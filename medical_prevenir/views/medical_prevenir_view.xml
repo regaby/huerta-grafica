@@ -1,0 +1,194 @@
+<openerp>
+	<data>
+		<!-- PARTNER -->
+
+		<record model="ir.ui.view" id="view_partner_form">
+			<field name="name">res.partner.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='supplier']" position="after">
+					<field name="is_patient" select="1" />
+					<field name="is_doctor" select="1" />
+					<field name="is_person" select="1" />
+					<field name="is_institution" select="1" />
+				</xpath>
+				<field name="name" position="after">
+					<field name="lastname" placeholder="Lastname"></field>
+				</field>
+				
+			</field>
+		</record>
+
+		<!-- Patient -->
+
+		<record model="ir.ui.view" id="medical_kanban_view_patient">
+	        <field name="name">Medical - Patients Kanban</field>
+	        <field name="model">medical.patient</field>
+	        <field name="arch" type="xml">
+	            <kanban>
+	                <field name="partner_id"/>
+	                <templates>
+	                    <t t-name="kanban-box">
+	                        <div class="oe_employee_vignette">
+	                            <div class="oe_employee_image">
+	                                <a type="open"><img t-att-src="kanban_image('medical.patient', 'partner_photo', record.id.value)" class="oe_employee_picture"/></a>
+	                            </div>
+	                            <div class="oe_employee_details">
+	                                <h4>
+	                                    <a type="open"><field name="partner_id"/></a>
+	                                </h4>
+	                                <ul>
+	                                    <li t-if="record.partner_phone">Tel: <field name="partner_phone"/></li>
+	                                    <li t-if="record.partner_mobile">Mobile: <field name="partner_mobile"/></li>
+	                                    <li t-if="record.partner_email"><a t-attf-href="mailto:#{record.partner_email}"><field name="partner_email"/></a></li>
+	                                    <li t-if="record.age">Age: <field name="age"/></li>
+	                                </ul>
+	                            </div>
+	                        </div>
+	                        <script>
+	                            $('.oe_employee_picture').load(function() { if($(this).width() > $(this).height()) { $(this).addClass('oe_employee_picture_wide') } });
+	                        </script>
+	                    </t>
+	                </templates>
+	            </kanban>
+	
+	        </field>
+	    </record>
+    
+		<record id="view_medical_patient_filter" model="ir.ui.view">
+			<field name="name">medical.patient.select</field>
+			<field name="model">medical.patient</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Patients">
+					<filter icon="terp-personal" string="My Patients" domain="[('user_id','=',uid)]" />
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="lastname" select="1" />
+					<field name="insurance_number" string="Patient ID" select="1" />
+					<field name="ref" string="SSN" select="1" />
+
+					<newline />
+					<group expand="0" string="Group By..." colspan="11" col="11">
+						<filter string="Sex" icon="terp-personal" domain="[]"
+							context="{'group_by':'sex'}" />
+						<filter string="Doctor" icon="terp-personal" domain="[]"
+							context="{'group_by':'primary_care_doctor'}" />
+					</group>
+				</search>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="medical_patient_view">
+			<field name="name">Patient</field>
+			<field name="model">medical.patient</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Patient" version="7.0">
+					<group col="8" name="medical.patient">
+						<group>
+							<field name="partner_photo" class="oe_avatar oe_left" widget='image' nolabel="1"/>
+						</group>
+						<group col="6" colspan="6">
+							<group colspan="6" col="8">
+								<field name="partner_id" colspan="3"/>
+								<field name="insurance_number" colspan="3"/>
+								<newline/>
+								<field name="dob"  colspan="3"/>
+								<field name="sex" required="1"  colspan="3"/>
+								<newline/>
+								<field name="dni" required="1"  colspan="3"/>
+								<!-- <field name="marital_status" required="1"  colspan="3"/>
+								<field name="ethnic_group" colspan="3" /> -->
+								<newline/>
+								<!-- <field name="religion"  colspan="3"/> -->
+								<field name="age"  colspan="3"/>
+							</group>
+						</group>
+					</group>
+					<notebook name="medical.patient.details">
+						<!-- PATIENT General information -->
+						<page string="General">
+							<!--<separator string="General info" colspan="6" />
+							<group colspan="4" col="6">
+								<field name="blood_type" />
+								<field name="rh" />
+								
+								<field name="current_insurance" />
+								<field name="primary_care_doctor" />
+								
+								<newline/>
+								<field name="deceased" />
+								<field name="dod"
+									attrs="{'invisible':[('deceased','=',False)],'required':[('deceased','=',True)]}" />
+								
+							</group> -->
+							<!-- Patient Critical Information -->
+							<newline />
+							<separator string="Patient Critical Information"
+								colspan="6" />
+							<field colspan="6" name="critical_info" nolabel="1" />
+						</page>
+						
+					</notebook>
+				</form>
+			</field>
+		</record>
+
+
+
+		<record model="ir.ui.view" id="medical_patient_tree">
+			<field name="name">Patient List</field>
+			<field name="model">medical.patient</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string='Patient Information'>
+					<field name="name"></field>
+					<field name="lastname"></field>
+					<field name="insurance_number"></field>
+					<field name="sex"></field>
+					<field name="dob"></field>
+					
+					<field name="deceased"></field>
+				</tree>
+			</field>
+		</record>
+
+
+		<!--
+			<record model="ir.actions.act_window"
+			id="medical_patient_action_form"> <field name="name">New
+			Patient</field> <field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.patient</field> <field
+			name="view_type">form</field> <field name="view_id"
+			ref="medical_patient_view"/> </record> <menuitem
+			action="medical_patient_action_form" parent="medical_patients_menu"
+			id="medical_add_patient" sequence="1"/>
+		-->
+
+		<record model="ir.actions.act_window" id="medical_patient_action_kanban">
+			<field name="name">Patients</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.patient</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+			<!-- <field name="view_id" ref="medical_patient_tree" /> -->
+		</record>
+		
+		<record model="ir.actions.act_window" id="medical_patient_action_tree">
+			<field name="name">Patients</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.patient</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<!-- <field name="view_id" ref="medical_patient_tree" /> -->
+		</record>
+
+
+
+	</data>
+</openerp>
