@@ -1,0 +1,410 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* medical
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-05-07 20:19+0000\n"
+"PO-Revision-Date: 2015-05-07 20:19+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: medical
+#: model:ir.actions.act_window,help:medical.action_partner_patient_form
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                Click to add a Patients in your address book.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                Haga Click para agregar un Paciente.\n"
+"              </p>\n"
+"            "
+
+#. module: medical
+#: model:ir.actions.act_window,help:medical.action_partner_phisicyan_form
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                Click to add a Phisicyan in your address book.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                Haga Click para agregar un Especialista.\n"
+"              </p>\n"
+"            "
+
+#. module: medical
+#: view:medical.appointment:medical.medical_appointment_view
+msgid "Appointment"
+msgstr "Visitas"
+
+#. module: medical
+#: field:medical.appointment,name:0
+msgid "Appointment ID"
+msgstr "Visita ID"
+
+#. module: medical
+#: view:medical.appointment:medical.medical_appointment_tree
+msgid "Appointment Information"
+msgstr "Información de la Visita"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.medical_action_form_appointment
+#: model:ir.ui.menu,name:medical.medical_appointment_submenu
+#: model:ir.ui.menu,name:medical.medical_conf_appointment_add
+#: view:medical.appointment:medical.view_medical_appointment
+msgid "Appointments"
+msgstr "Visitas"
+
+#. module: medical
+#: selection:medical.appointment,care_type:0
+msgid "Atencion Telefonica"
+msgstr "Atención Telefónica"
+
+#. module: medical
+#: selection:medical.appointment,care_type:0
+msgid "Atención Programada a Domicilio"
+msgstr "Atención Programada a Domicilio"
+
+#. module: medical
+#: selection:medical.appointment,care_type:0
+msgid "Atención en Jurisdicciónes Alejadas"
+msgstr "Atención en Jurisdicciónes Alejadas"
+
+#. module: medical
+#: selection:medical.appointment,state:0
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: medical
+#: field:medical.appointment,care_type:0
+msgid "Care Type"
+msgstr "Tipo de Cuidado"
+
+#. module: medical
+#: help:res.partner,is_institution:0
+msgid "Check if the partner is a Medical Center"
+msgstr "Tilde si la contraparte es un Centro Médico"
+
+#. module: medical
+#: help:res.partner,is_doctor:0
+msgid "Check if the partner is a doctor"
+msgstr "Tilde si la contraparte es un doctor"
+
+#. module: medical
+#: help:res.partner,is_patient:0
+msgid "Check if the partner is a patient"
+msgstr "Tilde si la contraparte es un paciente"
+
+#. module: medical
+#: help:res.partner,is_person:0
+msgid "Check if the partner is a person"
+msgstr "Tilde si la contraparte es una persona"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form
+msgid "Ciudad"
+msgstr "Ciudad"
+
+#. module: medical
+#: field:medical.appointment,comments:0
+msgid "Comments"
+msgstr "Comentarios"
+
+#. module: medical
+#: selection:medical.appointment,state:0
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#. module: medical
+#: selection:medical.appointment,care_type:0
+msgid "Consultorio Externo"
+msgstr "Consultorio Externo"
+
+#. module: medical
+#: field:medical.appointment,create_uid:0
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: medical
+#: field:medical.appointment,create_date:0
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: medical
+#: field:res.partner,dni:0
+#: help:res.partner,dni:0
+msgid "DNI"
+msgstr "DNI"
+
+#. module: medical
+#: view:medical.appointment:medical.view_medical_appointment_filter
+msgid "Date"
+msgstr "Día"
+
+#. module: medical
+#: field:medical.appointment,appointment_date:0
+msgid "Date and Time"
+msgstr "Día y Hora"
+
+#. module: medical
+#: field:res.partner,dob:0
+msgid "Date of Birth"
+msgstr "Fecha de Nacimiento"
+
+#. module: medical
+#: field:res.partner,dod:0
+msgid "Date of Death"
+msgstr "Fecha de Defunción"
+
+#. module: medical
+#: field:res.partner,deceased:0
+msgid "Deceased"
+msgstr "Difunto"
+
+#. module: medical
+#: view:medical.appointment:medical.view_medical_appointment_filter
+#: field:res.partner,is_doctor:0
+msgid "Doctor"
+msgstr "Doctor"
+
+#. module: medical
+#: selection:medical.appointment,state:0
+msgid "Done"
+msgstr "Realizado"
+
+#. module: medical
+#: selection:res.partner,sex:0
+msgid "Female"
+msgstr "Femenino"
+
+#. module: medical
+#: view:medical.appointment:medical.view_medical_appointment_filter
+msgid "Group By..."
+msgstr "Agrupar por..."
+
+#. module: medical
+#: field:medical.appointment,institution:0
+msgid "Health Center"
+msgstr "Centro de Salud"
+
+#. module: medical
+#: selection:medical.appointment,care_type:0
+msgid "Hospital de Dia Jornada Completa"
+msgstr "Hospital de Día Jornada Completa"
+
+#. module: medical
+#: selection:medical.appointment,care_type:0
+msgid "Hospital de Dia Jornada Simple"
+msgstr "Hospital de Día Jornada Simple"
+
+#. module: medical
+#: field:medical.appointment,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: medical
+#: field:res.partner,critical_info:0
+msgid "Important disease, allergy or procedures information"
+msgstr "Información importante sobre enfermedades, alergias o procedimientos"
+
+#. module: medical
+#: view:medical.appointment:medical.medical_appointment_view
+msgid "Information"
+msgstr "Información"
+
+#. module: medical
+#: field:res.partner,is_institution:0
+msgid "Institution"
+msgstr "Institución"
+
+#. module: medical
+#: field:res.partner,insurance:0
+msgid "Insurance"
+msgstr "Obra Social"
+
+#. module: medical
+#: field:res.partner,insurance_number:0
+msgid "Insurance Number"
+msgstr "Número de Obra Social"
+
+#. module: medical
+#: selection:medical.appointment,state:0
+msgid "Invoiced"
+msgstr "Facturado"
+
+#. module: medical
+#: help:res.partner,age:0
+msgid "It shows the age of the patient in years(y), months(m) and days(d).\n"
+"If the patient has died, the age shown is the age at time of death, the age corresponding to the date on the death certificate. It will show also \"deceased\" on the field"
+msgstr "Muestra la edad del paciente en años(y), meses(m) y días(d).\n"
+"Si el paciente ha fallecido, el año mostrado es el año del fallecimiento, el año corresponde a la fecha en el certificado de defunción. También mostrará \"fallecido\" en el campo"
+
+#. module: medical
+#: field:res.partner,lastname:0
+#: help:res.partner,lastname:0
+msgid "Last Name"
+msgstr "Apellido"
+
+#. module: medical
+#: field:medical.appointment,write_uid:0
+msgid "Last Updated by"
+msgstr "Última actualización realizada por"
+
+#. module: medical
+#: field:medical.appointment,write_date:0
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form
+msgid "Lastname"
+msgstr "Apellido"
+
+#. module: medical
+#: selection:res.partner,sex:0
+msgid "Male"
+msgstr "Masculino"
+
+#. module: medical
+#: help:res.partner,deceased:0
+msgid "Mark if the patient has died"
+msgstr "Marcar si el paciente ha fallecido"
+
+#. module: medical
+#: model:ir.ui.menu,name:medical.medical_root_menu
+msgid "Medical"
+msgstr "Medical"
+
+#. module: medical
+#: help:medical.appointment,institution:0
+msgid "Medical Center"
+msgstr "Centro Medico"
+
+#. module: medical
+#: view:medical.appointment:medical.view_medical_appointment_filter
+msgid "My appointments"
+msgstr "Mis visitas"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.medical_action_form_new_appointment
+#: model:ir.ui.menu,name:medical.medical_conf_new_appointment
+msgid "New Appointment"
+msgstr "Nueva Visita"
+
+#. module: medical
+#: model:ir.model,name:medical.model_res_partner
+msgid "Partner"
+msgstr "Contraparte"
+
+#. module: medical
+#: field:medical.appointment,patient:0
+#: field:res.partner,is_patient:0
+msgid "Patient"
+msgstr "Paciente"
+
+#. module: medical
+#: field:res.partner,age:0
+msgid "Patient Age"
+msgstr "Edad del pacient"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form
+msgid "Patient Critical Information"
+msgstr "Información Crítica del paciente"
+
+#. module: medical
+#: help:medical.appointment,patient:0
+msgid "Patient Name"
+msgstr "Nombre del paciente"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.action_partner_patient_form
+#: model:ir.ui.menu,name:medical.medical_patients_submenu
+#: model:ir.ui.menu,name:medical.menu_medical_patient
+msgid "Patients"
+msgstr "Pacientes"
+
+#. module: medical
+#: field:res.partner,is_person:0
+msgid "Person"
+msgstr "Persona"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.action_partner_phisicyan_form
+#: model:ir.ui.menu,name:medical.medical_phisicyan_submenu
+#: model:ir.ui.menu,name:medical.menu_medical_phisicyan
+msgid "Phisicyan"
+msgstr "Especialista"
+
+#. module: medical
+#: field:medical.appointment,doctor:0
+#: field:medical.appointment,user_id:0
+msgid "Physician"
+msgstr "Especialista"
+
+#. module: medical
+#: help:medical.appointment,doctor:0
+msgid "Physician's Name"
+msgstr "Nombre del Especialista"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form
+msgid "Provincia"
+msgstr "Provincia"
+
+#. module: medical
+#: field:res.partner,registration_number:0
+msgid "Registration Number"
+msgstr "Número de Registro"
+
+#. module: medical
+#: view:medical.appointment:medical.view_medical_appointment_filter
+msgid "Search Appointments"
+msgstr "Búsqueda de Visitas"
+
+#. module: medical
+#: field:res.partner,sex:0
+msgid "Sex"
+msgstr "Sexo"
+
+#. module: medical
+#: field:medical.appointment,speciality:0
+#: field:res.partner,speciality:0
+msgid "Speciality"
+msgstr "Especialidad"
+
+#. module: medical
+#: view:medical.appointment:medical.view_medical_appointment_filter
+msgid "Specialty"
+msgstr "Especialidad"
+
+#. module: medical
+#: field:medical.appointment,state:0
+msgid "State"
+msgstr "Provincia"
+
+#. module: medical
+#: sql_constraint:res.partner:0
+msgid "The dni already exists"
+msgstr "El dni ya existe"
+
+#. module: medical
+#: selection:medical.appointment,state:0
+msgid "Unconfirmed"
+msgstr "No confirmado"
+
+#. module: medical
+#: selection:medical.appointment,care_type:0
+msgid "Urgencias en Domicilio"
+msgstr "Urgencias en Domicilio"
+
+#. module: medical
+#: help:res.partner,critical_info:0
+msgid "Write any important information on the patient's disease, surgeries, allergies, ..."
+msgstr "Escriba cualquier información importante sobre enfermedades del paciente, cirugias, alergias, etc ..."
+

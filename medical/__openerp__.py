@@ -37,6 +37,8 @@ This module provide :
     
     "init_xml": [],
     'data': [
+        'security/medical_security.xml',
+        'security/ir.model.access.csv',
         'views/medical_view.xml',
         'views/medical_menu.xml',
     ],
