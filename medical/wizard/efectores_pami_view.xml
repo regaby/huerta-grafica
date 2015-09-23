@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_efectores_pami_form" model="ir.ui.view">
+            <field name="name">efectores.pami.form</field>
+            <field name="model">efectores.pami</field>
+            
+            <field name="arch" type="xml">
+                <form string="Archivo de Efectores PAMI" version="7.0">
+                    <group colspan="2" col="4" states="choose">
+                        <label align="0.0" string="Generar archivo de Efectores PAMI en formato txt" colspan="4"/>
+                        <field name="month"/>
+                        <field name="year"/>
+                    </group>
+                    <footer states="choose">
+                        <button special="cancel" icon="gtk-cancel" string="Cancelar"/>
+                        <button type="object" name="generate_file" icon="gtk-go-forward" string="Generar"/>
+                        <field invisible="1" name="state"/>
+                    </footer>
+                    <group colspan="4" col="4" states="get">
+                        <separator colspan="4" string="Archivo generado"/>
+                        <label align="0.0" string="Puede descargar el archivo haciendo click en 'Guardar como'" colspan="4"/>
+                        <field name="name" invisible="1"/>
+                        <field name="data" nolabel="1" readonly="1" filename="name"/>
+                    </group>
+                    <group colspan="4" col="4" states="error">
+                        <separator colspan="4" string="Registros con errores"/>
+                        <field name="info" colspan="4" nolabel="1"/>
+                        <separator colspan="4" string="El proceso no pudo llevarse a cabo"/>
+                    </group>
+                    <footer states="get,error">
+                        <button special="cancel" icon="gtk-cancel" string="Cerrar"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_efectores_pami">
+            <field name="name">Generar archivo de Efectores PAMI</field>
+            <field name="res_model">efectores.pami</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_efectores_pami_form" />
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="efectores_pami_values">
+            <field eval="'client_action_multi'" name="key2"/>
+            <field eval="'medical.appointment'" name="model"/>
+            <field name="name">Archivo de Efectores PAMI</field>
+            <field eval="'ir.actions.act_window,%d'%action_efectores_pami" name="value"/>
+        </record>
+
+    </data>
+</openerp>

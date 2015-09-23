@@ -28,6 +28,16 @@ from lxml import etree
 
 # DEBUG MODE -- DELETE ME !
 # import pdb
+class medical_speciality (osv.osv):
+    _name = "medical.speciality"
+    _columns = {
+        'name' :fields.char ('Description', size=128, help="ie, Addiction Psychiatry"),
+        'code' : fields.char ('Code', size=128, help="ie, ADP"),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (name)', 'The Medical Speciality code must be unique')
+    ]
+medical_speciality ()
 
 class medical_partner(osv.osv):
     _name = "res.partner"
@@ -47,9 +57,9 @@ class medical_partner(osv.osv):
         'dob' : fields.date ('Date of Birth'),
         'deceased' : fields.boolean ('Deceased', help="Mark if the patient has died"),
         'dod' : fields.datetime ('Date of Death'),
-        'insurance': fields.char('Insurance', size=64, required=True, select=True, ),
-        'insurance_number': fields.char('Insurance Number', size=64, required=True, select=True, ),
-        'dni': fields.char('DNI', size=64, required=True, select=True, help="DNI"),
+        'insurance': fields.char('Insurance', size=64, required=False, select=True, ),
+        'insurance_number': fields.char('Insurance Number', size=64, required=False, select=True, ),
+        'dni': fields.char('DNI', size=64, required=False, select=True, help="DNI"),
         'critical_info' : fields.text ('Important disease, allergy or procedures information', help="Write any important information on the patient's disease, surgeries, allergies, ..."),
         'sex' : fields.selection([
             ('m', 'Male'),
@@ -60,8 +70,16 @@ class medical_partner(osv.osv):
             ('f', 'Female'),
         ], 'Sex', select=True),
         # ----- datos medico
-        'registration_number': fields.char('Registration Number', size=64, required=True, select=True, ),
-        'speciality' : fields.char('Speciality', size=64, required=True, select=True, ),
+        'registration_number': fields.char('Registration Number', size=64, required=False, select=True, ),
+        'speciality' : fields.char('Speciality', size=64, required=False, select=True, ),
+        'speciality_id' : fields.many2one ('medical.speciality', 'Speciality', help="Speciality Code"),
+        # ------ datos institution - prestadores
+        'cuit': fields.char('CUIT', size=64, required=False, select=True, ),
+        #'institution_type': fields.integer('Institution Type'),
+        'institution_type': fields.selection([('1','Individual'),('2','Institution'),('3','Net')],'Institution Type'),
+        'user_name': fields.char('User Name', size=16),
+        'instalation_number': fields.char('Instalation Number', size=20 ),
+        'abbreviation': fields.char('Abbreviation', size=20),
     }
     _sql_constraints = [
         ('dni_uniq', 'unique (dni)', 'The dni already exists')

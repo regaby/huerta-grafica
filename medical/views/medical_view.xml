@@ -1,5 +1,6 @@
 <openerp>
 	<data>
+
 		<!-- PARTNER -->
 
 		<record model="ir.ui.view" id="view_partner_form">
@@ -15,7 +16,8 @@
 					<field name="is_institution" select="1" />
 				</field> -->
 				<field name="name" position="after">
-					<field name="lastname" placeholder="Lastname" required="True"></field>
+					<field name="lastname" placeholder="Lastname" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"></field>
+					<field name="abbreviation" placeholder="Abbreviation" attrs="{'invisible': [('is_institution','=', False)], 'required': [('is_institution','=', True)]}"></field>
 				</field>
 				<xpath expr="//field[@name='website']" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -53,6 +55,9 @@
                 <xpath expr="//field[@name='category_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
+                <xpath expr="//field[@name='street']" position="attributes">
+                    <attribute name="attrs">{'required': [('is_institution','=', True)]}</attribute>
+                </xpath>
                 <!-- <xpath expr="//label[@for='name']" position="after">
                     (
                             <field name="is_patient" class="oe_inline" /> <label for="is_patient" string="Is a Patient?"/>
@@ -61,13 +66,14 @@
                 <xpath expr="//label[@for='name']" position="after">
                             <field name="is_patient" class="oe_inline" invisible="True"/> 
                             <field name="is_doctor" class="oe_inline" invisible="True"/> 
+                            <field name="is_institution" class="oe_inline" invisible="True"/> 
                 </xpath>
                 <page name='internal_notes' position="before">
                 	<page name="patient" String="Patient Information" attrs="{'invisible': [('is_patient','=', False)]}">
                 		<group colspan="4" col="4">
-	                		<field name="dni"/>
-	                		<field name="insurance"/>
-	                		<field name="insurance_number"/>
+	                		<field name="dni" attrs="{'required': [('is_patient','=', True)]}"/>
+	                		<field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>
+	                		<field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}"/>
 	                		<field name="dob"/>
 	                		<field name="sex"/>
 	                		<field name="age"/>
@@ -81,12 +87,23 @@
 						<field colspan="6" name="critical_info" nolabel="1" />
 
                 	</page>
-                	<page name="patient" String="Phisycian Information" attrs="{'invisible': [('is_doctor','=', False)]}">
+                	<page name="phisycian" String="Phisycian Information" attrs="{'invisible': [('is_doctor','=', False)]}">
                 		<group colspan="4" col="4">
-	                		<field name="registration_number"/>
-	                		<field name="speciality"/>
+	                		<field name="registration_number" attrs="{'required': [('is_doctor','=', True)]}"/>
+	                		<field name="speciality" attrs="{'required': [('is_doctor','=', True)]}"/>
+	                		<field name="speciality_id" attrs="{'required': [('is_doctor','=', True)]}"/>
+	                		<field name="dni" attrs="{'required': [('is_doctor','=', True)]}"/>
 	                	</group>
                 	</page>
+                	<page name="institution" String="Institution Information" attrs="{'invisible': [('is_institution','=', False)]}">
+                		<group colspan="4" col="4">
+	                		<field name="cuit" string="CUIT" attrs="{'required': [('is_institution','=', True)]}"/>
+	                		<field name="institution_type" attrs="{'required': [('is_institution','=', True)]}"/>
+	                		<field name="user_name" attrs="{'required': [('is_institution','=', True)]}"/>
+	                		<field name="instalation_number" attrs="{'required': [('is_institution','=', True)]}"/>
+	                	</group>
+                	</page>
+
                 </page>
                 
 				
@@ -121,6 +138,22 @@
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to add a Phisicyan in your address book.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_partner_institution_form" model="ir.actions.act_window">
+            <field name="name">Institution</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('is_institution','=',1)]</field>
+            <field name="context">{'default_is_institution':1, 'search_default_is_institution':1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a Institution in your address book.
               </p>
             </field>
         </record>
@@ -230,17 +263,57 @@
 			<field name="view_mode">form,tree,calendar</field>
 		</record>
 
+		<!-- Medical Specialities -->
 
-		<!-- Appointment shortcut from patient form -->
+		<record model="ir.ui.view" id="medical_speciality_view">
+			<field name="name">Medical Specialties</field>
+			<field name="model">medical.speciality</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical Speciality">
+					<field name="name" required="1"></field>
+					<field name="code"></field>
+				</form>
+			</field>
+		</record>
 
-		<!-- <act_window domain="[('patient', '=', active_id)]" id="act_patient_appointments"
-			name="Appointments" res_model="medical.appointment" src_model="medical.patient" /> -->
+		<record model="ir.ui.view" id="medical_speciality_tree">
+			<field name="name">Medical Speciality list</field>
+			<field name="model">medical.speciality</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical Speciality">
+					<field name="name"></field>
+					<field name="code"></field>
+				</tree>
+			</field>
+		</record>
 
-		<!-- Patient shortcut from appointment form -->
+		<record model="ir.actions.act_window" id="medical_action_speciality">
+			<field name="name">Medical Specialties</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.speciality</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_speciality_tree" />
+		</record>
 
-		<!-- <act_window domain="[('id', '=', patient)]" id="act_appointment_patient"
-			name="Patient" res_model="medical.patient" src_model="medical.appointment" /> -->
 
+
+		<record id="view_medical_specialty_filter" model="ir.ui.view">
+			<field name="name">medical.speciality.select</field>
+			<field name="model">medical.speciality</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical Specialties">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<newline />
+
+				</search>
+			</field>
+		</record>
 
 
 	</data>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+				<record id="mp1" model="medical.speciality">
+					<field name="name">Psicología</field>
+					<field name="code">1000</field>
+				</record>
+				<record id="mp2" model="medical.speciality">
+					<field name="name">Psiquiatría y Psicología Pediátrica</field>
+					<field name="code">39</field>
+				</record>
+				<record id="mp3" model="medical.speciality">
+					<field name="name">Psiquiatría y Psicología Médica</field>
+					<field name="code">5</field>
+				</record>
+				<record id="mp4" model="medical.speciality">
+					<field name="name">Nutrición</field>
+					<field name="code">4</field>
+				</record>
+	</data>
+</openerp>					

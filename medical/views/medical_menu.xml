@@ -23,7 +23,20 @@
             <menuitem id="menu_medical_phisicyan" name="Phisicyan"
             parent="medical_phisicyan_submenu"
             action="action_partner_phisicyan_form" sequence="10"/>
+
+            <menuitem name="Configuration" id="medical_configuration_submenu" parent="medical_root_menu" sequence="100" />
+            <menuitem id="menu_medical_institution" name="Institution"
+            parent="medical_configuration_submenu"
+            action="action_partner_institution_form" sequence="10"/>
+
+            <menuitem id="menu_medical_speciality" name="Medical Speciality"
+            parent="medical_configuration_submenu"
+            action="medical_action_speciality" sequence="20"/>
 				<!-- <menuitem action="medical_patient_action_kanban" parent="medical_patients_submenu" id="medical_edit_patient" sequence="1" /> -->
+
+			<menuitem name="Efectores Pami" id="medical_efectores_pami_submenu" parent="medical_root_menu" sequence="40" />
+		 		<menuitem action="action_efectores_pami" id="medical_efectores_pami_menu" parent="medical_efectores_pami_submenu" sequence="1" />
+				
 
 				
 

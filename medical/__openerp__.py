@@ -39,8 +39,11 @@ This module provide :
     'data': [
         'security/medical_security.xml',
         'security/ir.model.access.csv',
+        'wizard/efectores_pami_view.xml',
         'views/medical_view.xml',
         'views/medical_menu.xml',
+        'data/medical_data.xml',
+
     ],
     'demo_xml': [],
     'images': [],
