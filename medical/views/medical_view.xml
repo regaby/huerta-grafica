@@ -3,7 +3,7 @@
 
 		<!-- PARTNER -->
 
-		<record model="ir.ui.view" id="view_partner_form">
+		<record model="ir.ui.view" id="view_partner_form_medical">
 			<field name="name">res.partner.form</field>
 			<field name="model">res.partner</field>
 			<field name="inherit_id" ref="base.view_partner_form" />
@@ -16,8 +16,8 @@
 					<field name="is_institution" select="1" />
 				</field> -->
 				<field name="name" position="after">
-					<field name="lastname" placeholder="Lastname" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"></field>
-					<field name="abbreviation" placeholder="Abbreviation" attrs="{'invisible': [('is_institution','=', False)], 'required': [('is_institution','=', True)]}"></field>
+					<!-- <field name="lastname" placeholder="Lastname" attrs="{'invisible': [('is_institution','!=', False)], 'required': [('is_patient','=',True)]}"></field> -->
+					<!-- <field name="abbreviation" placeholder="Abbreviation" attrs="{'invisible': [('is_institution','=', False)], 'required': [('is_institution','=', True)]}"></field> -->
 				</field>
 				<xpath expr="//field[@name='website']" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -31,14 +31,11 @@
                 <xpath expr="//field[@name='fax']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <xpath expr="//field[@name='state_id']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-                <xpath expr="//field[@name='country_id']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
                 <xpath expr="//field[@name='street2']" position="attributes">
-                    <attribute name="placeholder">Ciudad</attribute>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='zip']" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//field[@name='city']" position="attributes">
                     <attribute name="placeholder">Provincia</attribute>
@@ -56,8 +53,41 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name="required">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='email']" position="attributes">
                     <attribute name="attrs">{'required': [('is_institution','=', True)]}</attribute>
                 </xpath>
+                <xpath expr="//field[@name='email']" position="after">
+                	<field name="document_type" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"/>
+                    <field name="dni" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"/>
+                    <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
+                    <field name="cuit" placeholder="CUIT" attrs="{'invisible': [('is_doctor','!=', False)],'required': [('is_institution','=', True)]}"/>
+                    <field name="afjp_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}"/>
+                    <field name="correspondent_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}" on_change="onchange_correspondent_id(correspondent_id)"/>
+                    <field name="agency_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
+                    <field name="subsidiary_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
+                    <field name="id_sucursal" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)], 'readonly': False}"/>
+                </xpath>
+                <xpath expr="//field[@name='country_id']" position="after">
+                    
+                    <field name="start_date" placeholder="Start Date" attrs="{'required': [('is_institution','=', True)]}"/>
+            		<field name="end_date" placeholder="End Date"/>
+            		<field name="end_reason" placeholder="End Reason"/>
+
+            		<field name='update_date' placeholder="Update Date" attrs="{'invisible': [('is_institution','!=', True)]}"/>
+
+            		<!-- <field name="subsidiary_id" placeholder="Subsidiary" attrs="{'required': [('is_institution','=', True)], 'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)]}"/> -->
+                </xpath>
+                <xpath expr="//field[@name='street']" position="after">
+                	<field name="street_number" placeholder="Street Number"/>
+                	<!-- <field name="npostal" placeholder="N Postal"/> -->
+                </xpath>
+
+
                 <!-- <xpath expr="//label[@for='name']" position="after">
                     (
                             <field name="is_patient" class="oe_inline" /> <label for="is_patient" string="Is a Patient?"/>
@@ -71,11 +101,16 @@
                 <page name='internal_notes' position="before">
                 	<page name="patient" String="Patient Information" attrs="{'invisible': [('is_patient','=', False)]}">
                 		<group colspan="4" col="4">
-	                		<field name="dni" attrs="{'required': [('is_patient','=', True)]}"/>
-	                		<field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>
-	                		<field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}"/>
-	                		<field name="dob"/>
-	                		<field name="sex"/>
+	                		<!-- <field name="dni" attrs="{'required': [('is_patient','=', True)]}"/> -->
+	                		<!-- <field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>
+	                		<field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}"/> -->
+	                		<field name="benefit_id" attrs="{'required': [('is_patient','=', True)]}"/>
+	                		<field name="relationship_id" attrs="{'required': [('is_patient','=', True)]}"/>
+	                		<field name="marital_status"/>
+	                		<field name="nacionality"/>
+	                		<field name="nacionality_id"/>
+	                		<field name="dob" attrs="{'required': [('is_patient','=', True)]}"/>
+	                		<field name="sex" attrs="{'required': [('is_patient','=', True)]}"/>
 	                		<field name="age"/>
 	                		<newline/>
 							<field name="deceased" />
@@ -90,17 +125,38 @@
                 	<page name="phisycian" String="Phisycian Information" attrs="{'invisible': [('is_doctor','=', False)]}">
                 		<group colspan="4" col="4">
 	                		<field name="registration_number" attrs="{'required': [('is_doctor','=', True)]}"/>
-	                		<field name="speciality" attrs="{'required': [('is_doctor','=', True)]}"/>
+	                		<field name="state_registration_number" />
+	                		<!-- <field name="speciality" attrs="{'required': [('is_doctor','=', True)]}"/> -->
 	                		<field name="speciality_id" attrs="{'required': [('is_doctor','=', True)]}"/>
-	                		<field name="dni" attrs="{'required': [('is_doctor','=', True)]}"/>
+	                		<!-- <field name="dni" attrs="{'required': [('is_doctor','=', True)]}"/> -->
+	                		<!-- <field name="doctor_start_date" /> -->
 	                	</group>
                 	</page>
                 	<page name="institution" String="Institution Information" attrs="{'invisible': [('is_institution','=', False)]}">
                 		<group colspan="4" col="4">
-	                		<field name="cuit" string="CUIT" attrs="{'required': [('is_institution','=', True)]}"/>
 	                		<field name="institution_type" attrs="{'required': [('is_institution','=', True)]}"/>
 	                		<field name="user_name" attrs="{'required': [('is_institution','=', True)]}"/>
 	                		<field name="instalation_number" attrs="{'required': [('is_institution','=', True)]}"/>
+	                		<field name="head_doctor"/>
+	                		
+	                		<field name="attention_point" attrs="{'required': [('is_institution','=', True)]}"/>
+	                		
+	                		<field name="nro_sap"/>
+	                		
+	                	</group>
+	                	<group string="Modules">
+	                		<field name="module_ids" nolabel="1">
+	                			<!-- <tree string="Modules" editable="bottom">
+									<field name="code" />
+									<field name="name" />
+								</tree>
+								<form string="Modules" editable="bottom">
+									<field name="code" />
+									<field name="name" />
+								</form> -->
+	                		</field>
+
+
 	                	</group>
                 	</page>
 
@@ -187,9 +243,14 @@
 						<newline/>
 						
 						<field name="care_type" colspan="3" required="True"/>
+						<field name="id_modalidad_presta" colspan="3" required="True"/>
 						<newline/>
 						<field name="doctor" required="1" on_change="onchange_doctor(doctor, context)" colspan="3"/>
-						<field name="speciality" colspan="3"/>
+						<!-- <field name="speciality" colspan="3"/> -->
+						<newline/>
+						<field name="f_fecha_egreso" colspan="3"/>
+						<field name="id_tipo_egreso" colspan="3"/>
+
 					</group>
 					<newline />
 					<separator colspan="6" string="Information" />
@@ -211,7 +272,7 @@
 					<field name="care_type"></field>
 					<!-- <field name="urgency"></field> -->
 					<field name="appointment_date" />
-					<field name="speciality"></field>
+					<!-- <field name="speciality"></field> -->
 					<field name="doctor"></field>
 					<field name="institution"></field>
 				</tree>
@@ -245,8 +306,8 @@
 					<group expand="0" string="Group By..." colspan="11" col="11">
 						<filter string="Doctor" icon="terp-personal" domain="[]"
 							context="{'group_by':'doctor'}" />
-						<filter string="Specialty" icon="terp-personal" domain="[]"
-							context="{'group_by':'speciality'}" />
+						<!-- <filter string="Specialty" icon="terp-personal" domain="[]"
+							context="{'group_by':'speciality'}" /> -->
 						<filter string="Date" icon="terp-go-month" domain="[]"
 							context="{'group_by':'appointment_date'}" />
 					</group>
@@ -271,8 +332,10 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Medical Speciality">
-					<field name="name" required="1"></field>
-					<field name="code"></field>
+					<group>
+						<field name="name" required="1"></field>
+						<field name="code"></field>
+					</group>
 				</form>
 			</field>
 		</record>
@@ -314,6 +377,357 @@
 				</search>
 			</field>
 		</record>
+
+		<!-- medical module -->
+
+		<record model="ir.ui.view" id="medical_module_view">
+			<field name="name">Medical Modules</field>
+			<field name="model">medical.module</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical module">
+					<group>
+						<field name="name" required="1"></field>
+						<field name="code"></field>
+						<field name="level"></field>
+						<field name="start_date"></field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_module_tree">
+			<field name="name">Medical module list</field>
+			<field name="model">medical.module</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical module">
+					<field name="name"></field>
+					<field name="code"></field>
+					<field name="level"></field>
+					<field name="start_date"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_module">
+			<field name="name">Medical Modules</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.module</field>
+			<field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+			<field name="view_id" ref="medical_module_tree" />
+		</record>
+
+
+
+		<record id="view_medical_module_filter" model="ir.ui.view">
+			<field name="name">medical.module.select</field>
+			<field name="model">medical.module</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical Modules">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<field name="level" select="1" />
+					<field name="start_date"></field>
+					<newline />
+
+				</search>
+			</field>
+		</record>
+
+		<!-- medical subsidiary -->
+
+		<record model="ir.ui.view" id="medical_subsidiary_view">
+			<field name="name">Medical Subsidiaries</field>
+			<field name="model">medical.subsidiary</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical subsidiary">
+					<group>
+						<field name="name" required="1"></field>
+						<field name="code"></field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_subsidiary_tree">
+			<field name="name">Medical subsidiary list</field>
+			<field name="model">medical.subsidiary</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical subsidiary">
+					<field name="name"></field>
+					<field name="code"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_subsidiary">
+			<field name="name">Medical Subsidiaries</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.subsidiary</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_subsidiary_tree" />
+		</record>
+
+
+
+		<record id="view_medical_subsidiary_filter" model="ir.ui.view">
+			<field name="name">medical.subsidiary.select</field>
+			<field name="model">medical.subsidiary</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical Subsidiaries">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<newline />
+
+				</search>
+			</field>
+		</record>
+
+		<!-- medical agency -->
+
+		<record model="ir.ui.view" id="medical_agency_view">
+			<field name="name">Medical Agencies</field>
+			<field name="model">medical.agency</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical agency">
+					<group>
+						<field name="name" required="1"></field>
+						<field name="code"></field>
+						<field name="subsidiary_id"></field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_agency_tree">
+			<field name="name">Medical agency list</field>
+			<field name="model">medical.agency</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical agency">
+					<field name="name"></field>
+					<field name="code"></field>
+					<field name="subsidiary_id"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_agency">
+			<field name="name">Medical Agencies</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.agency</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_agency_tree" />
+		</record>
+
+
+
+		<record id="view_medical_agency_filter" model="ir.ui.view">
+			<field name="name">medical.agency.select</field>
+			<field name="model">medical.agency</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical Agencies">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<field name="subsidiary_id" select="1" />
+					<newline />
+
+				</search>
+			</field>
+		</record>
+
+		<!-- medical correspondent -->
+
+		<record model="ir.ui.view" id="medical_correspondent_view">
+			<field name="name">Medical Correspondent</field>
+			<field name="model">medical.correspondent</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical correspondent">
+					<group>
+						<field name="name" required="1"></field>
+						<field name="code"></field>
+						<field name="subsidiary_id"></field>
+						<field name="agency_id"></field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_correspondent_tree">
+			<field name="name">Medical correspondent list</field>
+			<field name="model">medical.correspondent</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical correspondent">
+					<field name="name"></field>
+					<field name="code"></field>
+					<field name="subsidiary_id"></field>
+					<field name="agency_id"></field>
+					<field name="id_agencia"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_correspondent">
+			<field name="name">Medical Correspondent</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.correspondent</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_correspondent_tree" />
+		</record>
+
+
+
+		<record id="view_medical_correspondent_filter" model="ir.ui.view">
+			<field name="name">medical.correspondent.select</field>
+			<field name="model">medical.correspondent</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical Correspondent">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<field name="subsidiary_id" select="1" />
+					<field name="agency_id" select="1" />
+					<newline />
+
+				</search>
+			</field>
+		</record>
+
+		<!-- medical afjp -->
+
+		<record model="ir.ui.view" id="medical_afjp_view">
+			<field name="name">Medical AFJP</field>
+			<field name="model">medical.afjp</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical afjp">
+					<group>
+						<field name="name" required="1"></field>
+						<field name="code"></field>
+						<field name="abbreviation"></field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_afjp_tree">
+			<field name="name">Medical afjp list</field>
+			<field name="model">medical.afjp</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical afjp">
+					<field name="name"></field>
+					<field name="code"></field>
+					<field name="abbreviation"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_afjp">
+			<field name="name">Medical AFJP</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.afjp</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_afjp_tree" />
+		</record>
+
+
+
+		<record id="view_medical_afjp_filter" model="ir.ui.view">
+			<field name="name">medical.afjp.select</field>
+			<field name="model">medical.afjp</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical AFJP">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<field name="abbreviation" select="1" />
+					<newline />
+
+				</search>
+			</field>
+		</record>
+
+		<!-- benefit -->
+
+		<record model="ir.ui.view" id="medical_benefit_view">
+			<field name="name">Medical Benefit</field>
+			<field name="model">medical.benefit</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical benefit">
+					<group>
+						<field name="name" required="1"/>
+						<field name="code"/>
+						<field name="benefit_type_id"/>
+						<field name="start_date"/>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_benefit_tree">
+			<field name="name">Medical benefit list</field>
+			<field name="model">medical.benefit</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical benefit">
+					<field name="name"></field>
+					<field name="code"></field>
+					<field name="benefit_type_id"></field>
+					<field name="start_date"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_benefit">
+			<field name="name">Medical Benefit</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.benefit</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_benefit_tree" />
+		</record>
+
+
+
+		<record id="view_medical_benefit_filter" model="ir.ui.view">
+			<field name="name">medical.benefit.select</field>
+			<field name="model">medical.benefit</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical Benefit">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<field name="benefit_type_id"></field>
+					<field name="start_date"></field>
+					<newline />
+
+				</search>
+			</field>
+		</record>
+
 
 
 	</data>

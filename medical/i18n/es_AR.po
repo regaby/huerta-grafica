@@ -6,14 +6,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-07 20:19+0000\n"
-"PO-Revision-Date: 2015-05-07 20:19+0000\n"
+"POT-Creation-Date: 2015-09-29 22:10+0000\n"
+"PO-Revision-Date: 2015-09-29 22:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: medical
+#: model:ir.actions.act_window,help:medical.action_partner_institution_form
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                Click to add a Institution in your address book.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                Haga Click para agregar un Prestador.\n"
+"              </p>\n"
+"            "
 
 #. module: medical
 #: model:ir.actions.act_window,help:medical.action_partner_patient_form
@@ -36,6 +47,27 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "                Haga Click para agregar un Especialista.\n"
 "              </p>\n"
 "            "
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,abbreviation:0
+msgid "Abbreviation"
+msgstr "Abreviatura"
+
+#. module: medical
+#: help:res.partner,abbreviation:0
+msgid "Abreviatura de la descripción"
+msgstr "Abreviatura de la descripción"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Abril"
+msgstr "Abril"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Agosto"
+msgstr "Agosto"
 
 #. module: medical
 #: view:medical.appointment:medical.medical_appointment_view
@@ -61,6 +93,26 @@ msgid "Appointments"
 msgstr "Visitas"
 
 #. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Archivo de Efectores PAMI"
+msgstr "Archivo de Efectores PAMI"
+
+#. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Archivo generado"
+msgstr "Archivo generado"
+
+#. module: medical
+#: selection:res.partner,nacionality:0
+msgid "Argentino"
+msgstr "Argentino"
+
+#. module: medical
+#: selection:res.partner,nacionality:0
+msgid "Argentino Naturalizado"
+msgstr "Argentino Naturalizado"
+
+#. module: medical
 #: selection:medical.appointment,care_type:0
 msgid "Atencion Telefonica"
 msgstr "Atención Telefónica"
@@ -76,6 +128,48 @@ msgid "Atención en Jurisdicciónes Alejadas"
 msgstr "Atención en Jurisdicciónes Alejadas"
 
 #. module: medical
+#: field:res.partner,attention_point:0
+msgid "Attention Point"
+msgstr "Boca de Atención"
+
+#. module: medical
+#: field:efectores.pami,year:0
+msgid "Año"
+msgstr "Año"
+
+#. module: medical
+#: field:res.partner,benefit_id:0
+msgid "Benefit"
+msgstr "Beneficio"
+
+#. module: medical
+#: field:medical.benefit,benefit_type_id:0
+msgid "Benefit Type"
+msgstr "Tipo de Beneficio"
+
+#. module: medical
+#: model:ir.ui.menu,name:medical.menu_medical_benefit
+msgid "Benefits"
+msgstr "Beneficios"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,cuil:0
+msgid "CUIL"
+msgstr "CUIL"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,cuit:0
+msgid "CUIT"
+msgstr "CUIT"
+
+#. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Cancelar"
+msgstr "Cancelar"
+
+#. module: medical
 #: selection:medical.appointment,state:0
 msgid "Cancelled"
 msgstr "Cancelado"
@@ -84,6 +178,16 @@ msgstr "Cancelado"
 #: field:medical.appointment,care_type:0
 msgid "Care Type"
 msgstr "Tipo de Cuidado"
+
+#. module: medical
+#: selection:res.partner,marital_status:0
+msgid "Casado/a"
+msgstr "Casado/a"
+
+#. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Cerrar"
+msgstr "Cerrar"
 
 #. module: medical
 #: help:res.partner,is_institution:0
@@ -106,14 +210,34 @@ msgid "Check if the partner is a person"
 msgstr "Tilde si la contraparte es una persona"
 
 #. module: medical
-#: view:res.partner:medical.view_partner_form
-msgid "Ciudad"
-msgstr "Ciudad"
+#: field:medical.benefit,code:0
+#: field:medical.benefit.type,code:0
+#: field:medical.module,code:0
+#: field:medical.patient.relationship,code:0
+#: field:medical.speciality,code:0
+#: field:medical.subsidiary,code:0
+msgid "Code"
+msgstr "Código"
+
+#. module: medical
+#: sql_constraint:medical.patient.relationship:0
+msgid "Code must be unique"
+msgstr "El código debe ser único."
 
 #. module: medical
 #: field:medical.appointment,comments:0
 msgid "Comments"
 msgstr "Comentarios"
+
+#. module: medical
+#: selection:res.partner,marital_status:0
+msgid "Concubino/a"
+msgstr "Concubino/a"
+
+#. module: medical
+#: model:ir.ui.menu,name:medical.medical_configuration_submenu
+msgid "Configuration"
+msgstr "Configuración"
 
 #. module: medical
 #: selection:medical.appointment,state:0
@@ -126,14 +250,48 @@ msgid "Consultorio Externo"
 msgstr "Consultorio Externo"
 
 #. module: medical
+#: field:efectores.pami,create_uid:0
 #: field:medical.appointment,create_uid:0
+#: field:medical.benefit,create_uid:0
+#: field:medical.benefit.type,create_uid:0
+#: field:medical.module,create_uid:0
+#: field:medical.patient.relationship,create_uid:0
+#: field:medical.speciality,create_uid:0
+#: field:medical.subsidiary,create_uid:0
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: medical
+#: field:efectores.pami,create_date:0
 #: field:medical.appointment,create_date:0
+#: field:medical.benefit,create_date:0
+#: field:medical.benefit.type,create_date:0
+#: field:medical.module,create_date:0
+#: field:medical.patient.relationship,create_date:0
+#: field:medical.speciality,create_date:0
+#: field:medical.subsidiary,create_date:0
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Cédula de Identidad"
+msgstr "Cédula de Identidad"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Cédula de Identidad Brasil"
+msgstr "Cédula de Identidad Brasil"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Cédula de Identidad Chile"
+msgstr "Cédula de Identidad Chile"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Cédula de Identidad Uruguay"
+msgstr "Cédula de Identidad Uruguay"
 
 #. module: medical
 #: field:res.partner,dni:0
@@ -167,10 +325,45 @@ msgid "Deceased"
 msgstr "Difunto"
 
 #. module: medical
+#: help:res.partner,end_reason:0
+msgid "Descripción del motivo por el cual el prestador se encuentra dado de baja"
+msgstr "Descripción del motivo por el cual el prestador se encuentra dado de baja"
+
+#. module: medical
+#: field:medical.benefit,name:0
+#: field:medical.benefit.type,name:0
+#: field:medical.module,name:0
+#: field:medical.patient.relationship,name:0
+#: field:medical.speciality,name:0
+#: field:medical.subsidiary,name:0
+msgid "Description"
+msgstr "Descripción"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Diciembre"
+msgstr "Diciembre"
+
+#. module: medical
+#: selection:res.partner,marital_status:0
+msgid "Divorciado/a"
+msgstr "Divorciado/a"
+
+#. module: medical
 #: view:medical.appointment:medical.view_medical_appointment_filter
 #: field:res.partner,is_doctor:0
 msgid "Doctor"
 msgstr "Doctor"
+
+#. module: medical
+#: field:res.partner,document_type:0
+msgid "Document Type"
+msgstr "Tipo de Documento"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Documento Nacional de Identidad"
+msgstr "Documento Nacional de Identidad"
 
 #. module: medical
 #: selection:medical.appointment,state:0
@@ -178,14 +371,124 @@ msgid "Done"
 msgstr "Realizado"
 
 #. module: medical
+#: model:ir.ui.menu,name:medical.medical_efectores_pami_submenu
+msgid "Efectores Pami"
+msgstr "Efectores Pami"
+
+#. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "El proceso no pudo llevarse a cabo"
+msgstr "El proceso no pudo llevarse a cabo"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,end_date:0
+msgid "End Date"
+msgstr "Fecha de Baja"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,end_reason:0
+msgid "End Reason"
+msgstr "Motivo de Baja"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Enero"
+msgstr "Enero"
+
+#. module: medical
+#: selection:res.partner,nacionality:0
+msgid "Extranjero"
+msgstr "Extranjero"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Febrero"
+msgstr "Febrero"
+
+#. module: medical
+#: help:res.partner,end_date:0
+msgid "Fecha a partir de la cual el prestador deja de está habilitado"
+msgstr "Fecha a partir de la cual el prestador deja de está habilitado"
+
+#. module: medical
+#: help:res.partner,start_date:0
+msgid "Fecha a partir de la cual el prestador está habilitado"
+msgstr "Fecha a partir de la cual el prestador está habilitado"
+
+#. module: medical
+#: help:res.partner,update_date:0
+msgid "Fecha de actualización del registro de prestador"
+msgstr "Fecha de actualización del registro de prestador"
+
+#. module: medical
+#: help:medical.module,start_date:0
+msgid "Fecha de alta de la relación entre modulo y prestador."
+msgstr "Fecha de alta de la relación entre modulo y prestador."
+
+#. module: medical
+#: help:res.partner,doctor_start_date:0
+msgid "Fecha de inicio del Profesional con el Prestador"
+msgstr "Fecha de inicio del Profesional con el Prestador"
+
+#. module: medical
+#: help:medical.benefit,start_date:0
+msgid "Fecha en la cual se ingresaron los datos del beneficio"
+msgstr "Fecha en la cual se ingresaron los datos del beneficio"
+
+#. module: medical
 #: selection:res.partner,sex:0
 msgid "Female"
 msgstr "Femenino"
 
 #. module: medical
+#: field:efectores.pami,data:0
+msgid "File"
+msgstr "Archivo"
+
+#. module: medical
+#: field:efectores.pami,name:0
+msgid "Filename"
+msgstr "Nombre del Archivo"
+
+#. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Generar"
+msgstr "Generar"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.action_efectores_pami
+#: model:ir.ui.menu,name:medical.medical_efectores_pami_menu
+msgid "Generar archivo de Efectores PAMI"
+msgstr "Generar archivo de Efectores PAMI"
+
+#. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Generar archivo de Efectores PAMI en formato txt"
+msgstr "Generar archivo de Efectores PAMI en formato txt"
+
+#. module: medical
+#: code:addons/medical/wizard/efectores_pami.py:342
+#, python-format
+msgid "Generar archivo de terceros BENEFICIARIOS"
+msgstr "Generar archivo de terceros BENEFICIARIOS"
+
+#. module: medical
+#: model:ir.model,name:medical.model_archivo_3ros_beneficiarios
+#: model:ir.model,name:medical.model_efectores_pami
+msgid "Generar archivo efectores PAMI"
+msgstr "Generar archivo efectores PAMI"
+
+#. module: medical
 #: view:medical.appointment:medical.view_medical_appointment_filter
 msgid "Group By..."
 msgstr "Agrupar por..."
+
+#. module: medical
+#: field:res.partner,head_doctor:0
+msgid "Head Doctor"
+msgstr "Médico de Cabecera"
 
 #. module: medical
 #: field:medical.appointment,institution:0
@@ -203,9 +506,26 @@ msgid "Hospital de Dia Jornada Simple"
 msgstr "Hospital de Día Jornada Simple"
 
 #. module: medical
+#: field:efectores.pami,id:0
 #: field:medical.appointment,id:0
+#: field:medical.benefit,id:0
+#: field:medical.benefit.type,id:0
+#: field:medical.module,id:0
+#: field:medical.patient.relationship,id:0
+#: field:medical.speciality,id:0
+#: field:medical.subsidiary,id:0
 msgid "ID"
 msgstr "ID"
+
+#. module: medical
+#: help:res.partner,attention_point:0
+msgid "Identificador único de una boca de atención"
+msgstr "Identificador único de una boca de atención"
+
+#. module: medical
+#: help:res.partner,subsidiary_id:0
+msgid "Identificador único de una sucursal del PAMI."
+msgstr "Identificador único de una sucursal del PAMI."
 
 #. module: medical
 #: field:res.partner,critical_info:0
@@ -213,14 +533,42 @@ msgid "Important disease, allergy or procedures information"
 msgstr "Información importante sobre enfermedades, alergias o procedimientos"
 
 #. module: medical
+#: help:res.partner,head_doctor:0
+msgid "Indica si el prestador es médico de cabecera"
+msgstr "Indica si el prestador es médico de cabecera"
+
+#. module: medical
+#: selection:res.partner,institution_type:0
+msgid "Individual"
+msgstr "Individual"
+
+#. module: medical
+#: field:efectores.pami,info:0
+msgid "Info"
+msgstr "Info"
+
+#. module: medical
 #: view:medical.appointment:medical.medical_appointment_view
 msgid "Information"
 msgstr "Información"
 
 #. module: medical
+#: field:res.partner,instalation_number:0
+msgid "Instalation Number"
+msgstr "Número de Instalación de Efectores"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.action_partner_institution_form
+#: model:ir.ui.menu,name:medical.menu_medical_institution
+#: selection:res.partner,institution_type:0
 #: field:res.partner,is_institution:0
 msgid "Institution"
-msgstr "Institución"
+msgstr "Prestador"
+
+#. module: medical
+#: field:res.partner,institution_type:0
+msgid "Institution Type"
+msgstr "Tipo de Prestador"
 
 #. module: medical
 #: field:res.partner,insurance:0
@@ -245,25 +593,74 @@ msgstr "Muestra la edad del paciente en años(y), meses(m) y días(d).\n"
 "Si el paciente ha fallecido, el año mostrado es el año del fallecimiento, el año corresponde a la fecha en el certificado de defunción. También mostrará \"fallecido\" en el campo"
 
 #. module: medical
+#: selection:efectores.pami,month:0
+msgid "Julio"
+msgstr "Julio"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Junio"
+msgstr "Junio"
+
+#. module: medical
 #: field:res.partner,lastname:0
 #: help:res.partner,lastname:0
 msgid "Last Name"
 msgstr "Apellido"
 
 #. module: medical
+#: field:efectores.pami,write_uid:0
 #: field:medical.appointment,write_uid:0
+#: field:medical.benefit,write_uid:0
+#: field:medical.benefit.type,write_uid:0
+#: field:medical.module,write_uid:0
+#: field:medical.patient.relationship,write_uid:0
+#: field:medical.speciality,write_uid:0
+#: field:medical.subsidiary,write_uid:0
 msgid "Last Updated by"
 msgstr "Última actualización realizada por"
 
 #. module: medical
+#: field:efectores.pami,write_date:0
 #: field:medical.appointment,write_date:0
+#: field:medical.benefit,write_date:0
+#: field:medical.benefit.type,write_date:0
+#: field:medical.module,write_date:0
+#: field:medical.patient.relationship,write_date:0
+#: field:medical.speciality,write_date:0
+#: field:medical.subsidiary,write_date:0
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: medical
-#: view:res.partner:medical.view_partner_form
+#: view:res.partner:medical.view_partner_form_medical
 msgid "Lastname"
 msgstr "Apellido"
+
+#. module: medical
+#: field:medical.module,level:0
+msgid "Level"
+msgstr "Nivel"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Libreta Cívica"
+msgstr "Libreta Cívica"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Libreta Femenina"
+msgstr "Libreta Femenina"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Libreta Masculina"
+msgstr "Libreta Masculina"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Libreta de Enrolamiento"
+msgstr "Libreta de Enrolamiento"
 
 #. module: medical
 #: selection:res.partner,sex:0
@@ -271,9 +668,24 @@ msgid "Male"
 msgstr "Masculino"
 
 #. module: medical
+#: field:res.partner,marital_status:0
+msgid "Marital Status"
+msgstr "Estado Civil"
+
+#. module: medical
 #: help:res.partner,deceased:0
 msgid "Mark if the patient has died"
 msgstr "Marcar si el paciente ha fallecido"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Marzo"
+msgstr "Marzo"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Mayo"
+msgstr "Mayo"
 
 #. module: medical
 #: model:ir.ui.menu,name:medical.medical_root_menu
@@ -281,14 +693,110 @@ msgid "Medical"
 msgstr "Medical"
 
 #. module: medical
+#: model:ir.actions.act_window,name:medical.medical_action_benefit
+msgid "Medical Benefit"
+msgstr "Beneficio"
+
+#. module: medical
 #: help:medical.appointment,institution:0
 msgid "Medical Center"
 msgstr "Centro Medico"
 
 #. module: medical
+#: model:res.groups,name:medical.group_medical_demo
+msgid "Medical Demo"
+msgstr "Medical Demo"
+
+#. module: medical
+#: model:ir.ui.menu,name:medical.menu_medical_module
+msgid "Medical Module"
+msgstr "Módulo"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.medical_action_module
+msgid "Medical Modules"
+msgstr "Módulos"
+
+#. module: medical
+#: model:ir.ui.menu,name:medical.menu_medical_speciality
+#: view:medical.speciality:medical.medical_speciality_tree
+#: view:medical.speciality:medical.medical_speciality_view
+msgid "Medical Speciality"
+msgstr "Especialidad Médica"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.medical_action_speciality
+msgid "Medical Specialties"
+msgstr "Especialidad Médicas"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.medical_action_subsidiary
+msgid "Medical Subsidiaries"
+msgstr "Sucursales"
+
+#. module: medical
+#: model:res.groups,name:medical.group_medical_user
+msgid "Medical User"
+msgstr "Medical User"
+
+#. module: medical
+#: view:medical.benefit:medical.medical_benefit_tree
+#: view:medical.benefit:medical.medical_benefit_view
+msgid "Medical benefit"
+msgstr "Beneficio"
+
+#. module: medical
+#: view:medical.module:medical.medical_module_tree
+#: view:medical.module:medical.medical_module_view
+msgid "Medical module"
+msgstr "Módulo"
+
+#. module: medical
+#: view:medical.subsidiary:medical.medical_subsidiary_tree
+#: view:medical.subsidiary:medical.medical_subsidiary_view
+msgid "Medical subsidiary"
+msgstr "Sucursal"
+
+#. module: medical
+#: field:efectores.pami,month:0
+msgid "Mes"
+msgstr "Mes"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,module_ids:0
+msgid "Modules"
+msgstr "Módulos"
+
+#. module: medical
 #: view:medical.appointment:medical.view_medical_appointment_filter
 msgid "My appointments"
 msgstr "Mis visitas"
+
+#. module: medical
+#: field:res.partner,nacionality:0
+msgid "Nacionality"
+msgstr "Nacionalidad"
+
+#. module: medical
+#: field:res.partner,complete_name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: medical
+#: field:res.partner,registration_number:0
+msgid "National Registration Number"
+msgstr "Matrícula Nacional"
+
+#. module: medical
+#: field:res.partner,nacionality_id:0
+msgid "Nationality Country"
+msgstr "País de Nacionalidad"
+
+#. module: medical
+#: selection:res.partner,institution_type:0
+msgid "Net"
+msgstr "Red"
 
 #. module: medical
 #: model:ir.actions.act_window,name:medical.medical_action_form_new_appointment
@@ -297,9 +805,29 @@ msgid "New Appointment"
 msgstr "Nueva Visita"
 
 #. module: medical
+#: selection:efectores.pami,month:0
+msgid "Noviembre"
+msgstr "Noviembre"
+
+#. module: medical
+#: field:res.partner,nro_sap:0
+msgid "Nro. SAP"
+msgstr "Nro. SAP"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Octubre"
+msgstr "Octubre"
+
+#. module: medical
 #: model:ir.model,name:medical.model_res_partner
 msgid "Partner"
 msgstr "Contraparte"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Pasaporte"
+msgstr "Pasaporte"
 
 #. module: medical
 #: field:medical.appointment,patient:0
@@ -313,7 +841,7 @@ msgid "Patient Age"
 msgstr "Edad del pacient"
 
 #. module: medical
-#: view:res.partner:medical.view_partner_form
+#: view:res.partner:medical.view_partner_form_medical
 msgid "Patient Critical Information"
 msgstr "Información Crítica del paciente"
 
@@ -353,14 +881,29 @@ msgid "Physician's Name"
 msgstr "Nombre del Especialista"
 
 #. module: medical
-#: view:res.partner:medical.view_partner_form
+#: view:res.partner:medical.view_partner_form_medical
 msgid "Provincia"
 msgstr "Provincia"
 
 #. module: medical
-#: field:res.partner,registration_number:0
-msgid "Registration Number"
-msgstr "Número de Registro"
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Puede descargar el archivo haciendo click en 'Guardar como'"
+msgstr "Puede descargar el archivo haciendo click en 'Guardar como'"
+
+#. module: medical
+#: selection:res.partner,document_type:0
+msgid "Recién Nacido"
+msgstr "Recién Nacido"
+
+#. module: medical
+#: view:efectores.pami:medical.view_efectores_pami_form
+msgid "Registros con errores"
+msgstr "Registros con errores"
+
+#. module: medical
+#: field:res.partner,relationship_id:0
+msgid "Relationship"
+msgstr "Parentesco"
 
 #. module: medical
 #: view:medical.appointment:medical.view_medical_appointment_filter
@@ -368,15 +911,66 @@ msgid "Search Appointments"
 msgstr "Búsqueda de Visitas"
 
 #. module: medical
+#: view:medical.benefit:medical.view_medical_benefit_filter
+msgid "Search Medical Benefit"
+msgstr "Búsqueda de Beneficio"
+
+#. module: medical
+#: view:medical.module:medical.view_medical_module_filter
+msgid "Search Medical Modules"
+msgstr "Búsqueda de Módulos"
+
+#. module: medical
+#: view:medical.speciality:medical.view_medical_specialty_filter
+msgid "Search Medical Specialties"
+msgstr "Búsqueda de Especialidades"
+
+#. module: medical
+#: view:medical.subsidiary:medical.view_medical_subsidiary_filter
+msgid "Search Medical Subsidiaries"
+msgstr "Búsqueda de Sucursales"
+
+#. module: medical
+#: selection:res.partner,marital_status:0
+msgid "Separado/a Legal"
+msgstr "Separado/a Legal"
+
+#. module: medical
+#: selection:res.partner,marital_status:0
+msgid "Separado/a de Hecho"
+msgstr "Separado/a de Hecho"
+
+#. module: medical
+#: selection:efectores.pami,month:0
+msgid "Septiembre"
+msgstr "Septiembre"
+
+#. module: medical
 #: field:res.partner,sex:0
 msgid "Sex"
 msgstr "Sexo"
 
 #. module: medical
+#: selection:res.partner,document_type:0
+msgid "Sin Identificación"
+msgstr "Sin Identificación"
+
+#. module: medical
+#: selection:res.partner,marital_status:0
+msgid "Soltero/a"
+msgstr "Soltero/a"
+
+#. module: medical
 #: field:medical.appointment,speciality:0
 #: field:res.partner,speciality:0
+#: field:res.partner,speciality_id:0
 msgid "Speciality"
 msgstr "Especialidad"
+
+#. module: medical
+#: help:res.partner,speciality_id:0
+msgid "Speciality Code"
+msgstr "Código de Especialidad"
 
 #. module: medical
 #: view:medical.appointment:medical.view_medical_appointment_filter
@@ -384,9 +978,51 @@ msgid "Specialty"
 msgstr "Especialidad"
 
 #. module: medical
+#: field:medical.benefit,start_date:0
+#: field:medical.module,start_date:0
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,doctor_start_date:0
+#: field:res.partner,start_date:0
+msgid "Start Date"
+msgstr "Fecha de Alta"
+
+#. module: medical
 #: field:medical.appointment,state:0
 msgid "State"
 msgstr "Provincia"
+
+#. module: medical
+#: field:res.partner,state_registration_number:0
+msgid "State Registration Number"
+msgstr "Matrícula Provincial"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+#: field:res.partner,subsidiary_id:0
+msgid "Subsidiary"
+msgstr "Sucursal"
+
+#. module: medical
+#: model:ir.ui.menu,name:medical.menu_medical_subsidiary
+msgid "Subsidiary Module"
+msgstr "Sucursal"
+
+#. module: medical
+#: sql_constraint:medical.benefit.type:0
+msgid "The Medical Benefit Type code must be unique"
+msgstr "El código de beneficio médico debe ser único."
+
+#. module: medical
+#: sql_constraint:medical.speciality:0
+msgid "The Medical Speciality code must be unique"
+msgstr "El código de especialidad médica debe ser único."
+
+#. module: medical
+#: sql_constraint:medical.benefit:0
+#: sql_constraint:medical.module:0
+#: sql_constraint:medical.subsidiary:0
+msgid "The Medical Subsidiary code must be unique"
+msgstr "El código debe ser único."
 
 #. module: medical
 #: sql_constraint:res.partner:0
@@ -399,12 +1035,72 @@ msgid "Unconfirmed"
 msgstr "No confirmado"
 
 #. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+msgid "Update Date"
+msgstr "Fecha de Actualización"
+
+#. module: medical
 #: selection:medical.appointment,care_type:0
 msgid "Urgencias en Domicilio"
 msgstr "Urgencias en Domicilio"
 
 #. module: medical
+#: field:res.partner,user_name:0
+msgid "User Name"
+msgstr "Nombre de Usuario"
+
+#. module: medical
+#: selection:res.partner,marital_status:0
+msgid "Viudo/a"
+msgstr "Viudo/a"
+
+#. module: medical
 #: help:res.partner,critical_info:0
 msgid "Write any important information on the patient's disease, surgeries, allergies, ..."
 msgstr "Escriba cualquier información importante sobre enfermedades del paciente, cirugias, alergias, etc ..."
+
+#. module: medical
+#: selection:efectores.pami,state:0
+msgid "choose"
+msgstr "choose"
+
+#. module: medical
+#: selection:efectores.pami,state:0
+msgid "done"
+msgstr "done"
+
+#. module: medical
+#: selection:efectores.pami,state:0
+msgid "error"
+msgstr "error"
+
+#. module: medical
+#: selection:efectores.pami,state:0
+msgid "get"
+msgstr "get"
+
+#. module: medical
+#: help:medical.speciality,code:0
+msgid "ie, ADP"
+msgstr "ie, ADP"
+
+#. module: medical
+#: help:medical.speciality,name:0
+msgid "ie, Addiction Psychiatry"
+msgstr "ie, Addiction Psychiatry"
+
+#. module: medical
+#: field:efectores.pami,state:0
+msgid "unknown"
+msgstr "unknown"
+
+#. module: medical
+#: field:res.partner,update_date:0
+msgid "update Date"
+msgstr "Fecha de Actualización"
+
+#. module: medical
+#: view:res.partner:medical.view_partner_form_medical
+msgid "{'required': [('is_institution','=', True)]}"
+msgstr "{'required': [('is_institution','=', True)]}"
 

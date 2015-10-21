@@ -31,19 +31,195 @@ from lxml import etree
 class medical_speciality (osv.osv):
     _name = "medical.speciality"
     _columns = {
-        'name' :fields.char ('Description', size=128, help="ie, Addiction Psychiatry"),
-        'code' : fields.char ('Code', size=128, help="ie, ADP"),
+        'name' :fields.char ('Description', size=128, help="ie, Addiction Psychiatry", required="True"),
+        'code' : fields.char ('Code', size=128, help="ie, ADP", required="True"),
     }
     _sql_constraints = [
-        ('code_uniq', 'unique (name)', 'The Medical Speciality code must be unique')
+        ('code_uniq', 'unique (name)', 'The code must be unique')
     ]
 medical_speciality ()
+
+class medical_patient_relationship (osv.osv):
+    _name = "medical.patient.relationship"
+    _columns = {
+        'name' :fields.char ('Description', size=128, required="True"),
+        'code' : fields.char ('Code', size=2, required="True"),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', 'Code must be unique'),
+
+    ]
+
+    # def name_get(self, cr, user, ids, context={}):
+    #     if not len(ids):
+    #         return []
+    #     def _name_get(d):
+    #         name = d.get('name', '')
+    #         code = d.get('code', '')
+    #         #idx = d.get('patient_id', False)
+    #         # if idx:
+    #         #     name = '[%s] %s' % (idx, name)
+    #         if code and name:
+    #             complete_name = '%s - %s' % (code,name)
+    #         else:
+    #             complete_name = name
+    #         return (d['id'], complete_name)
+    #     result = map(_name_get, self.read(cr, user, ids, ['name', 'code'], context))
+    #     return result
+
+
+medical_patient_relationship ()
+
+class medical_module (osv.osv):
+    _name = "medical.module"
+    _columns = {
+        'name' :fields.char ('Description', size=128, required="True"),
+        'code' : fields.char ('Code', size=2, required="True"),
+        'level' : fields.char ('Level', size=2),
+        'start_date': fields.date('Start Date', help="Fecha de alta de la relación entre modulo y prestador."),
+        #'instution_id': fields.many2one('res.partner','Institution', required="True"),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', 'The code must be unique')
+    ]
+medical_module ()
+
+class medical_subsidiary (osv.osv):
+    _name = "medical.subsidiary"
+    _columns = {
+        'name' :fields.char ('Description', size=128, required="True"),
+        'code' : fields.char ('Code', size=2, required="True"),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', 'The code must be unique')
+    ]
+medical_subsidiary ()
+
+class medical_agency (osv.osv):
+    _name = "medical.agency"
+    _columns = {
+        'name' :fields.char ('Description', size=128, required="True"),
+        'code' : fields.char ('Code', size=2, required="True"),
+        'subsidiary_id': fields.many2one('medical.subsidiary','Subsidiary',required=True),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code, subsidiary_id)', 'The code and subsidiary must be unique')
+    ]
+medical_agency ()
+
+class medical_correspondent (osv.osv):
+    _name = "medical.correspondent"
+    _columns = {
+        'name' :fields.char ('Description', size=128, required="True"),
+        'code' : fields.char ('Code', size=2, required="True"),
+        'subsidiary_id': fields.many2one('medical.subsidiary','Subsidiary',required=True),
+        'agency_id': fields.many2one('medical.agency','Agency',required=False),
+        'id_agencia': fields.integer('Id Agencia'),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code, subsidiary_id, id_agencia)', 'The code and subsidiary and agency must be unique.')
+    ]
+medical_correspondent ()
+
+class medical_afjp (osv.osv):
+    _name = "medical.afjp"
+    _columns = {
+        'name' :fields.char ('Description', size=128, required="True"),
+        'code' : fields.char ('Code', size=2, required="True"),
+        'abbreviation' : fields.char ('Abbreviation', size=5, required="True"),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', 'The code must be unique')
+    ]
+medical_afjp ()
+
+class Country(osv.osv):
+    _name = 'res.country'
+    _inherit = 'res.country'
+    _columns = {
+        'code': fields.char('Country Code', size=3,
+            help='The ISO country code in two chars.\n'
+            'You can use this field for quick search.'),
+        
+    }
+Country()
+
+class DepartmentCity(osv.osv):
+    
+    _name = 'res.department.city'
+    _inherit = 'res.department.city'
+    _columns = {
+        
+        # 'name': fields.char('City', size=50, required=True),
+        # 'municipality': fields.integer('Municipality'),        
+        # 'department_id' : fields.many2one('res.state.department','Department'), # 'state__id' : State relacion a "res.country.state
+        # 'zip_city' : fields.integer('Zip'),
+        'id_sucursal': fields.integer('Id Sucursal'),
+        'id_agencia': fields.integer('Id Agencia'),
+        'id_correspon': fields.integer('Id Agencia'),
+        'correspondent_id': fields.many2one('medical.correspondent','Correspondent'),
+        
+    }
+    
+    sql_constraints = [
+        
+        ('city_zipe_uniq', 'unique(zipe)', 'The zip must be unique.'),
+        ('department_name_uniq', 'unique(department_id, name)', 'The Name must be Unique per Department.'),
+        
+    ]
+    
+DepartmentCity()
+
+
+class medical_benefit_type(osv.osv):
+    _name = "medical.benefit.type"
+    _columns = {
+        'code' : fields.char ('Code', size=2, required="True"),
+        'name' :fields.char ('Description', size=128 ),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (name)', 'The code must be unique')
+    ]
+medical_benefit_type ()
+
+class medical_benefit(osv.osv):
+    _name = "medical.benefit"
+    _columns = {
+        'code' : fields.char ('Code', size=12, required="True"),
+        'name' :fields.char ('Description', size=128 ),
+        'benefit_type_id': fields.many2one('medical.benefit.type','Benefit Type'),
+        'start_date': fields.date('Start Date', help="Fecha en la cual se ingresaron los datos del beneficio", required="True"),
+        #'instution_id': fields.many2one('res.partner','Institution', required="True"),
+    }
+
+    def name_get(self, cr, user, ids, context={}):
+        if not len(ids):
+            return []
+        def _name_get(d):
+            name = d.get('name', '')
+            code = d.get('code', '')
+            #idx = d.get('patient_id', False)
+            # if idx:
+            #     name = '[%s] %s' % (idx, name)
+            if code and name:
+                complete_name = '%s - %s' % (code,name)
+            else:
+                complete_name = code
+            return (d['id'], complete_name)
+        result = map(_name_get, self.read(cr, user, ids, ['name', 'code'], context))
+        return result
+
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', 'The code must be unique')
+    ]
+medical_benefit ()
 
 class medical_partner(osv.osv):
     _name = "res.partner"
     _inherit = "res.partner"
 
     _patient_age_fnt = lambda self, cr, uid, ids, name, arg, context={}: self._patient_age(cr, uid, ids, name, arg, context)
+    _name_get_fnt = lambda self, cr, uid, ids, name, arg, context={}: self.name_get(cr, uid, ids, context)
 
     _columns = {
         'is_patient' : fields.boolean('Patient', help="Check if the partner is a patient"),
@@ -51,7 +227,19 @@ class medical_partner(osv.osv):
         'is_person' : fields.boolean('Person', help="Check if the partner is a person"),
         'is_institution' : fields.boolean ('Institution', help="Check if the partner is a Medical Center"),
         'lastname' : fields.char('Last Name', size=128, help="Last Name"),
-
+        'document_type': fields.selection([('CI','Cédula de Identidad'),
+                                            ('CIB','Cédula de Identidad Brasil'),
+                                            ('CIC','Cédula de Identidad Chile'),
+                                            ('CIU','Cédula de Identidad Uruguay'),
+                                            ('DNI','Documento Nacional de Identidad'),
+                                            ('LC','Libreta Cívica'),
+                                            ('LE','Libreta de Enrolamiento'),
+                                            ('LF','Libreta Femenina'),
+                                            ('LM','Libreta Masculina'),
+                                            ('PAS','Pasaporte'),
+                                            ('RN','Recién Nacido'),
+                                            ('SD','Sin Identificación'),
+            ],'Document Type'),
         # --- datos paciente
         'age' : fields.function(_patient_age_fnt, method=True, type='char', size=32, string='Patient Age', help="It shows the age of the patient in years(y), months(m) and days(d).\nIf the patient has died, the age shown is the age at time of death, the age corresponding to the date on the death certificate. It will show also \"deceased\" on the field"),
         'dob' : fields.date ('Date of Birth'),
@@ -66,24 +254,86 @@ class medical_partner(osv.osv):
             ('f', 'Female'),
         ], 'Sex', select=True),
         'sex' : fields.selection([
-            ('m', 'Male'),
-            ('f', 'Female'),
+            ('M', 'Male'),
+            ('F', 'Female'),
         ], 'Sex', select=True),
+        'complete_name': fields.function(_name_get_fnt, method=True, type="char", string='Name'),
+        'marital_status': fields.selection([('1','Soltero/a'),
+                                            ('2','Casado/a'),
+                                            ('3','Viudo/a'),
+                                            ('4','Separado/a Legal'),
+                                            ('5','Separado/a de Hecho'),
+                                            ('6','Divorciado/a'),
+                                            ('7','Concubino/a'),
+                                            ],'Marital Status'),
+        'nacionality': fields.selection([('1', 'Argentino'),
+                                         ('2', 'Argentino Naturalizado'),
+                                         ('3', 'Extranjero'),
+                                        ],'Nacionality'),
+        'nacionality_id': fields.many2one('res.country','Nationality Country'),
+        'cuil': fields.char('CUIL', size=15, required=False, select=True, ),
+        'benefit_id': fields.many2one('medical.benefit','Benefit'),
+        'relationship_id': fields.many2one('medical.patient.relationship','Relationship'),
+
+        'id_sucursal': fields.integer('Id Sucursal'),
+        'id_agencia': fields.integer('Id Agencia'),
+        'id_correspon': fields.integer('Id Agencia'),
+        'id_pais': fields.integer('Id Pais'),
+        'id_beneficio': fields.char ('Id beneficio', size=12,),
+        'id_parentesco': fields.char ('Id Parentesco', size=12,),
+        'correspondent_id': fields.many2one('medical.correspondent','Correspondent'),
+        'agency_id':fields.related('correspondent_id', 'agency_id', type='many2one', relation='medical.agency', string='Agency'),
+        'subsidiary_id':fields.related('correspondent_id', 'subsidiary_id', type='many2one', relation='medical.subsidiary', string='Subsidiary'),
+        'afjp_id': fields.many2one('medical.afjp','AFJP'),
+
+        'vto_afiliacion': fields.date('Fecha de Vencimineto', help="Fecha de vencimiento para la afiliación"),
+        't_formulario': fields.selection([('0', 'Indefinido'),
+                                         ('1', 'Ingreso manual en corresponsalía'),
+                                         ('2', 'Automático por importación de datos desde el ANSES'),
+                                        ],'Tipo de Formulario'),
+
+
         # ----- datos medico
-        'registration_number': fields.char('Registration Number', size=64, required=False, select=True, ),
+        'registration_number': fields.char('National Registration Number', size=64, required=False, select=True, ),
+        'state_registration_number': fields.char('State Registration Number', size=64, required=False, select=True, ),
         'speciality' : fields.char('Speciality', size=64, required=False, select=True, ),
         'speciality_id' : fields.many2one ('medical.speciality', 'Speciality', help="Speciality Code"),
+        'doctor_start_date': fields.date('Start Date', help="Fecha de inicio del Profesional con el Prestador"),
+        'street_number': fields.char('Street Number',size=10),
+        'npostal': fields.char('Npostal',size=10),
+        'c_profesional': fields.integer('c_profesional'),
+
         # ------ datos institution - prestadores
-        'cuit': fields.char('CUIT', size=64, required=False, select=True, ),
+        'cuit': fields.char('CUIT', size=15, required=False, select=True, ),
         #'institution_type': fields.integer('Institution Type'),
         'institution_type': fields.selection([('1','Individual'),('2','Institution'),('3','Net')],'Institution Type'),
         'user_name': fields.char('User Name', size=16),
+        'nro_sap': fields.char('Nro. SAP', size=16),
         'instalation_number': fields.char('Instalation Number', size=20 ),
-        'abbreviation': fields.char('Abbreviation', size=20),
+        'abbreviation': fields.char('Abbreviation', size=20, help='Abreviatura de la descripción'),
+        'head_doctor': fields.boolean('Head Doctor', help="Indica si el prestador es médico de cabecera"),
+        'start_date': fields.date('Start Date', help="Fecha a partir de la cual el prestador está habilitado"),
+        'end_date': fields.date('End Date', help="Fecha a partir de la cual el prestador deja de está habilitado"),
+        'end_reason': fields.char('End Reason', help="Descripción del motivo por el cual el prestador se encuentra dado de baja"),
+        'update_date': fields.date('update Date', help="Fecha de actualización del registro de prestador"),
+        'attention_point': fields.integer('Attention Point', help="Identificador único de una boca de atención"),
+        #'subsidiary_number': fields.integer('Subsidiary Number', help="Identificador único de una sucursal del PAMI."),
+        #'subsidiary_id': fields.many2one('medical.subsidiary','Subsidiary', help="Identificador único de una sucursal del PAMI."),
+        'module_ids': fields.many2many('medical.module','rel_modulosxprestador','instution_id','module_id','Modules'),
+
     }
     _sql_constraints = [
-        ('dni_uniq', 'unique (dni)', 'The dni already exists')
+        ('benefit_uniq', 'unique (benefit_id, relationship_id)', 'Benefit and relationship must be unique.'),
     ]
+
+    _defaults = {
+        
+        'street_number':lambda *a: '0',
+        't_formulario':lambda *a: '0',
+        'phone':lambda *a: '0',
+        'id_sucursal':lambda *a: 18,
+
+    }
 
     def name_get(self, cr, user, ids, context={}):
         if not len(ids):
@@ -91,15 +341,15 @@ class medical_partner(osv.osv):
         def _name_get(d):
             name = d.get('name', '')
             lastname = d.get('lastname', '')
-            print name
-            print lastname
             #idx = d.get('patient_id', False)
             # if idx:
             #     name = '[%s] %s' % (idx, name)
-            complete_name = '%s, %s' % (lastname,name)
+            if lastname and name:
+                complete_name = '%s, %s' % (lastname,name)
+            else:
+                complete_name = name
             return (d['id'], complete_name)
         result = map(_name_get, self.read(cr, user, ids, ['name', 'lastname'], context))
-        print result
         return result
 
     # Get the patient age in the following format : "YEARS MONTHS DAYS"
@@ -126,6 +376,15 @@ class medical_partner(osv.osv):
             result[patient_data.id] = compute_age_from_dates (patient_data.dob, patient_data.deceased, patient_data.dod)
         return result
 
+    def onchange_correspondent_id(self, cr, uid, ids, correspondent_id, context=None):
+        if correspondent_id:
+            city = self.pool.get('medical.correspondent').browse(cr, uid, correspondent_id, context)
+            val = {'agency_id':city.agency_id.id,
+                   'subsidiary_id':city.subsidiary_id.id,}
+            
+            return {'value': val}
+        return {}
+
 medical_partner()
 
 class medical_appointment (osv.osv):
@@ -135,10 +394,10 @@ class medical_appointment (osv.osv):
         'doctor' : fields.many2one ('res.partner', 'Physician',domain=[('is_doctor', '=', "1")], help="Physician's Name"),
         'name' : fields.char ('Appointment ID', size=64, readonly=True, required=False),
         'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name"),
-        'appointment_date' : fields.datetime ('Date and Time'),
+        'appointment_date' : fields.date ('Date'),
         'institution' : fields.many2one ('res.partner', 'Health Center', domain=[('is_institution', '=', "1")], help="Medical Center"),
         #'speciality' : fields.many2one ('medical.speciality', 'Speciality', help="Medical Speciality / Sector"),
-        'speciality' : fields.char('Speciality', size=64, required=True, select=True, ),
+        # 'speciality' : fields.char('Speciality', size=64, required=True, select=True, ),
         'state': fields.selection([
             ('draft', 'Unconfirmed'),
             ('open', 'Confirmed'),
@@ -160,15 +419,33 @@ class medical_appointment (osv.osv):
 # End of additions from hda
 
         'care_type': fields.selection([
-            ('consul_ext', 'Consultorio Externo'),
-            ('atenc_domic', 'Atención Programada a Domicilio'),
-            ('atenc_juris', 'Atención en Jurisdicciónes Alejadas'),
-            ('hosp_jorn_simple', 'Hospital de Dia Jornada Simple'),
-            ('hosp_jorn_comple', 'Hospital de Dia Jornada Completa'),
-            ('atenc_telef', 'Atencion Telefonica'),
-            ('urgencia_dom', 'Urgencias en Domicilio'),
-
+            ('1','Atención Programada a Domicilio'),
+            ('2','Urgencias en Domicilio'),
+            ('3','Atención telefónica'),
+            ('4', 'Consultorio Externo'),
+            ('5', 'Hospital de Dia Jornada Simple'),
+            ('6', 'Hospital de Dia Jornada Completa'),
+            ('7', 'Atención en Jurisdicciónes Alejadas'),
         ], 'Care Type'), ##---- Tipo de atencion
+
+        #----------------------- extras migracion
+        'c_profesional': fields.integer('c_profesional'),
+        'id_modalidad_presta': fields.selection([('1','Afiliado Propio'),('2','Por order de Prestación')],'Modalidad de Prestación'),
+        'id_beneficio': fields.char ('Id beneficio', size=12,),
+        'id_parentesco': fields.char ('Id Parentesco', size=12,),
+        'f_fecha_egreso' : fields.date ('Fecha Finalización'),
+        'id_tipo_egreso': fields.selection([
+            ('1','Alta Médica Definitiva'),
+            ('2','Alta Médica Transitoria'),
+            ('3','Traslado a O/ Establecimiento'),
+            ('4', 'Defuncion'),
+            ('5', 'Retiro Voluntario'),
+            ('6', 'Fuga'),
+            ('7', 'Internacion Domiciliaria'),
+            ('8', 'Otro'),
+        ], 'Tipo de Egreso'), ##---- Tipo de atencion
+
+
     }
     _order = "appointment_date desc"
 
@@ -177,7 +454,7 @@ class medical_appointment (osv.osv):
         'name': lambda self, cr, uid, context = None: \
             self.pool.get('ir.sequence').get(cr, uid, 'medical.appointment'),
         'appointment_date': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
-        'care_type': lambda *a: 'consul_ext',
+        'care_type': lambda *a: '1',
         # TODO: arreglar esto
         #'doctor': lambda self, cr, uid, context: self.pool.get('medical.physician')._get_default_doctor(cr, uid, context),
         'state':lambda *a: 'draft',

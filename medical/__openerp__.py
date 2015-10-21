@@ -33,6 +33,7 @@ This module provide :
     "version": "1.0",
     "depends": [
         "base",
+        "base_department_city",
         ],
     
     "init_xml": [],
@@ -42,7 +43,7 @@ This module provide :
         'wizard/efectores_pami_view.xml',
         'views/medical_view.xml',
         'views/medical_menu.xml',
-        'data/medical_data.xml',
+        #'data/medical_data.xml',
 
     ],
     'demo_xml': [],

@@ -19,6 +19,10 @@
             parent="medical_patients_submenu"
             action="action_partner_patient_form" sequence="10"/>
 
+            <menuitem id="menu_medical_benefit" name="Benefits"
+            parent="medical_patients_submenu"
+            action="medical_action_benefit" sequence="20"/>
+
             <menuitem name="Phisicyan" id="medical_phisicyan_submenu" parent="medical_root_menu" sequence="30" />
             <menuitem id="menu_medical_phisicyan" name="Phisicyan"
             parent="medical_phisicyan_submenu"
@@ -32,6 +36,26 @@
             <menuitem id="menu_medical_speciality" name="Medical Speciality"
             parent="medical_configuration_submenu"
             action="medical_action_speciality" sequence="20"/>
+
+            <menuitem id="menu_medical_module" name="Medical Module"
+            parent="medical_configuration_submenu"
+            action="medical_action_module" sequence="30"/>
+
+            <menuitem id="menu_medical_subsidiary" name="Subsidiary Module"
+            parent="medical_configuration_submenu"
+            action="medical_action_subsidiary" sequence="40"/>
+
+            <menuitem id="menu_medical_agency" name="Agency"
+            parent="medical_configuration_submenu"
+            action="medical_action_agency" sequence="50"/>
+
+            <menuitem id="menu_medical_correspondent" name="Correspondent"
+            parent="medical_configuration_submenu"
+            action="medical_action_correspondent" sequence="60"/>
+
+            <menuitem id="menu_medical_afjp" name="AFJP"
+            parent="medical_configuration_submenu"
+            action="medical_action_afjp" sequence="70"/>
 				<!-- <menuitem action="medical_patient_action_kanban" parent="medical_patients_submenu" id="medical_edit_patient" sequence="1" /> -->
 
 			<menuitem name="Efectores Pami" id="medical_efectores_pami_submenu" parent="medical_root_menu" sequence="40" />

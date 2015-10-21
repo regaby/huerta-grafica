@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data noupdate="1">
+    			<!-- especialidades -->
 
 				<record id="mp1" model="medical.speciality">
 					<field name="name">Psicología</field>
@@ -17,6 +18,119 @@
 				<record id="mp4" model="medical.speciality">
 					<field name="name">Nutrición</field>
 					<field name="code">4</field>
+				</record>
+				<!-- modulos -->
+
+				<record id="mm1" model="medical.module">
+					<field name="name">Medico Cabecera</field>
+					<field name="code">1</field>
+					<field name="level">1</field>
+				</record>
+
+				<record id="mm6" model="medical.module">
+					<field name="name">Consulta Especialista</field>
+					<field name="code">6</field>
+					<field name="level">2</field>
+				</record>
+
+				<record id="mm50" model="medical.module">
+					<field name="name">Salud Mental Hospital de Día</field>
+					<field name="code">50</field>
+					<field name="level">1</field>
+				</record>
+
+				<record id="mm51" model="medical.module">
+					<field name="name">Salud Mental Consultorio Externo</field>
+					<field name="code">51</field>
+					<field name="level">1</field>
+				</record>
+
+				<!-- subsidiary -->
+				<record id="ms1" model="medical.subsidiary">
+					<field name="name">Misiones</field>
+					<field name="code">18</field>
+				</record>
+
+				<!-- parentesco -->
+
+				<record id="mpr00" model="medical.patient.relationship">
+					<field name="name">Titular</field>
+					<field name="code">00</field>
+				</record>
+
+				<record id="mpr01" model="medical.patient.relationship">
+					<field name="name">Esposo/a</field>
+					<field name="code">01</field>
+				</record>
+
+				<record id="mpr02" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">02</field>
+				</record>
+
+				<record id="mpr03" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">03</field>
+				</record>
+
+				<record id="mpr04" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">04</field>
+				</record>
+
+				<record id="mpr05" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">05</field>
+				</record>
+
+				<record id="mpr06" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">06</field>
+				</record>
+
+				<record id="mpr07" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">07</field>
+				</record>
+
+				<record id="mpr08" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">08</field>
+				</record>
+
+				<record id="mpr09" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">09</field>
+				</record>
+
+				<record id="mpr10" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">10</field>
+				</record>
+
+				<record id="mpr11" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">11</field>
+				</record>
+
+				<record id="mpr12" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">12</field>
+				</record>
+
+				<record id="mpr13" model="medical.patient.relationship">
+					<field name="name">Hijo/a</field>
+					<field name="code">13</field>
+				</record>
+
+				<record id="mpr14" model="medical.patient.relationship">
+					<field name="name">Hijo Soltero mayor 32 años</field>
+					<field name="code">14</field>
+				</record>
+
+				<record id="mpr15" model="medical.patient.relationship">
+					<field name="name">Hijo Soltero mayor 32 años</field>
+					<field name="code">15</field>
 				</record>
 	</data>
 </openerp>					

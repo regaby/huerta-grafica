@@ -42,29 +42,40 @@ class efectores_pami(osv.osv_memory):
         
         prestador_id = self.pool.get('res.partner').search(cr, uid, [('is_institution','=',True)])
         prestador_pool = self.pool.get('res.partner').browse(cr, uid, prestador_id, context)
-        output += prestador_pool.cuit+';' # CUIT
-        output += str(ids[0])+';' # numero de emulacion
+        output += prestador_pool.cuit +';' # CUIT
+        numero_emulacion = str(ids[0])
+        fecha_emulacion = time.strftime('%d_%m_%Y')
+        periodo_emulacion = str(this.month).zfill(2)+'-'+str(this.year)[2:4]
+        output += numero_emulacion+';' # numero de emulacion
         output += time.strftime('%d/%m/%Y')+';' # fecha emulasion
-        output += str(this.month).zfill(2)+'-'+str(this.year)[2:4]+';'# mes y año prestacionales
+
+        output += periodo_emulacion + ';'# mes y año prestacionales
         output += prestador_pool.name+';' # nombre del prestador
         output += str(prestador_pool.institution_type)+';' # tipo de prestador
         output += prestador_pool.user_name+';' # nombre de usuario
         output += prestador_pool.instalation_number + '\n' # nro. de instalacion de efectores
 
-        output += 'RED\n'
+        # output += 'RED\n'
 
-        output += prestador_pool.cuit+';' # CUIT
-        output += ';;0;' # vacio, vacio, 0
-        output += prestador_pool.abbreviation+';' # CUIT
-        output += prestador_pool.name+';' # nombre del prestador
-        output += '0' +';' # cuit, va 0
-        output += prestador_pool.street+';' # calle
-        output += '0' +';' # puerta
-        output += ';;;' # piso, departamento, npostal
-        if prestador_pool.phone:
-            output += prestador_pool.phone + '\n' # telefono
-        else:
-            output += '\n'
+        # output += prestador_pool.cuit +';' # CUIT
+        # output += ';;0;' # vacio, vacio, 0
+        # output += prestador_pool.name[0:20]+';' # abreviacion
+        # output += prestador_pool.name+';' # nombre del prestador
+        # output += '0' +';' # cuit, va 0
+        # output += prestador_pool.street+';' # calle
+        # if prestador_pool.street_number:
+        #     output += prestador_pool.street_number+';'
+        # else:
+        #     output += '0;' # puerta
+        # output += ';;' # piso, departamento
+        # if prestador_pool.city_id:
+        #     output += str(prestador_pool.city_id.zip_city) + ';' # npostal
+        # else:
+        #     output += ';'
+        # if prestador_pool.phone:
+        #     output += prestador_pool.phone + '\n' # telefono
+        # else:
+        #     output += '\n'
 
         # buscar visitas...
         year = this.year
@@ -74,30 +85,47 @@ class efectores_pami(osv.osv_memory):
         date_top = str(datetime(year, month, last_day[1]))[0:10]
         appointment_ids = self.pool.get('medical.appointment').search(cr, uid, [('appointment_date','>=',date_bottom),('appointment_date','<=',date_top)])
 
-        doctor = []
+        doctors = []
+        patients = []
 
         for apoint in self.pool.get('medical.appointment').browse(cr, uid, appointment_ids):
-            doctor.append(apoint.doctor.id)
+            doctors.append(apoint.doctor.id)
+            patients.append(apoint.patient.id)
             #doctor.update({apoint.doctor.id: apoint.doctor.id})
         # elimino los elementos duplicados
-        doctor = list(set(doctor))
-        print "doctor..."
-        print doctor
+        doctors = list(set(doctors))
+        patients = list(set(patients))
 
 
         output += 'PROFESIONAL\n'
 
-        for doc in self.pool.get('res.partner').browse(cr, uid, doctor):
+        for doc in self.pool.get('res.partner').browse(cr, uid, doctors):
             output += ';;;0;'
             output += doc.name + ';' # apellido y nombre
             output += doc.speciality_id.code + ';' # id especialidad
             output += doc.registration_number + ';' # matricula nacional profesional
-            output += ';' # matricula provincial, no es obligatoria
-            output += 'DNI;0;' # tipo y numero de documento
-            output += ';' # cuil, no es obligatorio
-            output += doc.street + ';' # calle
-            output += '0;' # numero
-            output += ';;;' # piso, departamento, npostal
+            if doc.state_registration_number:
+                output += doc.state_registration_number + ';'
+            else:
+                output += ';' # matricula provincial, no es obligatoria
+            output += doc.document_type + ';' + doc.dni +';' # tipo y numero de documento
+            if doc.cuil:
+                output += doc.cuil + ';' # cuil
+            else:
+                output += ';'
+            if doc.street:
+                output += doc.street + ';' # calle
+            else:
+                output += 'SIN SUMINISTRAR;' # calle
+            if doc.street_number:
+                output += doc.street_number+';'
+            else:
+                output += '0;' # puerta
+            output += ';;' # piso, departamento
+            if doc.city_id:
+                output += str(doc.city_id.zip_city) + ';' # npostal
+            else:
+                output += ';'
             if doc.phone:
                 output += doc.phone + '\n' # telefono
             else:
@@ -106,81 +134,240 @@ class efectores_pami(osv.osv_memory):
         output += 'PRESTADOR\n'
 
         output += ';' # vacio
-        output += prestador_pool.cuit+';' # CUIT
+        output += prestador_pool.cuit +';' # CUIT
         output += ';' # matricula nacional del profesional, si no es individual sera null #VER
         output += ';' # vacio
-        output += '0' # C_PRESTADOR , poner 0
-        output += ';' # n_nro_prestador, nombre de usuario #VER
-        output += ';' # n_nro_sap, cod. sap para facturacion #VER
+        output += '0;' # C_PRESTADOR , poner 0
+        if prestador_pool.user_name:
+            output += prestador_pool.user_name + ';' # n_nro_prestador, nombre de usuario
+        else:
+            output += ';' 
+        if prestador_pool.nro_sap:
+            output += prestador_pool.nro_sap + ';' # nro_sap
+        else:
+            output += ';' 
+        output += str(prestador_pool.institution_type)+';' # tipo de prestador
+        output += ';' # tabla iva
+        if prestador_pool.head_doctor: # medico de cabecera
+            output += '1;' # el prestador es medico de cabecera
+        else:
+            output += '0;' # el prestador no es medico de cabecera
+        output += prestador_pool.email + ';'
+        output += datetime.strptime(prestador_pool.start_date, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de alta
+
+        if prestador_pool.end_date:
+            #output += prestador_pool.end_date.strftime('%d/%m/%Y')+';' # fecha de baja
+            output += datetime.strptime(prestador_pool.end_date, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de alta
+            output += prestador_pool.end_reason
+        else:
+            output += ';;'
+        if prestador_pool.update_date:
+            #output += prestador_pool.update_date.strftime('%d/%m/%Y')+';' # fecha de actualización
+            output += datetime.strptime(prestador_pool.update_date, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de actualizacion
+        else:
+            output += ';' 
+        output += '0;0;0;' # cuit, profesional, id_red
+        output += prestador_pool.name + ';' # nombre del prestador institución
+        output += prestador_pool.street+';' # calle
+        if prestador_pool.street_number:
+            output += prestador_pool.street_number+';'
+        else:
+            output += '0;' # puerta
+        output += ';;' # piso, departamento
+        if prestador_pool.city_id:
+            output += str(prestador_pool.city_id.zip_city) + ';' # npostal
+        else:
+            output += ';'
+        if prestador_pool.phone:
+            output += prestador_pool.phone + ';' # telefono 
+        else:
+            output += ';'
+        if prestador_pool.instalation_number:
+            output += prestador_pool.instalation_number + '\n' # identificador unido de nstalacion de BD para el prestador
+        else:
+            output += '\n'
+
+
+        output += 'REL_PROFESIONALESXPRESTADOR\n'
+
+        for doc in self.pool.get('res.partner').browse(cr, uid, doctors):
+            output += ';' # vacio
+            output += prestador_pool.cuit +';' # CUIT
+            output += doc.registration_number + ';' # matricula nacional profesional
+            output += '0;0;'
+            if doc.start_date:
+                output += datetime.strptime(doc.start_date, '%Y-%m-%d').strftime('%d/%m/%Y') +'\n' # fecha de alta
+            else:
+                output += '\n'
+
+        output += 'BOCA_ATENCION\n'
+        output += ';' # vacio
+        output += prestador_pool.cuit +';' # CUIT
+        output += ';0;' # vacio + 0
+        output += str(prestador_pool.attention_point) + ';' # boca de atencion
+        #output += str(prestador_pool.subsidiary_number) + ';' # numero sucursal PAMI
+        if prestador_pool.id_sucursal:
+            output += str(prestador_pool.id_sucursal) + ';' # numero sucursal PAMI
+        else:
+            outerr+= "El prestador %s no tiene sucursal asignada.\n"%(prestador_pool.complete_name)
+        output += prestador_pool.street+';' # calle
+        if prestador_pool.street_number:
+            output += prestador_pool.street_number+';'
+        else:
+            output += '0;' # puerta
+        output += ';;' # piso, departamento
+        if prestador_pool.city_id:
+            output += str(prestador_pool.city_id.zip_city) + ';' # npostal
+        else:
+            output += ';'
+        if prestador_pool.phone:
+            output += prestador_pool.phone + '\n' # telefono 
+        else:
+            output += '\n'
+
+        output += 'REL_MODULOSXPRESTADOR\n'
+        for module in prestador_pool.module_ids:
+            output += ';' # vacio
+            output += prestador_pool.cuit +';' # CUIT
+            output += ';' # vacio
+            output += '0;' # C_PRESTADOR , poner 0
+            output += module.code + ';' 
+            if module.start_date:
+                output += module.start_date + '\n' # fecha de alta de la relación entre modulo y prestador
+            else:
+                output += '\n'
 
 
 
 
+        # output += 'REL_PRESTADORESXRED\n'
+        # output += prestador_pool.cuit +';' # CUIT
+        # output += prestador_pool.cuit +';' # CUIT
+        # output += ';0;0;\n' # vacio + 0 + 0
+
+        output += 'BENEFICIO\n'
+        for pat in self.pool.get('res.partner').browse(cr, uid, patients):
+            output += ';;;' # 3 vacios
+            if pat.benefit_id:
+                output += pat.benefit_id.code +';' # id beneficio
+                if pat.benefit_id.benefit_type_id:
+                    output += pat.benefit_id.benefit_type_id.code +';' # id tipo beneficio
+                else:
+                    output += ';'
+                if pat.benefit_id.name:
+                    output += pat.benefit_id.name +';' # denominacion beneficio
+                else:
+                    output += ';'
+                output += '1;' # ni_alta_por_presta siempre es 1
+                if pat.benefit_id.start_date:
+                    output += datetime.strptime(pat.benefit_id.start_date, '%Y-%m-%d').strftime('%d/%m/%Y') +'\n' # fecha de alta
+                else:
+                    outerr+= "El beneficio del afiliado %s no tiene fecha de alta.\n"%(pat.complete_name)
+            else:
+                outerr+= "El afiliado %s no tiene beneficio relacionado.\n"%(pat.complete_name)
 
 
-        print output
-        return True
+        output += 'AFILIADO\n'
+        for pat in self.pool.get('res.partner').browse(cr, uid, patients):
+            output += pat.name + ';' # nombre y apellido de la persona
+            if pat.document_type:
+                output += pat.document_type + ';' # tipo de documento
+            else:
+                output += 'DNI'
+            output += pat.dni + ';' # nro de documento
+            if pat.marital_status: 
+                output += pat.marital_status + ';' 
+            else: 
+                output += ';' # estado civil
+            if pat.nacionality:
+                output += pat.nacionality + ';' # nacionalidad
+            else:
+                output += ';' 
+            if pat.nacionality_id:
+                output += pat.nacionality_id.code + ';' # nacionalidad pais
+            else:
+                output += ';' 
+            if pat.street:
+                output += pat.street + ';' # cale
+            else:
+                output += ';' 
+            if pat.street_number:
+                output += pat.street_number+';'
+            else:
+                output += '0;' # puerta
+            output += ';;' # piso, departamento
+            if pat.city_id:
+                output += str(pat.city_id.zip_city) + ';' # npostal
+            else:
+                output += ';'
+            if pat.phone:
+                output += pat.phone + ';' # telefono
+            else:
+                output += ';'
+            if pat.dob:
+                output += datetime.strptime(pat.dob, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de nacimiento
+            else:
+                outerr+= "El afiliado %s no tiene fecha de nacimiento.\n"%(pat.complete_name)
+            if pat.sex:
+                output += pat.sex + ';' # sexo
+            else:
+                outerr+= "El afiliado %s no tiene el campo sexo asignado.\n"%(pat.complete_name)
+            if pat.cuil:
+                output += pat.cuil + ';' # cuil
+            else:
+                output += ';'
+            if pat.cuit:
+                output += pat.cuit + ';' # cuit
+            else:
+                output += ';' 
+            # if pat.insurance_number:
+            #     output += pat.insurance_number[0:12] + ';' # id beneficio
+            # else:
+            #     outerr+= "El afiliado %s no tiene número de obra social.\n"%(pat.complete_name)
+            if pat.benefit_id.code:
+                output += pat.benefit_id.code + ';' # id beneficio
+            else:
+                outerr+= "El afiliado %s no tiene código de beneficio relacionado.\n"%(pat.complete_name)
+            if pat.relationship_id:
+                output += pat.relationship_id.code + ';' # id parentesco
+            else:
+                outerr+= "El afiliado %s no tiene el campo parentesco asignado.\n"%(pat.complete_name)
+            output += ';;;;;;;\n' # id_sucursal, id_agencia, id_corresponsalia, id_afjp, vto_afiliado, f_formulario, fecha_baja, codigo_baja
+        output += 'PRESTACIONES\n'
 
-        # nom = 'bnf '
 
-        # #
-        # for obj in objs:
-        #     cr.execute("SELECT ID FROM hr_employee WHERE address_home_id2=%s" % (obj.partner_id.address[0].id))
-        #     sql_res = cr.dictfetchone()
+            
 
-        #     if not sql_res and this.type=='interno':
-        #         outerr+= "El proveedor %s no tiene agente asociado por address_home_id2.\n"%(obj.partner_id.name)
 
-        #     if len(obj.partner_id.bank_ids)==0:
-        #         outerr+= "El proveedor %s no tiene detalle del banco.\n"%(obj.partner_id.name)
+        #print output
+        print outerr
 
-        #     # Con al menos un error ya no proceso la salida, solo los errores.
-        #     if outerr=="":
-        #         if this.type=='interno':
-        #             empl = self.pool.get('hr.employee').read(cr, uid, [sql_res['id']], ('licenseno',), context)[0]
-        #             output+= '3'+'\t' # Tipo de documento DNI
-        #             output+= ('0', empl['licenseno'].replace('.',''))[empl['licenseno']!=False]+'\t' # Numero de documento
-        #         else:
-        #             output+= '10'+'\t' # Tipo de documento CUIT
-        #             output+= obj.partner_id.cuit.replace('-','')+'\t' # Numero de documento
-        #         output+= '1'+'\t' # Condicion de ingreso brutos
-        #         output+= (('1', '4')[obj.partner_id.title=='MONOTRIBUTISTA'])+'\t' # Condicion de ganancias
-        #         output+= (('1', '7')[obj.partner_id.title=='MONOTRIBUTISTA'])+'\t' # Condicion de iva
-        #         output+= obj.partner_id.ref+'\t' # Razon social
-        #         #
-        #         nom = nom+str(obj.partner_id.ref)[4:12]
-        #         nom += '.txt'
-        #         #
-        #         output+= obj.partner_id.address[0].street+'\t' # Calle
-        #         output+= (obj.partner_id.address[0].numero or '')+'\t' # Numero de puerta
-        #         output+= '0'+'\t'#(obj.partner_id.address[0].unidad_funcional or '')+'\t' # Unidad funcional
-        #         output+= ('0', str(obj.partner_id.address[0].zip))[obj.partner_id.address[0].zip!=False]+'\t' # Codigo postal
-        #         output+= '' # Nro de ingreso brutos
-        #         output+= '\n'
+        if outerr=="":
+            #filename = 'bnf.txt'
+            #filename = 'efectores_%s_%s.txt' % (numero_emulacion,fecha_emulacion)
+            filename = '%s_%s_%s_%s_%s_%s.txt' % (prestador_pool.cuit, fecha_emulacion, periodo_emulacion, numero_emulacion, prestador_pool.user_name, prestador_pool.instalation_number)
 
-        # if outerr=="":
-        #     #filename = 'bnf.txt'
-        #     filename = nom.replace(' ','_')
+            #30-69806560-1_05_09_2015_08-2015_216_UP3069806560100_jo432
 
-        #     out=base64.encodestring(output.encode('utf-8'))
-        #     self.write(cr, uid, ids, {'state':'get', 'data':out, 'name':filename}, context=context)
-        # else:
-        #     out=base64.encodestring(outerr.encode('utf-8'))
-        #     self.write(cr, uid, ids, {'state':'error', 'info':outerr, 'name':''}, context=context)
+            out=base64.encodestring(output.encode('utf-8'))
+            self.write(cr, uid, ids, {'state':'get', 'data':out, 'name':filename}, context=context)
+        else:
+            out=base64.encodestring(outerr.encode('utf-8'))
+            self.write(cr, uid, ids, {'state':'error', 'info':outerr, 'name':''}, context=context)
 
-        # # se agrega return de vista para la version 7.0, antes el return hacia con self.write, pero esto cerraba el wizard
-        # view_id = self.pool.get('ir.ui.view').search(cr,uid,[('model','=','efectores.pami')])
-        # return {
-        #     'type': 'ir.actions.act_window',
-        #     'res_model': 'efectores.pami',
-        #     'name': _('Generar archivo de terceros BENEFICIARIOS'),
-        #     'res_id': ids[0],
-        #     'view_type': 'form',
-        #     'view_mode': 'form',
-        #     'view_id': view_id,
-        #     'target': 'new',
-        #      'nodestroy': True,
-        #      'context': context
-        #         }
+        # se agrega return de vista para la version 7.0, antes el return hacia con self.write, pero esto cerraba el wizard
+        view_id = self.pool.get('ir.ui.view').search(cr,uid,[('model','=','efectores.pami')])
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'efectores.pami',
+            'name': _('Generar archivo de terceros BENEFICIARIOS'),
+            'res_id': ids[0],
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id,
+            'target': 'new',
+             'nodestroy': True,
+             'context': context
+                }
 
 efectores_pami()
