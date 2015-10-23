@@ -20,3 +20,4 @@
 #
 ##############################################################################
 import efectores_pami
+import medical_patient_report_wizard

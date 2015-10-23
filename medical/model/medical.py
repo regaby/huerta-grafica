@@ -387,6 +387,63 @@ class medical_partner(osv.osv):
 
 medical_partner()
 
+class medical_diagnostic(osv.osv):
+    _name = "medical.diagnostic"
+    _columns = {
+        'code' : fields.char ('Code', size=10, required="True"),
+        'name' :fields.char ('Description', size=128, required="True" ),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', 'The code must be unique')
+    ]
+medical_diagnostic ()
+
+class medical_appointment_diagnostic(osv.osv):
+    _name = "medical.appointment.diagnostic"
+    _columns = {
+        'diagnostic_id' : fields.many2one ('medical.diagnostic', 'Diagnostic', required=False),
+        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=True),
+        'm_tipo_diagnostico': fields.selection([('1','Principal'),('2','Secundary')],'Diagnostic Type', required=True),
+        'vch_coddiagnostico' : fields.char ('vch_coddiagnostico'),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (diagnostic_id,appointment_id)', 'El diagnostico debe ser único por ambulatorio')
+    ]
+    _defaults = {
+        'm_tipo_diagnostico': lambda *a: '1',
+
+    }
+medical_appointment_diagnostic ()
+
+class medical_practice(osv.osv):
+    _name = "medical.practice"
+    _columns = {
+        'code' : fields.char ('Code', size=10, required="True"),
+        'name' :fields.char ('Description', size=1024, required="True" ),
+    }
+    _sql_constraints = [
+        ('code_uniq', 'unique (code)', 'The code must be unique')
+    ]
+medical_practice ()
+
+class medical_appointment_practice(osv.osv):
+    _name = "medical.appointment.practice"
+    _columns = {
+        'practice_id' : fields.many2one ('medical.practice', 'Practice', required=False),
+        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=True),
+        'vch_codprestacion' : fields.char ('vch_codprestacion'),
+        'f_fecha_practica': fields.date('Practice Date', required=True),
+        'q_cantidad': fields.integer('Practice Quantity', required=True),
+    }
+    # _sql_constraints = [
+    #     ('code_uniq', 'unique (practice_id,appointment_id)', 'La práctica debe ser única por ambulatorio')
+    # ]
+    _defaults = {
+        'q_cantidad': lambda *a: 1,
+
+    }
+medical_appointment_practice ()
+
 class medical_appointment (osv.osv):
     _name = "medical.appointment"
     
@@ -444,6 +501,12 @@ class medical_appointment (osv.osv):
             ('7', 'Internacion Domiciliaria'),
             ('8', 'Otro'),
         ], 'Tipo de Egreso'), ##---- Tipo de atencion
+
+        # 'diagnostic_id' : fields.many2one ('medical.diagnostic', 'Diagnostic'),
+        # 'vch_coddiagnostico' : fields.date ('vch_coddiagnostico'),
+        #'diagnostic_ids': fields.many2many('medical.diagnostic','diagnosticosxambulatoriopsi','appointment_id','diagnostic_id','Diagnostic'),
+        'diagnostic_ids': fields.one2many('medical.appointment.diagnostic','appointment_id','Diagnostic'),
+        'practice_ids': fields.one2many('medical.appointment.practice','appointment_id','Practices'),
 
 
     }

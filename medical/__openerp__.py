@@ -41,8 +41,10 @@ This module provide :
         'security/medical_security.xml',
         'security/ir.model.access.csv',
         'wizard/efectores_pami_view.xml',
+        'wizard/medical_patient_report_wizard_view.xml',
         'views/medical_view.xml',
         'views/medical_menu.xml',
+        #'report/medical_patient_report.xml'
         #'data/medical_data.xml',
 
     ],

@@ -228,6 +228,18 @@
 			</field>
 		</record>
 
+		<record id="view_medical_appointmen_graph" model="ir.ui.view">
+            <field name="name">medical.appointment.graph</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <graph string="Appointment Analysis" type="pivot">
+                    <field name="doctor" type="row"/>
+                    <field name="patient" type="row"/>
+                    <!-- <field name="product_uom_qty" type="measure"/> -->
+                </graph>
+            </field>
+        </record>
+
 		<record model="ir.ui.view" id="medical_appointment_view">
 			<field name="name">Appointment</field>
 			<field name="model">medical.appointment</field>
@@ -252,10 +264,46 @@
 						<field name="id_tipo_egreso" colspan="3"/>
 
 					</group>
-					<newline />
-					<separator colspan="6" string="Information" />
-					<newline />
-					<field colspan="4" nolabel="1" name="comments"/>
+					
+
+					<notebook>
+						
+						<page string="Diagnostic / Practices">
+							<separator string="Diagnostic"/>
+							<field colspan="4" nolabel="1" name="diagnostic_ids">
+								<tree string="Diagnostic" editable="bottom">
+									<field name="diagnostic_id" required="True"/>
+									<field name="m_tipo_diagnostico" />
+								</tree>
+								<form string="Diagnostic" editable="bottom">
+									<field name="diagnostic_id" required="True"/>
+									<field name="m_tipo_diagnostico" />
+								</form>
+
+							</field>
+							<separator string="Practices"/>
+							<field colspan="4" nolabel="1" name="practice_ids">
+								<tree string="Practices" editable="bottom">
+									<field name="practice_id" required="True"/>
+									<field name="f_fecha_practica" />
+									<field name="q_cantidad" />
+								</tree>
+								<form string="Practices" editable="bottom">
+									<field name="practice_id" required="True"/>
+									<field name="f_fecha_practica" />
+									<field name="q_cantidad" />
+								</form>
+
+							</field>
+
+						</page>
+						<page string="Information">
+							<separator string="Information"/>
+							<field colspan="4" nolabel="1" name="comments"/>
+						</page>
+					</notebook>
+
+					
 					<field name="state" widget="statusbar" options='{"clickable":"1"}'/>
 				</form>
 			</field>
@@ -284,7 +332,7 @@
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">medical.appointment</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">calendar,tree,form</field>
+			<field name="view_mode">calendar,tree,form,graph</field>
 			<field name="context">{'current_user': True}</field>
 		</record>
 
@@ -722,6 +770,60 @@
 					<field name="code" select="1" />
 					<field name="benefit_type_id"></field>
 					<field name="start_date"></field>
+					<newline />
+
+				</search>
+			</field>
+		</record>
+
+		<!-- Medical Specialities -->
+
+		<record model="ir.ui.view" id="medical_diagnostic_view">
+			<field name="name">Medical Diagnostic</field>
+			<field name="model">medical.diagnostic</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Medical diagnostic">
+					<group>
+						<field name="code"></field>
+						<field name="name" required="1"></field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_diagnostic_tree">
+			<field name="name">Medical diagnostic list</field>
+			<field name="model">medical.diagnostic</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Medical diagnostic">
+					<field name="code"></field>
+					<field name="name"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_diagnostic">
+			<field name="name">Medical Diagnostic</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.diagnostic</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_diagnostic_tree" />
+		</record>
+
+
+
+		<record id="view_medical_specialty_filter" model="ir.ui.view">
+			<field name="name">medical.diagnostic.select</field>
+			<field name="model">medical.diagnostic</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Medical Diagnostic">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
 					<newline />
 
 				</search>

@@ -334,9 +334,56 @@ class efectores_pami(osv.osv_memory):
                 outerr+= "El afiliado %s no tiene el campo parentesco asignado.\n"%(pat.complete_name)
             output += ';;;;;;;\n' # id_sucursal, id_agencia, id_corresponsalia, id_afjp, vto_afiliado, f_formulario, fecha_baja, codigo_baja
         output += 'PRESTACIONES\n'
+        
+        for apoint in self.pool.get('medical.appointment').browse(cr, uid, appointment_ids):
+            output += 'AMBULATORIOPSI\n'
+            output += ';;'
+            output += apoint.doctor.registration_number + ';' # matricula nacional del profesional
+            output += '0;0;0;' # c_ambulatorio, id_red, c_prestador
+            output += str(prestador_pool.attention_point) + ';' # boca de atencion
+            output += '0;' # c_profesional
+            output += datetime.strptime(apoint.appointment_date, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de atencion
+            output += ';' # d_estado
+            output += ';' # d_motivo_rechazo
+            output += apoint.id_modalidad_presta + ';' # id_modalidad_presta
+            output += ';' # n_nro_orden
+            output += apoint.care_type + ';' # id_tipo_atencion 
+            output += apoint.patient.benefit_id.code + ';' # id_beneficio
+            output += apoint.patient.relationship_id.code + ';' # id parentesco
+            if apoint.f_fecha_egreso:
+                output += datetime.strptime(apoint.f_fecha_egreso, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
+            else:
+                output += ';' 
+            if apoint.id_tipo_egreso:
+                output += apoint.id_tipo_egreso + ';'
+            else:
+                output += ';' 
+            if apoint.comments:
+                output += apoint.comments + '\n'
+            else:
+                output += '\n' 
+            output += 'REL_DIAGNOSTICOSXAMBULATORIOPSI\n'
+            for diagnostic in apoint.diagnostic_ids:
+                output += ';;;'
+                output += '0;' # c_ambulatorio
+                output += '1;' # ni_coddiagno
+                output += diagnostic.diagnostic_id.code + ';' # vch_coddiagnostico
+                output += diagnostic.m_tipo_diagnostico + '\n' # m_tipo_diagnostico
+                #output += '1\n'
 
+            output += 'REL_PRACTICASREALIZADASXAMBULATORIOPSI\n'
+            for practice in apoint.practice_ids:
+                output += ';;;'
+                output += '0;' # c_ambulatorio
+                output += '1;' # ni_codpresta
+                output += practice.practice_id.code + ';' # vch_codprestacion
+                output += datetime.strptime(practice.f_fecha_practica, '%Y-%m-%d').strftime('%d/%m/%Y') + ' 00:00' +';' # fecha que se realizó la práctica
+                output += str(practice.q_cantidad) + ';' # cantidad de practicas realizadas
+                output += '0;' # c_prestador_solicita
+                output += '0\n' # c_profesional_solicita
 
-            
+            output += 'MEDICACIONXAMBULATORIOPSI\n'
+            output += 'FIN AMBULATORIOPSI\n'
 
 
         #print output

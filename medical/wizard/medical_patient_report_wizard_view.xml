@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_medical_patient_report_wizard" model="ir.ui.view">
+            <field name="name">medical.patient.report.wizard</field>
+            <field name="model">medical.patient.report.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Reporte Prestaciones" version="7.0">
+                <group col="2" fill="0" height="400">
+                    <group colspan="2">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <newline />
+                        <field name="doctor_id" />
+                        <field name="patient_id" />
+                        
+                    </group>
+                    
+                </group>
+                <footer>
+                        <button special="cancel" icon="gtk-cancel" string="Cancelar"/>
+                        <button type="object" name="print_report" icon="gtk-print" string="Generar reporte"/>
+                    </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_medical_patient_report_wizard" model="ir.actions.act_window">
+            <field name="name">Reporte Prestaciones</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.patient.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+<!-- 
+        <record model="ir.values" id="medical_patient_report_wizard_values">
+            <field name="model_id" ref="hr.model_hr_employee" />
+            <field name="name">Control de Stock por Departamento</field>
+            <field name="key2">client_print_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_medical_patient_report_wizard'))" />
+            <field name="key">action</field>
+            <field name="model">hr.attendance</field>
+        </record> -->
+
+	
+    </data>
+</openerp>
