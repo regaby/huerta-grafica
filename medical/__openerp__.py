@@ -34,6 +34,7 @@ This module provide :
     "depends": [
         "base",
         "base_department_city",
+        'report_aeroo',
         ],
     
     "init_xml": [],
@@ -44,7 +45,7 @@ This module provide :
         'wizard/medical_patient_report_wizard_view.xml',
         'views/medical_view.xml',
         'views/medical_menu.xml',
-        #'report/medical_patient_report.xml'
+        'report/medical_patient_report.xml'
         #'data/medical_data.xml',
 
     ],

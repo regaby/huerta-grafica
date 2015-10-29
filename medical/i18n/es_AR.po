@@ -175,7 +175,7 @@ msgstr "Año"
 #. module: medical
 #: field:res.partner,benefit_id:0
 msgid "Benefit"
-msgstr "Beneficio"
+msgstr "Beneficiario"
 
 #. module: medical
 #: field:medical.benefit,benefit_type_id:0
@@ -185,12 +185,12 @@ msgstr "Tipo de Beneficio"
 #. module: medical
 #: sql_constraint:res.partner:0
 msgid "Benefit and relationship must be unique."
-msgstr "Beneficio y parentesco deben ser únicos."
+msgstr "Beneficiario y parentesco deben ser únicos."
 
 #. module: medical
 #: model:ir.ui.menu,name:medical.menu_medical_benefit
 msgid "Benefits"
-msgstr "Beneficios"
+msgstr "Beneficiarios"
 
 #. module: medical
 #: view:res.partner:medical.view_partner_form_medical
@@ -549,7 +549,7 @@ msgstr "Fecha de vencimiento para la afiliación"
 #. module: medical
 #: help:medical.benefit,start_date:0
 msgid "Fecha en la cual se ingresaron los datos del beneficio"
-msgstr "Fecha en la cual se ingresaron los datos del beneficio"
+msgstr "Fecha en la cual se ingresaron los datos del Beneficiario"
 
 #. module: medical
 #: selection:res.partner,sex:0
@@ -881,7 +881,7 @@ msgstr "Agencias"
 #. module: medical
 #: model:ir.actions.act_window,name:medical.medical_action_benefit
 msgid "Medical Benefit"
-msgstr "Beneficios"
+msgstr "Beneficiarios"
 
 #. module: medical
 #: help:medical.appointment,institution:0
@@ -951,7 +951,7 @@ msgstr "Agencia"
 #: view:medical.benefit:medical.medical_benefit_tree
 #: view:medical.benefit:medical.medical_benefit_view
 msgid "Medical benefit"
-msgstr "Beneficio"
+msgstr "Beneficiario"
 
 #. module: medical
 #: view:medical.correspondent:medical.medical_correspondent_tree
@@ -1194,7 +1194,7 @@ msgstr "Búsqueda de Agencias"
 #. module: medical
 #: view:medical.benefit:medical.view_medical_benefit_filter
 msgid "Search Medical Benefit"
-msgstr "Búsqueda de Beneficio"
+msgstr "Búsqueda de Beneficiario"
 
 #. module: medical
 #: view:medical.correspondent:medical.view_medical_correspondent_filter
