@@ -19,8 +19,8 @@
 #
 ##############################################################################
 from datetime import datetime, timedelta, time
-from report import report_sxw
-from report.report_sxw import rml_parse
+from openerp.report import report_sxw
+from openerp.report.report_sxw import rml_parse
 from datetime import datetime
 from dateutil import tz
 
@@ -34,50 +34,68 @@ class Parser(report_sxw.rml_parse):
             'get_objects':self._get_objects,
             'group':self._group,
             'group_items':self._group_items,
+            'get_total':self._get_total,
         })
         
     ret = False
 
-    def _get_objects(self):
-
+    def _get_appoints(self):
         if self.ret:
             return self.ret
         ret=[]
         cr = self.cr 
         uid = self.uid
         form = self.localcontext['data']['form']
-        fecha_desde = form['fecha_desde'] 
-        fecha_hasta = form['fecha_hasta'] 
-        picking_pool = self.pool.get('stock.picking')
-        employee_obj = self.pool.get('hr.employee')
-        product_obj = self.pool.get('product.product')
-        if form['agente_id']:
-            employee_ids = [form['agente_id'][0]]
-        elif form['unidad_organizativa_id']:
-            employee_ids = employee_obj.search(cr, uid, [('department_id', '=', form['unidad_organizativa_id'][0])])
+        fecha_desde = form['date_from'] 
+        fecha_hasta = form['date_to'] 
+        # picking_pool = self.pool.get('stock.picking')
+        partner_obj = self.pool.get('res.partner')
+        # product_obj = self.pool.get('product.product')
+        appointment_obj = self.pool.get('medical.appointment')
+        if form['patient_id']:
+            patient_ids = [form['patient_id'][0]]
         else:
-            employee_ids = employee_obj.search(cr, uid, [])
+            patient_ids = partner_obj.search(cr, uid, [('is_patient','=',True)])
 
-        if form['product_id']:
-            product_ids = [form['product_id'][0]]
+        if form['doctor_id']:
+            doctor_ids = [form['doctor_id'][0]]
         else:
-            product_ids = product_obj.search(cr, uid, [('product_order','=',True)])
+            doctor_ids = partner_obj.search(cr, uid, [('is_doctor','=',True)])
 
 
-        pick_ids = picking_pool.search(cr, uid, [('product_order','=',True),('date','>=',fecha_desde),('date','<=',fecha_hasta),
-                                                 ('state','=','done'),('type','=','internal'),('employee_id','in',employee_ids),
-                                                 ('product_id','=',product_ids)])
-        for pick_obj in picking_pool.browse(cr, uid, pick_ids):
-            for line in pick_obj.move_lines:
-                res = {
-                    'agente': pick_obj.employee_id.name,
-                    'fecha': pick_obj.date,
-                    'unidad_organizativa': pick_obj.employee_id.department_id.name, 
-                    'product': line.product_id.name,
-                    'qty': line.product_qty, 
-                }
-                ret.append(res)
+        appoint_ids = appointment_obj.search(cr, uid, [('appointment_date','>=',fecha_desde),('appointment_date','<=',fecha_hasta),
+                                                 ('patient','in',patient_ids),
+                                                 ('doctor','in',doctor_ids)])
+        return appoint_ids
+
+    def _get_objects(self):
+        if self.ret:
+            return self.ret
+        ret=[]
+        cr = self.cr 
+        uid = self.uid
+
+        appoint_ids = self._get_appoints()
+
+        appointment_obj = self.pool.get('medical.appointment')
+
+        
+        for appoint in appointment_obj.browse(cr, uid, appoint_ids):
+            res = {
+                'patient': appoint.patient.name,
+                'fecha': appoint.appointment_date,
+                'doctor': appoint.doctor.name, 
+                'count': len(appoint_ids),
+                # 'product': line.product_id.name,
+                # 'qty': line.product_qty, 
+            }
+            ret.append(res)
         return ret
+
+    def _get_total(self):
+        appoint_ids = self._get_appoints()
+        tot = len(appoint_ids)
+        return tot
   
 
 

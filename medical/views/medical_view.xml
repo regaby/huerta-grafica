@@ -102,8 +102,8 @@
                 	<page name="patient" String="Patient Information" attrs="{'invisible': [('is_patient','=', False)]}">
                 		<group colspan="4" col="4">
 	                		<!-- <field name="dni" attrs="{'required': [('is_patient','=', True)]}"/> -->
-	                		<!-- <field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>
-	                		<field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}"/> -->
+	                		<!-- <field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>-->
+	                		<!-- <field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}" placeholder="xxxxxxxxxxxxxxx/nn" on_change="onchange_insurance_number(insurance_number)"/>/>  -->
 	                		<field name="benefit_id" attrs="{'required': [('is_patient','=', True)]}"/>
 	                		<field name="relationship_id" attrs="{'required': [('is_patient','=', True)]}"/>
 	                		<field name="marital_status"/>

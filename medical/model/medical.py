@@ -185,8 +185,8 @@ medical_benefit_type ()
 class medical_benefit(osv.osv):
     _name = "medical.benefit"
     _columns = {
-        'code' : fields.char ('Code', size=12, required="True"),
-        'name' :fields.char ('Description', size=128 ),
+        'code' : fields.char ('Nro. Obra Social', size=12, required="True"),
+        'name' :fields.char ('Beneficiario', size=128 ),
         'benefit_type_id': fields.many2one('medical.benefit.type','Benefit Type'),
         'start_date': fields.date('Start Date', help="Fecha en la cual se ingresaron los datos del beneficio", required="True"),
         #'instution_id': fields.many2one('res.partner','Institution', required="True"),
@@ -221,6 +221,31 @@ class medical_partner(osv.osv):
     _patient_age_fnt = lambda self, cr, uid, ids, name, arg, context={}: self._patient_age(cr, uid, ids, name, arg, context)
     _name_get_fnt = lambda self, cr, uid, ids, name, arg, context={}: self.name_get(cr, uid, ids, context)
 
+    def onchange_insurance_number(self, cr, uid, ids, insurance_number, context=None):
+        if insurance_number:
+            if len(insurance_number)!=15:
+                raise osv.except_osv(_('Error'),_('El número de obra social debe tener 15 dígitos.') )  
+            benefit = instalation_number[0:12]
+            relationship = instalation_number[13:15]
+            print benefit
+            print relationship
+            try:
+                int(benefit)
+            except Exception, e:
+                raise osv.except_osv(_('Error'),_('El número de obra social debe ser numerico con separador /.') )
+            try:
+                int(relationship)
+            except Exception, e:
+                raise osv.except_osv(_('Error'),_('El número de obra social debe ser numerico con separador /.') )
+
+
+            # city = self.pool.get('medical.correspondent').browse(cr, uid, correspondent_id, context)
+            # val = {'agency_id':city.agency_id.id,
+            #        'subsidiary_id':city.subsidiary_id.id,}
+            
+            # return {'value': val}
+        return {}
+
     _columns = {
         'is_patient' : fields.boolean('Patient', help="Check if the partner is a patient"),
         'is_doctor' : fields.boolean('Doctor', help="Check if the partner is a doctor"),
@@ -246,7 +271,7 @@ class medical_partner(osv.osv):
         'deceased' : fields.boolean ('Deceased', help="Mark if the patient has died"),
         'dod' : fields.datetime ('Date of Death'),
         'insurance': fields.char('Insurance', size=64, required=False, select=True, ),
-        'insurance_number': fields.char('Insurance Number', size=64, required=False, select=True, ),
+        'insurance_number': fields.char('Insurance Number', size=15, required=False, select=True, ),
         'dni': fields.char('DNI', size=64, required=False, select=True, help="DNI"),
         'critical_info' : fields.text ('Important disease, allergy or procedures information', help="Write any important information on the patient's disease, surgeries, allergies, ..."),
         'sex' : fields.selection([
