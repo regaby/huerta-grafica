@@ -35,6 +35,8 @@ class Parser(report_sxw.rml_parse):
             'group':self._group,
             'group_items':self._group_items,
             'get_total':self._get_total,
+            'get_total_prestaciones':self._get_total_prestaciones,
+            '_get_lineas_prestaciones':self._get_lineas_prestaciones,
         })
         
     ret = False
@@ -80,12 +82,18 @@ class Parser(report_sxw.rml_parse):
         appointment_obj = self.pool.get('medical.appointment')
 
         
+
         for appoint in appointment_obj.browse(cr, uid, appoint_ids):
+            tot=0
+            for practice in appoint.practice_ids:
+                tot += practice.q_cantidad
             res = {
                 'patient': appoint.patient.name,
                 'fecha': appoint.appointment_date,
                 'doctor': appoint.doctor.name, 
                 'count': len(appoint_ids),
+                #'cant_prestaciones': len(appoint.practice_ids)
+                'cant_prestaciones': tot
                 # 'product': line.product_id.name,
                 # 'qty': line.product_qty, 
             }
@@ -96,6 +104,32 @@ class Parser(report_sxw.rml_parse):
         appoint_ids = self._get_appoints()
         tot = len(appoint_ids)
         return tot
+
+    def _get_total_prestaciones(self):
+        cr = self.cr 
+        uid = self.uid
+        appoint_ids = self._get_appoints()
+        #tot = len(appoint_ids)
+        tot = 0
+        appointment_obj = self.pool.get('medical.appointment')
+        for appoint in appointment_obj.browse(cr, uid, appoint_ids):
+            #tot += len(appoint.practice_ids)
+            for practice in appoint.practice_ids:
+                tot += practice.q_cantidad
+        return tot
+
+    def _get_lineas_prestaciones(self, attr):
+        ret = []
+        cr = self.cr 
+        uid = self.uid
+        
+        appoint_ids = self._get_appoints()
+        appointment_obj = self.pool.get('medical.appointment')
+        for appoint in appointment_obj.browse(cr, uid, appoint_ids):
+            if appoint.doctor.name==attr:
+                for l in appoint.practice_ids:
+                    ret.append(l)
+        return ret
   
 
 
@@ -104,7 +138,7 @@ class Parser(report_sxw.rml_parse):
         for obj in attr:
             call = obj[field]
             if not {field: call} in group:
-                group.append({field: call})
+                group.append({field: call})    
         return group
 
     def _group_items(self, attr, group, field):
