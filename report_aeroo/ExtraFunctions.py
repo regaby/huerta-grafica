@@ -159,6 +159,7 @@ class ExtraFunctions(object):
             'text_wiki': wikitext_ok and self._text_wiki or \
                 self._text_plain('"wikimarkup" format is not supported! Need to be installed "python-mediawiki" package.'),
             'text_markup': self._text_markup,
+            'sum_expre':self._sum_expre,
             'text_remove_markup': self._text_remove_markup,
             '__filter': self.__filter, # Don't use in the report template!
         }
@@ -587,6 +588,14 @@ class ExtraFunctions(object):
         elif first_line=='text/x-rst':
             return self._text_rest('\n'.join(lines))
         return text
+
+    # Metodo para sumarizar con operaciones, por ejemplo "o.cant * o.price"
+    # la expresion es un string y debe respetarse el "o." en cada campo del objeto.
+    def _sum_expre(self, attr, sum_fields):
+        expr = "for o in objects:\n\tsumm+=float(%s)" % sum_fields
+        localspace = {'objects':attr, 'summ':0}
+        exec expr in localspace
+        return localspace['summ']
 
     def _text_remove_markup(self, text):
         lines = text.splitlines()
