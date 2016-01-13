@@ -3,6 +3,21 @@
 
 		<!-- PARTNER -->
 
+		<record model="ir.ui.view" id="res_partner_kanban_view_medical">
+			<field name="name">res.partner.tree</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.res_partner_kanban_view" />
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<xpath expr="//ul/li[@t-if='record.city.raw_value and record.country_id.raw_value']" position="after">
+                    <li t-if="record.dni.raw_value">DNI: <field name="dni"/></li>
+                    <li t-if="record.benefit_id.raw_value"><field name="benefit_id"/></li>
+                    <li t-if="record.relationship_id.raw_value"><field name="relationship_id"/></li>
+                </xpath>
+				
+			</field>
+		</record>
+
 		<record model="ir.ui.view" id="view_partner_tree_medical">
 			<field name="name">res.partner.tree</field>
 			<field name="model">res.partner</field>
