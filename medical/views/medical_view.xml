@@ -3,6 +3,29 @@
 
 		<!-- PARTNER -->
 
+		<record model="ir.ui.view" id="view_partner_tree_medical">
+			<field name="name">res.partner.tree</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_tree" />
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='phone']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='email']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <field name="display_name" position="after">
+					<field name='dni'/>
+					<field name='cuit'/>
+					<field name='benefit_id'/>
+					<field name='relationship_id'/>
+				</field>
+
+
+			</field>
+		</record>
+
 		<record model="ir.ui.view" id="view_partner_form_medical">
 			<field name="name">res.partner.form</field>
 			<field name="model">res.partner</field>
