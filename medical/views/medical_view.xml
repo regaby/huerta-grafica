@@ -729,6 +729,8 @@
 						<field name="code"/>
 						<field name="benefit_type_id"/>
 						<field name="start_date"/>
+						<separator string="Patients" colspan="6" />
+						<field colspan="6" name="patient_ids" nolabel="1" />
 					</group>
 				</form>
 			</field>

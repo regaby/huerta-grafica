@@ -189,6 +189,7 @@ class medical_benefit(osv.osv):
         'name' :fields.char ('Beneficiario', size=128 ),
         'benefit_type_id': fields.many2one('medical.benefit.type','Benefit Type'),
         'start_date': fields.date('Start Date', help="Fecha en la cual se ingresaron los datos del beneficio", required="True"),
+        'patient_ids': fields.one2many('res.partner','benefit_id','Patients'),###
         #'instution_id': fields.many2one('res.partner','Institution', required="True"),
     }
 
