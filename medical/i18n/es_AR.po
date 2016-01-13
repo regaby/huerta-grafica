@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-22 17:05+0000\n"
-"PO-Revision-Date: 2015-10-22 17:05+0000\n"
+"POT-Creation-Date: 2016-01-12 12:03+0000\n"
+"PO-Revision-Date: 2016-01-12 12:03+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -105,6 +105,11 @@ msgid "Appointment"
 msgstr "Visitas"
 
 #. module: medical
+#: view:medical.appointment:medical.view_medical_appointmen_graph
+msgid "Appointment Analysis"
+msgstr "Análisi de Visitas"
+
+#. module: medical
 #: field:medical.appointment,name:0
 msgid "Appointment ID"
 msgstr "Visita ID"
@@ -173,6 +178,11 @@ msgid "Año"
 msgstr "Año"
 
 #. module: medical
+#: field:medical.benefit,name:0
+msgid "Beneficiario"
+msgstr "Beneficiario"
+
+#. module: medical
 #: field:res.partner,benefit_id:0
 msgid "Benefit"
 msgstr "Beneficiario"
@@ -206,6 +216,7 @@ msgstr "CUIT"
 
 #. module: medical
 #: view:efectores.pami:medical.view_efectores_pami_form
+#: view:medical.patient.report.wizard:medical.view_medical_patient_report_wizard
 msgid "Cancelar"
 msgstr "Cancelar"
 
@@ -257,7 +268,6 @@ msgstr "Ciudad"
 #. module: medical
 #: field:medical.afjp,code:0
 #: field:medical.agency,code:0
-#: field:medical.benefit,code:0
 #: field:medical.benefit.type,code:0
 #: field:medical.correspondent,code:0
 #: field:medical.diagnostic,code:0
@@ -324,6 +334,7 @@ msgstr "País"
 #: field:medical.diagnostic,create_uid:0
 #: field:medical.module,create_uid:0
 #: field:medical.patient.relationship,create_uid:0
+#: field:medical.patient.report.wizard,create_uid:0
 #: field:medical.practice,create_uid:0
 #: field:medical.speciality,create_uid:0
 #: field:medical.subsidiary,create_uid:0
@@ -343,6 +354,7 @@ msgstr "Creado por"
 #: field:medical.diagnostic,create_date:0
 #: field:medical.module,create_date:0
 #: field:medical.patient.relationship,create_date:0
+#: field:medical.patient.report.wizard,create_date:0
 #: field:medical.practice,create_date:0
 #: field:medical.speciality,create_date:0
 #: field:medical.subsidiary,create_date:0
@@ -379,7 +391,7 @@ msgstr "DNI"
 #: view:medical.appointment:medical.view_medical_appointment_filter
 #: field:medical.appointment,appointment_date:0
 msgid "Date"
-msgstr "Día"
+msgstr "Fecha"
 
 #. module: medical
 #: field:res.partner,dob:0
@@ -409,7 +421,6 @@ msgstr "Descripción del motivo por el cual el prestador se encuentra dado de ba
 #. module: medical
 #: field:medical.afjp,name:0
 #: field:medical.agency,name:0
-#: field:medical.benefit,name:0
 #: field:medical.benefit.type,name:0
 #: field:medical.correspondent,name:0
 #: field:medical.diagnostic,name:0
@@ -429,6 +440,11 @@ msgid "Diagnostic"
 msgstr "Diagnóstico"
 
 #. module: medical
+#: view:medical.appointment:medical.medical_appointment_view
+msgid "Diagnostic / Practices"
+msgstr "Diagnóstico / Prestaciones"
+
+#. module: medical
 #: field:medical.appointment.diagnostic,m_tipo_diagnostico:0
 msgid "Diagnostic Type"
 msgstr "Tipo de Diagnóstico"
@@ -445,6 +461,7 @@ msgstr "Divorciado/a"
 
 #. module: medical
 #: view:medical.appointment:medical.view_medical_appointment_filter
+#: field:medical.patient.report.wizard,doctor_id:0
 #: field:res.partner,is_doctor:0
 msgid "Doctor"
 msgstr "Doctor"
@@ -475,6 +492,19 @@ msgid "El diagnostico debe ser único por ambulatorio"
 msgstr "El diagnostico debe ser único por ambulatorio"
 
 #. module: medical
+#: code:addons/medical/model/medical.py:236
+#: code:addons/medical/model/medical.py:240
+#, python-format
+msgid "El número de obra social debe ser numerico con separador /."
+msgstr "El número de obra social debe ser numerico con separador /."
+
+#. module: medical
+#: code:addons/medical/model/medical.py:228
+#, python-format
+msgid "El número de obra social debe tener 15 dígitos."
+msgstr "El número de obra social debe tener 15 dígitos."
+
+#. module: medical
 #: view:efectores.pami:medical.view_efectores_pami_form
 msgid "El proceso no pudo llevarse a cabo"
 msgstr "El proceso no pudo llevarse a cabo"
@@ -495,6 +525,14 @@ msgstr "Motivo de Baja"
 #: selection:efectores.pami,month:0
 msgid "Enero"
 msgstr "Enero"
+
+#. module: medical
+#: code:addons/medical/model/medical.py:228
+#: code:addons/medical/model/medical.py:236
+#: code:addons/medical/model/medical.py:240
+#, python-format
+msgid "Error"
+msgstr "Error"
 
 #. module: medical
 #: selection:res.partner,nacionality:0
@@ -524,7 +562,7 @@ msgstr "Fecha a partir de la cual el prestador está habilitado"
 #. module: medical
 #: field:res.partner,vto_afiliacion:0
 msgid "Fecha de Vencimineto"
-msgstr "Fecha de Vencimineto"
+msgstr "Fecha de Vencimiento"
 
 #. module: medical
 #: help:res.partner,update_date:0
@@ -547,9 +585,19 @@ msgid "Fecha de vencimiento para la afiliación"
 msgstr "Fecha de vencimiento para la afiliación"
 
 #. module: medical
+#: field:medical.patient.report.wizard,date_from:0
+msgid "Fecha desde"
+msgstr "Fecha desde"
+
+#. module: medical
 #: help:medical.benefit,start_date:0
 msgid "Fecha en la cual se ingresaron los datos del beneficio"
 msgstr "Fecha en la cual se ingresaron los datos del Beneficiario"
+
+#. module: medical
+#: field:medical.patient.report.wizard,date_to:0
+msgid "Fecha hasta"
+msgstr "Fecha hasta"
 
 #. module: medical
 #: selection:res.partner,sex:0
@@ -588,7 +636,7 @@ msgid "Generar archivo de Efectores PAMI en formato txt"
 msgstr "Generar archivo de Efectores PAMI en formato txt"
 
 #. module: medical
-#: code:addons/medical/wizard/efectores_pami.py:477
+#: code:addons/medical/wizard/efectores_pami.py:410
 #, python-format
 msgid "Generar archivo de terceros BENEFICIARIOS"
 msgstr "Generar archivo de terceros BENEFICIARIOS"
@@ -597,6 +645,11 @@ msgstr "Generar archivo de terceros BENEFICIARIOS"
 #: model:ir.model,name:medical.model_efectores_pami
 msgid "Generar archivo efectores PAMI"
 msgstr "Generar archivo efectores PAMI"
+
+#. module: medical
+#: view:medical.patient.report.wizard:medical.view_medical_patient_report_wizard
+msgid "Generar reporte"
+msgstr "Generar reporte"
 
 #. module: medical
 #: view:medical.appointment:medical.view_medical_appointment_filter
@@ -636,6 +689,7 @@ msgstr "Hospital de Día Jornada Simple"
 #: field:medical.diagnostic,id:0
 #: field:medical.module,id:0
 #: field:medical.patient.relationship,id:0
+#: field:medical.patient.report.wizard,id:0
 #: field:medical.practice,id:0
 #: field:medical.speciality,id:0
 #: field:medical.subsidiary,id:0
@@ -788,6 +842,7 @@ msgstr "Apellido"
 #: field:medical.diagnostic,write_uid:0
 #: field:medical.module,write_uid:0
 #: field:medical.patient.relationship,write_uid:0
+#: field:medical.patient.report.wizard,write_uid:0
 #: field:medical.practice,write_uid:0
 #: field:medical.speciality,write_uid:0
 #: field:medical.subsidiary,write_uid:0
@@ -807,6 +862,7 @@ msgstr "Última actualización realizada por"
 #: field:medical.diagnostic,write_date:0
 #: field:medical.module,write_date:0
 #: field:medical.patient.relationship,write_date:0
+#: field:medical.patient.report.wizard,write_date:0
 #: field:medical.practice,write_date:0
 #: field:medical.speciality,write_date:0
 #: field:medical.subsidiary,write_date:0
@@ -864,6 +920,7 @@ msgid "Mayo"
 msgstr "Mayo"
 
 #. module: medical
+#: model:ir.module.category,name:medical.module_medical
 #: model:ir.ui.menu,name:medical.medical_root_menu
 msgid "Medical"
 msgstr "Medical"
@@ -1040,6 +1097,11 @@ msgid "Npostal"
 msgstr "Npostal"
 
 #. module: medical
+#: field:medical.benefit,code:0
+msgid "Nro. Obra Social"
+msgstr "Nro. Obra Social"
+
+#. module: medical
 #: field:res.partner,nro_sap:0
 msgid "Nro. SAP"
 msgstr "Nro. SAP"
@@ -1066,6 +1128,7 @@ msgstr "Pasaporte"
 
 #. module: medical
 #: field:medical.appointment,patient:0
+#: field:medical.patient.report.wizard,patient_id:0
 #: field:res.partner,is_patient:0
 msgid "Patient"
 msgstr "Paciente"
@@ -1089,6 +1152,8 @@ msgstr "Nombre del paciente"
 #: model:ir.actions.act_window,name:medical.action_partner_patient_form
 #: model:ir.ui.menu,name:medical.medical_patients_submenu
 #: model:ir.ui.menu,name:medical.menu_medical_patient
+#: view:medical.benefit:medical.medical_benefit_view
+#: field:medical.benefit,patient_ids:0
 msgid "Patients"
 msgstr "Pacientes"
 
@@ -1123,23 +1188,23 @@ msgstr "Por order de Prestación"
 #. module: medical
 #: field:medical.appointment.practice,practice_id:0
 msgid "Practice"
-msgstr "Práctica"
+msgstr "Prestación"
 
 #. module: medical
 #: field:medical.appointment.practice,f_fecha_practica:0
 msgid "Practice Date"
-msgstr "Fecha de Práctica"
+msgstr "Fecha de Prestación"
 
 #. module: medical
 #: field:medical.appointment.practice,q_cantidad:0
 msgid "Practice Quantity"
-msgstr "Cantidad de Prácticas"
+msgstr "Cantidad de Prestaciones"
 
 #. module: medical
 #: view:medical.appointment:medical.medical_appointment_view
 #: field:medical.appointment,practice_ids:0
 msgid "Practices"
-msgstr "Prácticas"
+msgstr "Prestaciones"
 
 #. module: medical
 #: selection:medical.appointment.diagnostic,m_tipo_diagnostico:0
@@ -1170,6 +1235,14 @@ msgstr "Registros con errores"
 #: field:res.partner,relationship_id:0
 msgid "Relationship"
 msgstr "Parentesco"
+
+#. module: medical
+#: model:ir.actions.act_window,name:medical.action_medical_patient_report_wizard
+#: model:ir.actions.report.xml,name:medical.report_medical_patient_report
+#: model:ir.ui.menu,name:medical.menu_report_medical_patient_report_wizard
+#: view:medical.patient.report.wizard:medical.view_medical_patient_report_wizard
+msgid "Reporte Prestaciones"
+msgstr "Reporte Prestaciones"
 
 #. module: medical
 #: selection:medical.appointment,id_tipo_egreso:0
