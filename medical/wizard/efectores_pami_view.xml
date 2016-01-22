@@ -45,12 +45,5 @@
             <field name="target">new</field>
         </record>
 
-        <record model="ir.values" id="efectores_pami_values">
-            <field eval="'client_action_multi'" name="key2"/>
-            <field eval="'medical.appointment'" name="model"/>
-            <field name="name">Archivo de Efectores PAMI</field>
-            <field eval="'ir.actions.act_window,%d'%action_efectores_pami" name="value"/>
-        </record>
-
     </data>
 </openerp>

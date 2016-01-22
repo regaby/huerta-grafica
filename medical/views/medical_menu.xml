@@ -23,12 +23,12 @@
             parent="medical_patients_submenu"
             action="medical_action_benefit" sequence="20"/>
 
-            <menuitem name="Phisicyan" id="medical_phisicyan_submenu" parent="medical_root_menu" sequence="30" groups="group_medical_user"/>
+            <menuitem name="Phisicyan" id="medical_phisicyan_submenu" parent="medical_root_menu" sequence="30" />
             <menuitem id="menu_medical_phisicyan" name="Phisicyan"
             parent="medical_phisicyan_submenu"
             action="action_partner_phisicyan_form" sequence="10"/>
 
-            <menuitem name="Configuration" id="medical_configuration_submenu" parent="medical_root_menu" sequence="100" groups="base.group_system"/>
+            <menuitem name="Configuration" id="medical_configuration_submenu" parent="medical_root_menu" sequence="100" groups="group_medical_user"/>
             <menuitem id="menu_medical_institution" name="Institution"
             parent="medical_configuration_submenu"
             action="action_partner_institution_form" sequence="10"/>

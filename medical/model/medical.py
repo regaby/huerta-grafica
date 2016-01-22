@@ -456,7 +456,7 @@ class medical_appointment_practice(osv.osv):
     _name = "medical.appointment.practice"
     _columns = {
         'practice_id' : fields.many2one ('medical.practice', 'Practice', required=False),
-        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=True),
+        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=False),
         'vch_codprestacion' : fields.char ('vch_codprestacion'),
         'f_fecha_practica': fields.date('Practice Date', required=True),
         'q_cantidad': fields.integer('Practice Quantity', required=True),
@@ -531,8 +531,8 @@ class medical_appointment (osv.osv):
         # 'diagnostic_id' : fields.many2one ('medical.diagnostic', 'Diagnostic'),
         # 'vch_coddiagnostico' : fields.date ('vch_coddiagnostico'),
         #'diagnostic_ids': fields.many2many('medical.diagnostic','diagnosticosxambulatoriopsi','appointment_id','diagnostic_id','Diagnostic'),
-        'diagnostic_ids': fields.one2many('medical.appointment.diagnostic','appointment_id','Diagnostic'),
-        'practice_ids': fields.one2many('medical.appointment.practice','appointment_id','Practices'),
+        'diagnostic_ids': fields.one2many('medical.appointment.diagnostic','appointment_id','Diagnostic',ondelete='cascade'),
+        'practice_ids': fields.one2many('medical.appointment.practice','appointment_id','Practices',ondelete='cascade'),
 
 
     }

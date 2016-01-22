@@ -193,6 +193,8 @@ class efectores_pami(osv.osv_memory):
         for doc in self.pool.get('res.partner').browse(cr, uid, doctors):
             output += ';' # vacio
             output += prestador_pool.cuit +';' # CUIT
+            if doc.registration_number=='0':
+                raise osv.except_osv(_('Error'),_('El número de matrícula del especialista %s debe ser diferente a 0.')%(doc.name) )  
             output += doc.registration_number + ';' # matricula nacional profesional
             output += '0;0;'
             if doc.start_date:
@@ -305,7 +307,10 @@ class efectores_pami(osv.osv_memory):
             else:
                 output += ';'
             if pat.dob:
-                output += datetime.strptime(pat.dob, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de nacimiento
+                try:
+                    output += datetime.strptime(pat.dob, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de nacimiento
+                except Exception, e:
+                    raise osv.except_osv(_('Error'),_('La fecha de nacimiento del paciente %s es previo a 1900.')%(pat.name) )  
             else:
                 outerr+= "El afiliado %s no tiene fecha de nacimiento.\n"%(pat.complete_name)
             if pat.sex:
