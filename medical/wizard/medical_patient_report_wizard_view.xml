@@ -14,6 +14,7 @@
                         <newline />
                         <field name="doctor_id" />
                         <field name="patient_id" />
+                        <field name="city_id" />
                         
                     </group>
                     

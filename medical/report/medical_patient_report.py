@@ -61,9 +61,10 @@ class Parser(report_sxw.rml_parse):
 
         if form['doctor_id']:
             doctor_ids = [form['doctor_id'][0]]
+        elif form['city_id']:
+            doctor_ids = partner_obj.search(cr, uid, [('city_id','=',form['city_id'][0])])
         else:
             doctor_ids = partner_obj.search(cr, uid, [('is_doctor','=',True)])
-
 
         appoint_ids = appointment_obj.search(cr, uid, [('appointment_date','>=',fecha_desde),('appointment_date','<=',fecha_hasta),
                                                  ('patient','in',patient_ids),

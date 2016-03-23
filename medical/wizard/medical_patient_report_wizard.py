@@ -15,6 +15,7 @@ class medical_patient_report_wizard(osv.osv_memory):
         'date_to': fields.date('Fecha hasta', required=True),
         'doctor_id': fields.many2one('res.partner', 'Doctor', domain=[('is_doctor','=',True)]),
         'patient_id': fields.many2one('res.partner', 'Patient', domain=[('is_patient','=',True)]),
+        'city_id' : fields.many2one('res.department.city','City'),
         #'product_id': fields.many2one('product.product', 'Producto'),
     }
 
