@@ -382,7 +382,7 @@ class efectores_pami(osv.osv_memory):
                 output += '0;' # c_ambulatorio
                 output += '1;' # ni_codpresta
                 output += practice.practice_id.code + ';' # vch_codprestacion
-                output += datetime.strptime(practice.f_fecha_practica, '%Y-%m-%d').strftime('%d/%m/%Y') + ' 00:00' +';' # fecha que se realizó la práctica
+                output += datetime.strptime(practice.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') +';' # fecha que se realizó la práctica
                 output += str(practice.q_cantidad) + ';' # cantidad de practicas realizadas
                 output += '0;' # c_prestador_solicita
                 output += '0\n' # c_profesional_solicita

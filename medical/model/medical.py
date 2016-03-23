@@ -458,7 +458,7 @@ class medical_appointment_practice(osv.osv):
         'practice_id' : fields.many2one ('medical.practice', 'Practice', required=False),
         'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=False),
         'vch_codprestacion' : fields.char ('vch_codprestacion'),
-        'f_fecha_practica': fields.date('Practice Date', required=True),
+        'f_fecha_practica': fields.datetime('Practice Date', required=True),
         'q_cantidad': fields.integer('Practice Quantity', required=True),
     }
     # _sql_constraints = [
