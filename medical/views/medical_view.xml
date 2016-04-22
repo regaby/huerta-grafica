@@ -104,8 +104,8 @@
                     <field name="dni" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"/>
                     <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
                     <field name="cuit" placeholder="CUIT" attrs="{'invisible': [('is_doctor','!=', False)],'required': [('is_institution','=', True)]}"/>
-                    <field name="afjp_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}"/>
-                    <field name="correspondent_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}" on_change="onchange_correspondent_id(correspondent_id)"/>
+                    <field name="afjp_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}"  widget="selection"/>
+                    <field name="correspondent_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}" on_change="onchange_correspondent_id(correspondent_id)"  widget="selection"/>
                     <field name="agency_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
                     <field name="subsidiary_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
                     <field name="id_sucursal" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)], 'readonly': False}"/>
@@ -143,10 +143,10 @@
 	                		<!-- <field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>-->
 	                		<!-- <field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}" placeholder="xxxxxxxxxxxxxxx/nn" on_change="onchange_insurance_number(insurance_number)"/>/>  -->
 	                		<field name="benefit_id" attrs="{'required': [('is_patient','=', True)]}"/>
-	                		<field name="relationship_id" attrs="{'required': [('is_patient','=', True)]}"/>
+	                		<field name="relationship_id" attrs="{'required': [('is_patient','=', True)]}" widget="selection"/>
 	                		<field name="marital_status"/>
 	                		<field name="nacionality"/>
-	                		<field name="nacionality_id"/>
+	                		<field name="nacionality_id" widget="selection"/>
 	                		<field name="dob" attrs="{'required': [('is_patient','=', True)]}"/>
 	                		<field name="sex" attrs="{'required': [('is_patient','=', True)]}"/>
 	                		<field name="age"/>
@@ -165,7 +165,7 @@
 	                		<field name="registration_number" attrs="{'required': [('is_doctor','=', True)]}"/>
 	                		<field name="state_registration_number" />
 	                		<!-- <field name="speciality" attrs="{'required': [('is_doctor','=', True)]}"/> -->
-	                		<field name="speciality_id" attrs="{'required': [('is_doctor','=', True)]}"/>
+	                		<field name="speciality_id" attrs="{'required': [('is_doctor','=', True)]}" widget="selection"/>
 	                		<!-- <field name="dni" attrs="{'required': [('is_doctor','=', True)]}"/> -->
 	                		<!-- <field name="doctor_start_date" /> -->
 	                	</group>
@@ -295,7 +295,7 @@
 						<field name="care_type" colspan="3" required="True"/>
 						<field name="id_modalidad_presta" colspan="3" required="True"/>
 						<newline/>
-						<field name="doctor" required="1" on_change="onchange_doctor(doctor, context)" colspan="3"/>
+						<field name="doctor" required="1" on_change="onchange_doctor(doctor, context)" colspan="3" widget="selection"/>
 						<!-- <field name="speciality" colspan="3"/> -->
 						<newline/>
 						<field name="f_fecha_egreso" colspan="3"/>
@@ -310,7 +310,7 @@
 							<separator string="Diagnostic"/>
 							<field colspan="4" nolabel="1" name="diagnostic_ids">
 								<tree string="Diagnostic" editable="bottom">
-									<field name="diagnostic_id" required="True"/>
+									<field name="diagnostic_id" required="True" domain="[('frequently_used','=',True)]" widget="selection"/>
 									<field name="m_tipo_diagnostico" />
 								</tree>
 								<form string="Diagnostic" editable="bottom">
@@ -322,12 +322,12 @@
 							<separator string="Practices"/>
 							<field colspan="4" nolabel="1" name="practice_ids">
 								<tree string="Practices" editable="bottom">
-									<field name="practice_id" required="True"/>
+									<field name="practice_id" required="True" domain="[('frequently_used','=',True)]" widget="selection"/>
 									<field name="f_fecha_practica" />
 									<field name="q_cantidad" />
 								</tree>
 								<form string="Practices" editable="bottom">
-									<field name="practice_id" required="True"/>
+									<field name="practice_id" required="True" />
 									<field name="f_fecha_practica" />
 									<field name="q_cantidad" />
 								</form>
@@ -370,7 +370,7 @@
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">medical.appointment</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">calendar,tree,form,graph</field>
+			<field name="view_mode">tree,form,calendar,graph</field>
 			<field name="context">{'current_user': True}</field>
 		</record>
 
@@ -407,7 +407,7 @@
 			<field name="type">ir.actions.act_window</field>
 			<field name="res_model">medical.appointment</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">form,tree,calendar</field>
+			<field name="view_mode">form,tree</field>
 		</record>
 
 		<!-- Medical Specialities -->
@@ -762,14 +762,23 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form string="Medical benefit">
-					<group>
-						<field name="name" required="1"/>
-						<field name="code"/>
-						<field name="benefit_type_id"/>
-						<field name="start_date"/>
-						<separator string="Patients" colspan="6" />
-						<field colspan="6" name="patient_ids" nolabel="1" />
-					</group>
+                    <notebook>
+                        <page string="Datos Afiliado">
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="code"/>
+                                <field name="benefit_type_id"/>
+                                <field name="start_date"/>
+                            </group>
+                        </page>
+                        <page string="Afiliados">
+                            <group>
+                                <separator string="Afiliados" colspan="6" />
+                                <field colspan="6" name="patient_ids" nolabel="1" />
+                            </group>
+                        </page>
+                    </notebook>
+					
 				</form>
 			</field>
 		</record>

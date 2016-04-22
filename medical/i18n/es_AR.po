@@ -180,12 +180,12 @@ msgstr "Año"
 #. module: medical
 #: field:medical.benefit,name:0
 msgid "Beneficiario"
-msgstr "Beneficiario"
+msgstr "Afiliado"
 
 #. module: medical
 #: field:res.partner,benefit_id:0
 msgid "Benefit"
-msgstr "Beneficiario"
+msgstr "Afiliado"
 
 #. module: medical
 #: field:medical.benefit,benefit_type_id:0
@@ -195,12 +195,12 @@ msgstr "Tipo de Beneficio"
 #. module: medical
 #: sql_constraint:res.partner:0
 msgid "Benefit and relationship must be unique."
-msgstr "Beneficiario y parentesco deben ser únicos."
+msgstr "Afiliado y parentesco deben ser únicos."
 
 #. module: medical
 #: model:ir.ui.menu,name:medical.menu_medical_benefit
 msgid "Benefits"
-msgstr "Beneficiarios"
+msgstr "Afiliado"
 
 #. module: medical
 #: view:res.partner:medical.view_partner_form_medical
@@ -592,7 +592,7 @@ msgstr "Fecha desde"
 #. module: medical
 #: help:medical.benefit,start_date:0
 msgid "Fecha en la cual se ingresaron los datos del beneficio"
-msgstr "Fecha en la cual se ingresaron los datos del Beneficiario"
+msgstr "Fecha en la cual se ingresaron los datos del Afiliado"
 
 #. module: medical
 #: field:medical.patient.report.wizard,date_to:0
@@ -938,7 +938,7 @@ msgstr "Agencias"
 #. module: medical
 #: model:ir.actions.act_window,name:medical.medical_action_benefit
 msgid "Medical Benefit"
-msgstr "Beneficiarios"
+msgstr "Afiliado"
 
 #. module: medical
 #: help:medical.appointment,institution:0
@@ -1008,7 +1008,7 @@ msgstr "Agencia"
 #: view:medical.benefit:medical.medical_benefit_tree
 #: view:medical.benefit:medical.medical_benefit_view
 msgid "Medical benefit"
-msgstr "Beneficiario"
+msgstr "Afiliado"
 
 #. module: medical
 #: view:medical.correspondent:medical.medical_correspondent_tree
@@ -1267,7 +1267,7 @@ msgstr "Búsqueda de Agencias"
 #. module: medical
 #: view:medical.benefit:medical.view_medical_benefit_filter
 msgid "Search Medical Benefit"
-msgstr "Búsqueda de Beneficiario"
+msgstr "Búsqueda de Afiliado"
 
 #. module: medical
 #: view:medical.correspondent:medical.view_medical_correspondent_filter

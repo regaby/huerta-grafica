@@ -211,7 +211,7 @@ class medical_benefit(osv.osv):
         return result
 
     _sql_constraints = [
-        ('code_uniq', 'unique (code)', 'The code must be unique')
+        ('code_uniq', 'unique (code)', 'El nro. de Obra Social debe ser único.')
     ]
 medical_benefit ()
 
@@ -349,7 +349,7 @@ class medical_partner(osv.osv):
 
     }
     _sql_constraints = [
-        ('benefit_uniq', 'unique (benefit_id, relationship_id)', 'Benefit and relationship must be unique.'),
+        ('benefit_uniq', 'unique (benefit_id, relationship_id)', 'Beneficiario y parentesco deben ser únicos.'),
     ]
 
     _defaults = {
@@ -358,6 +358,8 @@ class medical_partner(osv.osv):
         't_formulario':lambda *a: '0',
         'phone':lambda *a: '0',
         'id_sucursal':lambda *a: 18,
+        'nacionality': '1',
+        'nacionality_id': lambda self,cr,uid,context: self.pool.get('res.country').search(cr, uid, [('name','=','Argentina')])[0],
 
     }
 
@@ -418,6 +420,7 @@ class medical_diagnostic(osv.osv):
     _columns = {
         'code' : fields.char ('Code', size=10, required="True"),
         'name' :fields.char ('Description', size=128, required="True" ),
+        'frequently_used': fields.boolean('Frequently used'),
     }
     _sql_constraints = [
         ('code_uniq', 'unique (code)', 'The code must be unique')
@@ -446,6 +449,7 @@ class medical_practice(osv.osv):
     _columns = {
         'code' : fields.char ('Code', size=10, required="True"),
         'name' :fields.char ('Description', size=1024, required="True" ),
+        'frequently_used': fields.boolean('Frequently used'),
     }
     _sql_constraints = [
         ('code_uniq', 'unique (code)', 'The code must be unique')
