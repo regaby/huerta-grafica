@@ -17,6 +17,7 @@ class efectores_pami(osv.osv_memory):
         'name': fields.char('Filename', 16, readonly=True),
         
         'info': fields.text('Info'),
+        'info2': fields.text('Info'),
         'state': fields.selection( ( ('choose','choose'),
                                      ('get','get'),
                                      ('done','done'),
@@ -55,42 +56,20 @@ class efectores_pami(osv.osv_memory):
         output += prestador_pool.user_name+';' # nombre de usuario
         output += prestador_pool.instalation_number + '\n' # nro. de instalacion de efectores
 
-        # output += 'RED\n'
-
-        # output += prestador_pool.cuit +';' # CUIT
-        # output += ';;0;' # vacio, vacio, 0
-        # output += prestador_pool.name[0:20]+';' # abreviacion
-        # output += prestador_pool.name+';' # nombre del prestador
-        # output += '0' +';' # cuit, va 0
-        # output += prestador_pool.street+';' # calle
-        # if prestador_pool.street_number:
-        #     output += prestador_pool.street_number+';'
-        # else:
-        #     output += '0;' # puerta
-        # output += ';;' # piso, departamento
-        # if prestador_pool.city_id:
-        #     output += str(prestador_pool.city_id.zip_city) + ';' # npostal
-        # else:
-        #     output += ';'
-        # if prestador_pool.phone:
-        #     output += prestador_pool.phone + '\n' # telefono
-        # else:
-        #     output += '\n'
-
         # buscar visitas...
         year = this.year
         month = this.month
         last_day = calendar.monthrange(year,month)
         date_bottom = str(datetime(year, month, 1))[0:10]
         date_top = str(datetime(year, month, last_day[1]))[0:10]
-        appointment_ids = self.pool.get('medical.appointment').search(cr, uid, [('appointment_date','>=',date_bottom),('appointment_date','<=',date_top)])
+        appointment_ids = self.pool.get('medical.appointment.practice').search(cr, uid, [('f_fecha_practica','>=',date_bottom),('f_fecha_practica','<=',date_top)])
 
         doctors = []
         patients = []
 
-        for apoint in self.pool.get('medical.appointment').browse(cr, uid, appointment_ids):
-            doctors.append(apoint.doctor.id)
-            patients.append(apoint.patient.id)
+        for apoint in self.pool.get('medical.appointment.practice').browse(cr, uid, appointment_ids):
+            doctors.append(apoint.appointment_id.doctor.id)
+            patients.append(apoint.appointment_id.patient.id)
             #doctor.update({apoint.doctor.id: apoint.doctor.id})
         # elimino los elementos duplicados
         doctors = list(set(doctors))
@@ -194,7 +173,7 @@ class efectores_pami(osv.osv_memory):
             output += ';' # vacio
             output += prestador_pool.cuit +';' # CUIT
             if doc.registration_number=='0':
-                raise osv.except_osv(_('Error'),_('El número de matrícula del especialista %s debe ser diferente a 0.')%(doc.name) )  
+                outerr+= _('El numero de matricula del especialista %s debe ser diferente a 0.\n'%(doc.name))
             output += doc.registration_number + ';' # matricula nacional profesional
             output += '0;0;'
             if doc.start_date:
@@ -310,7 +289,7 @@ class efectores_pami(osv.osv_memory):
                 try:
                     output += datetime.strptime(pat.dob, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de nacimiento
                 except Exception, e:
-                    raise osv.except_osv(_('Error'),_('La fecha de nacimiento del paciente %s es previo a 1900.')%(pat.name) )  
+                    outerr+= 'La fecha de nacimiento del paciente %s es previo a 1900.\n'%(pat.name) 
             else:
                 outerr+= "El afiliado %s no tiene fecha de nacimiento.\n"%(pat.complete_name)
             if pat.sex:
@@ -340,35 +319,35 @@ class efectores_pami(osv.osv_memory):
             output += ';;;;;;;\n' # id_sucursal, id_agencia, id_corresponsalia, id_afjp, vto_afiliado, f_formulario, fecha_baja, codigo_baja
         output += 'PRESTACIONES\n'
         
-        for apoint in self.pool.get('medical.appointment').browse(cr, uid, appointment_ids):
+        for apoint in self.pool.get('medical.appointment.practice').browse(cr, uid, appointment_ids):
             output += 'AMBULATORIOPSI\n'
             output += ';;'
-            output += apoint.doctor.registration_number + ';' # matricula nacional del profesional
+            output += apoint.appointment_id.doctor.registration_number + ';' # matricula nacional del profesional
             output += '0;0;0;' # c_ambulatorio, id_red, c_prestador
             output += str(prestador_pool.attention_point) + ';' # boca de atencion
             output += '0;' # c_profesional
-            output += datetime.strptime(apoint.appointment_date, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de atencion
+            output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y  %H:%M') +';' # fecha de atencion
             output += ';' # d_estado
             output += ';' # d_motivo_rechazo
-            output += apoint.id_modalidad_presta + ';' # id_modalidad_presta
+            output += apoint.appointment_id.id_modalidad_presta + ';' # id_modalidad_presta
             output += ';' # n_nro_orden
-            output += apoint.care_type + ';' # id_tipo_atencion 
-            output += apoint.patient.benefit_id.code + ';' # id_beneficio
-            output += apoint.patient.relationship_id.code + ';' # id parentesco
-            if apoint.f_fecha_egreso:
-                output += datetime.strptime(apoint.f_fecha_egreso, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
+            output += apoint.appointment_id.care_type + ';' # id_tipo_atencion 
+            output += apoint.appointment_id.patient.benefit_id.code + ';' # id_beneficio
+            output += apoint.appointment_id.patient.relationship_id.code + ';' # id parentesco
+            if apoint.appointment_id.f_fecha_egreso:
+                output += datetime.strptime(apoint.appointment_id.f_fecha_egreso, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
             else:
                 output += ';' 
-            if apoint.id_tipo_egreso:
-                output += apoint.id_tipo_egreso + ';'
+            if apoint.appointment_id.id_tipo_egreso:
+                output += apoint.appointment_id.id_tipo_egreso + ';'
             else:
                 output += ';' 
-            if apoint.comments:
-                output += apoint.comments + '\n'
+            if apoint.appointment_id.comments:
+                output += apoint.appointment_id.comments + '\n'
             else:
                 output += '\n' 
             output += 'REL_DIAGNOSTICOSXAMBULATORIOPSI\n'
-            for diagnostic in apoint.diagnostic_ids:
+            for diagnostic in apoint.appointment_id.diagnostic_ids:
                 output += ';;;'
                 output += '0;' # c_ambulatorio
                 output += '1;' # ni_coddiagno
@@ -377,32 +356,46 @@ class efectores_pami(osv.osv_memory):
                 #output += '1\n'
 
             output += 'REL_PRACTICASREALIZADASXAMBULATORIOPSI\n'
-            for practice in apoint.practice_ids:
-                output += ';;;'
-                output += '0;' # c_ambulatorio
-                output += '1;' # ni_codpresta
-                output += practice.practice_id.code + ';' # vch_codprestacion
-                output += datetime.strptime(practice.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') +';' # fecha que se realizó la práctica
-                output += str(practice.q_cantidad) + ';' # cantidad de practicas realizadas
-                output += '0;' # c_prestador_solicita
-                output += '0\n' # c_profesional_solicita
+            #for practice in apoint.practice_ids:
+            output += ';;;'
+            output += '0;' # c_ambulatorio
+            output += '1;' # ni_codpresta
+            output += apoint.practice_id.code + ';' # vch_codprestacion
+            output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y  %H:%M') + ' 00:00' +';' # fecha que se realizó la práctica
+            output += str(apoint.q_cantidad) + ';' # cantidad de practicas realizadas
+            output += '0;' # c_prestador_solicita
+            output += '0\n' # c_profesional_solicita
 
             output += 'MEDICACIONXAMBULATORIOPSI\n'
             output += 'FIN AMBULATORIOPSI\n'
 
 
         #print output
-        print outerr
+        #print outerr
+
+        MONTH = {1: 'Ene',
+                2: 'Feb',
+                3: 'Mar',
+                4: 'Abr',
+                5: 'May',
+                6: 'Jun',
+                7: 'Jul',
+                8: 'Ago',
+                9: 'Sep',
+                10: 'Oct',
+                11: 'Nov',
+                12: 'Dic',}
 
         if outerr=="":
             #filename = 'bnf.txt'
             #filename = 'efectores_%s_%s.txt' % (numero_emulacion,fecha_emulacion)
-            filename = '%s_%s_%s_%s_%s_%s.txt' % (prestador_pool.cuit, fecha_emulacion, periodo_emulacion, numero_emulacion, prestador_pool.user_name, prestador_pool.instalation_number)
+            filename = '%s_%s.txt' % (MONTH[this.month],this.year)
 
             #30-69806560-1_05_09_2015_08-2015_216_UP3069806560100_jo432
-
+            msj = 'Se han generado %s prestaciones'%(len(appointment_ids))
             out=base64.encodestring(output.encode('utf-8'))
-            self.write(cr, uid, ids, {'state':'get', 'data':out, 'name':filename}, context=context)
+            self.write(cr, uid, ids, {'state':'get', 'data':out, 'name':filename,
+                'info2': msj}, context=context)
         else:
             out=base64.encodestring(outerr.encode('utf-8'))
             self.write(cr, uid, ids, {'state':'error', 'info':outerr, 'name':''}, context=context)

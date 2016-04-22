@@ -23,10 +23,11 @@
                         <label align="0.0" string="Puede descargar el archivo haciendo click en 'Guardar como'" colspan="4"/>
                         <field name="name" invisible="1"/>
                         <field name="data" nolabel="1" readonly="1" filename="name"/>
+                        <field name="info2" colspan="4" nolabel="1" readonly="True"/>
                     </group>
                     <group colspan="4" col="4" states="error">
                         <separator colspan="4" string="Registros con errores"/>
-                        <field name="info" colspan="4" nolabel="1"/>
+                        <field name="info" colspan="4" nolabel="1" readonly="True"/>
                         <separator colspan="4" string="El proceso no pudo llevarse a cabo"/>
                     </group>
                     <footer states="get,error">
