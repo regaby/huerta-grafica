@@ -458,19 +458,26 @@ medical_practice ()
 
 class medical_appointment_practice(osv.osv):
     _name = "medical.appointment.practice"
+
+    # def _get_doctor_id(self, cr, uid, context=None):
+    #     if context is None:
+    #         context = {}
+    #     return 1
+
     _columns = {
         'practice_id' : fields.many2one ('medical.practice', 'Practice', required=False),
         'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=False),
         'vch_codprestacion' : fields.char ('vch_codprestacion'),
         'f_fecha_practica': fields.datetime('Practice Date', required=True),
         'q_cantidad': fields.integer('Practice Quantity', required=True),
+        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=True),
     }
     # _sql_constraints = [
     #     ('code_uniq', 'unique (practice_id,appointment_id)', 'La práctica debe ser única por ambulatorio')
     # ]
     _defaults = {
         'q_cantidad': lambda *a: 1,
-
+        #'doctor_id': _get_doctor_id,
     }
 medical_appointment_practice ()
 
