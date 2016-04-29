@@ -13,9 +13,10 @@ class medical_patient_report_wizard(osv.osv_memory):
     _columns = {
         'date_from': fields.date('Fecha desde', required=True),
         'date_to': fields.date('Fecha hasta', required=True),
-        'doctor_id': fields.many2one('res.partner', 'Doctor', domain=[('is_doctor','=',True)]),
+        'doctor_id': fields.many2one('res.partner', 'Profesional', domain=[('is_doctor','=',True)]),
         'patient_id': fields.many2one('res.partner', 'Patient', domain=[('is_patient','=',True)]),
-        'city_id' : fields.many2one('res.department.city','City'),
+        'city_id' : fields.many2one('res.department.city','Ciudad'),
+        'mostrar_pacientes': fields.boolean('Mostrar detalle de pacientes?')
         #'product_id': fields.many2one('product.product', 'Producto'),
     }
 
@@ -32,6 +33,7 @@ class medical_patient_report_wizard(osv.osv_memory):
          #'date_to': lambda *a: (datetime.now()).strftime('%Y-%m-%d'),
          'date_from': _get_inicio_mes,
          'date_to': _get_fin_mes,
+         'mostrar_pacientes': lambda *a: False,
 
     }
 
