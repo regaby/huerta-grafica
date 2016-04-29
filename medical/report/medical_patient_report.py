@@ -34,7 +34,6 @@ class Parser(report_sxw.rml_parse):
             'get_objects':self._get_objects,
             'group':self._group,
             'group_items':self._group_items,
-            'get_total':self._get_total,
             'get_total_prestaciones':self._get_total_prestaciones,
             '_get_lineas_prestaciones':self._get_lineas_prestaciones,
         })
@@ -55,15 +54,13 @@ class Parser(report_sxw.rml_parse):
         # product_obj = self.pool.get('product.product')
         #appointment_obj = self.pool.get('medical.appointment')
         practice_obj = self.pool.get('medical.appointment.practice')
+        patient_ids = []
         if form['patient_id']:
             patient_ids = [form['patient_id'][0]]
-        else:
-            patient_ids = partner_obj.search(cr, uid, [('is_patient','=',True)])
-
         if form['doctor_id']:
             doctor_ids = [form['doctor_id'][0]]
         elif form['city_id']:
-            doctor_ids = partner_obj.search(cr, uid, [('city_id','=',form['city_id'][0])])
+            doctor_ids = partner_obj.search(cr, uid, [('city_id','=',form['city_id'][0]),('is_doctor','=',True)])
         else:
             doctor_ids = partner_obj.search(cr, uid, [('is_doctor','=',True)])
 
@@ -72,10 +69,18 @@ class Parser(report_sxw.rml_parse):
         #                                          ('doctor','in',doctor_ids)])
         # return appoint_ids
         practice_ids = practice_obj.search(cr, uid, [('f_fecha_practica','>=',fecha_desde),('f_fecha_practica','<=',fecha_hasta),
-                                                 #('patient','in',patient_ids),
-                                                 #('doctor','in',doctor_ids)
+                                                 ('doctor_id','in',doctor_ids)
                                                  ],order="f_fecha_practica")
-        return practice_ids
+        ret=[]
+
+        for practice in practice_obj.browse(cr, uid, practice_ids):
+            tot=0
+            if len(patient_ids)>0:
+                if practice.appointment_id.patient.id != patient_ids[0]:
+                    continue
+            ret.append(practice.id)
+
+        return ret 
 
     def _get_objects(self):
         if self.ret:
@@ -85,58 +90,57 @@ class Parser(report_sxw.rml_parse):
         uid = self.uid
 
         practice_ids = self._get_practices()
-
         practice_obj = self.pool.get('medical.appointment.practice')
-
-        
-
+        partner_obj = self.pool.get('res.partner')
+        form = self.localcontext['data']['form']
+        patient_ids=[]
+        if form['patient_id']:
+            patient_ids = [form['patient_id'][0]]
         for practice in practice_obj.browse(cr, uid, practice_ids):
             tot=0
+            if len(patient_ids)>0:
+                if practice.appointment_id.patient.id != patient_ids[0]:
+                    continue
             #for practice in appoint.practice_ids:
             tot += practice.q_cantidad
             res = {
                 'patient': practice.appointment_id.patient.name,
                 'fecha': practice.f_fecha_practica[8:10]+'/'+practice.f_fecha_practica[5:7]+'/'+practice.f_fecha_practica[0:4]+' '+practice.f_fecha_practica[11:16],
                 #'fecha': practice.appointment_id.appointment_date,
-                'doctor': practice.appointment_id.doctor.name, 
-                'count': len(practice_ids),
+                #'doctor': practice.appointment_id.doctor.name, 
+                'doctor': practice.doctor_id.name, 
+                'q_cantidad': practice.q_cantidad,
             }
             ret.append(res)
         return ret
 
-    def _get_total(self):
-        appoint_ids = self._get_practices()
-        tot = len(appoint_ids)
-        return tot
-
     def _get_total_prestaciones(self):
+        # este método calcula total del reporte
+        # se invoca como: _get_total_prestaciones()
         cr = self.cr 
         uid = self.uid
         practice_ids = self._get_practices()
-        #tot = len(appoint_ids)
         tot = 0
         practice_obj = self.pool.get('medical.appointment.practice')
         for practice in practice_obj.browse(cr, uid, practice_ids):
-            #tot += len(appoint.practice_ids)
-            #for practice in appoint.practice_ids:
             tot += practice.q_cantidad
         return tot
 
     def _get_lineas_prestaciones(self, attr):
+        # este metodo calcula total de prestaciones de un médico
+        # se lo invoca como _get_lineas_prestaciones(group1.doctor)
         ret = []
         cr = self.cr 
         uid = self.uid
-        
+        subtotal = 0
+        form = self.localcontext['data']['form']
         practice_ids = self._get_practices()
         practice_obj = self.pool.get('medical.appointment.practice')
         for practice in practice_obj.browse(cr, uid, practice_ids):
-            if practice.appointment_id.doctor.name==attr:
-                # for l in appoint.practice_ids:
-                #     ret.append(l)
-                ret.append(practice)
+            if practice.doctor_id.name==attr:
+                subtotal+=1
+        return subtotal
   
-
-
     def _group(self, attr, field):
         group = []
         for obj in attr:
