@@ -68,7 +68,7 @@ class efectores_pami(osv.osv_memory):
         patients = []
 
         for apoint in self.pool.get('medical.appointment.practice').browse(cr, uid, appointment_ids):
-            doctors.append(apoint.appointment_id.doctor.id)
+            doctors.append(apoint.doctor_id.id)
             patients.append(apoint.appointment_id.patient.id)
             #doctor.update({apoint.doctor.id: apoint.doctor.id})
         # elimino los elementos duplicados
@@ -255,7 +255,12 @@ class efectores_pami(osv.osv_memory):
                 output += pat.document_type + ';' # tipo de documento
             else:
                 output += 'DNI'
-            output += pat.dni + ';' # nro de documento
+            if pat.dni:
+                output += pat.dni + ';' # nro de documento
+            else:
+                outerr+= "El afiliado %s no tiene DNI asignado.\n"%(pat.complete_name)
+                print pat
+                print pat.name
             if pat.marital_status: 
                 output += pat.marital_status + ';' 
             else: 
@@ -311,18 +316,24 @@ class efectores_pami(osv.osv_memory):
             if pat.benefit_id.code:
                 output += pat.benefit_id.code + ';' # id beneficio
             else:
-                outerr+= "El afiliado %s no tiene código de beneficio relacionado.\n"%(pat.complete_name)
-            if pat.relationship_id:
+                outerr+= "El afiliado %s no tiene codigo de beneficio relacionado.\n"%(pat.complete_name)
+                print pat
+                print pat.name
+
+            if pat.relationship_id.code:
                 output += pat.relationship_id.code + ';' # id parentesco
             else:
                 outerr+= "El afiliado %s no tiene el campo parentesco asignado.\n"%(pat.complete_name)
+                print pat
+                print pat.name
+                
             output += ';;;;;;;\n' # id_sucursal, id_agencia, id_corresponsalia, id_afjp, vto_afiliado, f_formulario, fecha_baja, codigo_baja
         output += 'PRESTACIONES\n'
         
         for apoint in self.pool.get('medical.appointment.practice').browse(cr, uid, appointment_ids):
             output += 'AMBULATORIOPSI\n'
             output += ';;'
-            output += apoint.appointment_id.doctor.registration_number + ';' # matricula nacional del profesional
+            output += apoint.doctor_id.registration_number + ';' # matricula nacional del profesional
             output += '0;0;0;' # c_ambulatorio, id_red, c_prestador
             output += str(prestador_pool.attention_point) + ';' # boca de atencion
             output += '0;' # c_profesional
@@ -332,8 +343,16 @@ class efectores_pami(osv.osv_memory):
             output += apoint.appointment_id.id_modalidad_presta + ';' # id_modalidad_presta
             output += ';' # n_nro_orden
             output += apoint.appointment_id.care_type + ';' # id_tipo_atencion 
-            output += apoint.appointment_id.patient.benefit_id.code + ';' # id_beneficio
-            output += apoint.appointment_id.patient.relationship_id.code + ';' # id parentesco
+            if apoint.appointment_id.patient.benefit_id.code:
+                output += apoint.appointment_id.patient.benefit_id.code + ';' # id_beneficio
+            else:
+                outerr+= "El Afiliado %s no tiene benificiario asignado.\n"%(apoint.appointment_id.patient.complete_name)
+                print apoint.appointment_id.patient
+                print apoint.appointment_id.patient.name
+            if apoint.appointment_id.patient.relationship_id.code:
+                output += apoint.appointment_id.patient.relationship_id.code + ';' # id parentesco
+            else:
+                outerr+= "El Afiliado %s no tiene parentesco asignado.\n"%(apoint.appointment_id.patient.complete_name)
             if apoint.appointment_id.f_fecha_egreso:
                 output += datetime.strptime(apoint.appointment_id.f_fecha_egreso, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
             else:
