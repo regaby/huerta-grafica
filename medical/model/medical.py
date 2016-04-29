@@ -273,7 +273,7 @@ class medical_partner(osv.osv):
         'dod' : fields.datetime ('Date of Death'),
         'insurance': fields.char('Insurance', size=64, required=False, select=True, ),
         'insurance_number': fields.char('Insurance Number', size=15, required=False, select=True, ),
-        'dni': fields.char('DNI', size=64, required=False, select=True, help="DNI"),
+        'dni': fields.char('DNI', size=64, required=True, select=True, help="DNI"),
         'critical_info' : fields.text ('Important disease, allergy or procedures information', help="Write any important information on the patient's disease, surgeries, allergies, ..."),
         'sex' : fields.selection([
             ('m', 'Male'),
@@ -396,7 +396,7 @@ class medical_partner(osv.osv):
                     deceased = ''
                 years_months_days = str(delta.years) + "y " + str(delta.months) + "m " + str(delta.days) + "d" + deceased
             else:
-                years_months_days = "No DoB !"
+                years_months_days = "Fecha de nacimiento no asignada !"
 
             return years_months_days
         result = {}
@@ -458,6 +458,7 @@ medical_practice ()
 
 class medical_appointment_practice(osv.osv):
     _name = "medical.appointment.practice"
+    _order = "f_fecha_practica asc"
 
     # def _get_doctor_id(self, cr, uid, context=None):
     #     if context is None:
