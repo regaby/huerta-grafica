@@ -102,7 +102,7 @@
                 </xpath>
                 <xpath expr="//field[@name='email']" position="after">
                 	<field name="document_type" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"/>
-                    <field name="dni" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"/>
+                    <field name="dni" attrs="{'invisible': [('is_institution','!=', False)]}"/>
                     <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
                     <field name="cuit" placeholder="CUIT" attrs="{'invisible': [('is_doctor','!=', False)],'required': [('is_institution','=', True)]}"/>
                     <field name="afjp_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}"  widget="selection"/>
@@ -289,7 +289,7 @@
 						<field name="name" colspan="3"/>
 						<!-- <field name="institution" context="{'default_is_institution': 1}" colspan="3"/> -->
 						<newline/>
-						<field name="patient" required="1" colspan="3"/>
+						<field name="patient" required="1" colspan="3" context="{'default_is_patient': 1}" options="{'no_create': True}"/>
 						<field name="appointment_date" required="1" colspan="3"/>
 						<newline/>
 						
