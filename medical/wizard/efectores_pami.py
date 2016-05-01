@@ -61,7 +61,13 @@ class efectores_pami(osv.osv_memory):
         month = this.month
         last_day = calendar.monthrange(year,month)
         date_bottom = str(datetime(year, month, 1))[0:10]
-        date_top = str(datetime(year, month, last_day[1]))[0:10]
+        #date_top = str(datetime(year, month, last_day[1]))[0:10]
+        month = int(month) + 1
+        if month == 13:
+            month = 1
+            year = year +1
+        date_top = str(year)+'-'+str(month)+'-01'
+
         appointment_ids = self.pool.get('medical.appointment.practice').search(cr, uid, [('f_fecha_practica','>=',date_bottom),('f_fecha_practica','<=',date_top)])
 
         doctors = []
@@ -337,7 +343,7 @@ class efectores_pami(osv.osv_memory):
             output += '0;0;0;' # c_ambulatorio, id_red, c_prestador
             output += str(prestador_pool.attention_point) + ';' # boca de atencion
             output += '0;' # c_profesional
-            output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y  %H:%M') +';' # fecha de atencion
+            output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y') +';' # fecha de atencion
             output += ';' # d_estado
             output += ';' # d_motivo_rechazo
             output += apoint.appointment_id.id_modalidad_presta + ';' # id_modalidad_presta
@@ -380,7 +386,7 @@ class efectores_pami(osv.osv_memory):
             output += '0;' # c_ambulatorio
             output += '1;' # ni_codpresta
             output += apoint.practice_id.code + ';' # vch_codprestacion
-            output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y  %H:%M') + ' 00:00' +';' # fecha que se realizó la práctica
+            output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') +';' # fecha que se realizó la práctica
             output += str(apoint.q_cantidad) + ';' # cantidad de practicas realizadas
             output += '0;' # c_prestador_solicita
             output += '0\n' # c_profesional_solicita
