@@ -471,7 +471,8 @@ class medical_appointment_practice(osv.osv):
         'vch_codprestacion' : fields.char ('vch_codprestacion'),
         'f_fecha_practica': fields.datetime('Practice Date', required=True),
         'q_cantidad': fields.integer('Practice Quantity', required=True),
-        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=True),
+        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=False),
+        'c_profesional_solicita' : fields.char ('c_profesional_solicita'),
     }
     # _sql_constraints = [
     #     ('code_uniq', 'unique (practice_id,appointment_id)', 'La práctica debe ser única por ambulatorio')
@@ -560,6 +561,9 @@ class medical_appointment (osv.osv):
         #'doctor': lambda self, cr, uid, context: self.pool.get('medical.physician')._get_default_doctor(cr, uid, context),
         'state':lambda *a: 'draft',
     }
+    _sql_constraints = [
+        ('patient_uniq', 'unique (patient,care_type)', 'El ambulatorio debe ser único por paciente y tipo de atención.'),
+    ]
 
     # Additions from Nhomar Hernandez (nhomar)
 

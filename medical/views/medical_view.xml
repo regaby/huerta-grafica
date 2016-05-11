@@ -326,13 +326,13 @@
 									<field name="practice_id" required="True" domain="[('frequently_used','=',True)]" widget="selection"/>
 									<field name="f_fecha_practica" />
 									<field name="q_cantidad" />
-                                    <field name="doctor_id" widget="selection"/>
+                                    <field name="doctor_id" widget="selection" required="True"/>
 								</tree>
 								<form string="Practices" editable="bottom">
 									<field name="practice_id" required="True" />
 									<field name="f_fecha_practica" />
 									<field name="q_cantidad" />
-                                    <field name="doctor_id" />
+                                    <field name="doctor_id" required="True"/>
 								</form>
 
 							</field>
