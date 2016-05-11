@@ -360,6 +360,7 @@ class medical_partner(osv.osv):
         'id_sucursal':lambda *a: 18,
         'nacionality': '1',
         'nacionality_id': lambda self,cr,uid,context: self.pool.get('res.country').search(cr, uid, [('name','=','Argentina')])[0],
+        'start_date': lambda *a: time.strftime('%Y-%m-%d'),
 
     }
 
