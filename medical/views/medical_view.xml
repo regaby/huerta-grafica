@@ -53,6 +53,9 @@
 					<field name="is_person" select="1" />
 					<field name="is_institution" select="1" />
 				</field> -->
+                <div name="buttons" position="inside">
+                    <button name="get_pami_link" string="Ver Padrón PAMI" type="object" attrs="{'invisible': [('is_patient','=', False)]}"/>
+                </div>
 				<field name="name" position="after">
 					<!-- <field name="lastname" placeholder="Lastname" attrs="{'invisible': [('is_institution','!=', False)], 'required': [('is_patient','=',True)]}"></field> -->
 					<!-- <field name="abbreviation" placeholder="Abbreviation" attrs="{'invisible': [('is_institution','=', False)], 'required': [('is_institution','=', True)]}"></field> -->
@@ -286,6 +289,7 @@
 			<field name="arch" type="xml">
 				<form string="Appointment">
 					<group col="6" colspan="6">
+                        <button name="get_pami_link" string="Ver Padrón PAMI" type="object" />
 						<field name="name" colspan="3"/>
 						<!-- <field name="institution" context="{'default_is_institution': 1}" colspan="3"/> -->
 						<newline/>

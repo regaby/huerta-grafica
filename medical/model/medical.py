@@ -247,6 +247,15 @@ class medical_partner(osv.osv):
             # return {'value': val}
         return {}
 
+    def get_pami_link(self, cr, uid, ids, context=None):
+        this = self.browse(cr, uid, ids, context=context)
+        url = 'http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.benefit_id.code,this.relationship_id.code)
+        return {
+            'type': 'ir.actions.act_url',
+            'url': url,
+            'target': 'new',
+                }
+
     _columns = {
         'is_patient' : fields.boolean('Patient', help="Check if the partner is a patient"),
         'is_doctor' : fields.boolean('Doctor', help="Check if the partner is a doctor"),
@@ -486,6 +495,15 @@ medical_appointment_practice ()
 
 class medical_appointment (osv.osv):
     _name = "medical.appointment"
+
+    def get_pami_link(self, cr, uid, ids, context=None):
+        this = self.browse(cr, uid, ids, context=context)
+        url = 'http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.patient.benefit_id.code,this.patient.relationship_id.code)
+        return {
+            'type': 'ir.actions.act_url',
+            'url': url,
+            'target': 'new',
+                }
     
     _columns = {
         'doctor' : fields.many2one ('res.partner', 'Physician',domain=[('is_doctor', '=', "1")], help="Physician's Name"),
