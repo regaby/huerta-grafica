@@ -35,7 +35,9 @@ class Parser(report_sxw.rml_parse):
             'group':self._group,
             'group_items':self._group_items,
             'get_total_prestaciones':self._get_total_prestaciones,
+            'get_total_pacientes': self._get_total_pacientes,
             '_get_lineas_prestaciones':self._get_lineas_prestaciones,
+            '_get_lineas_cant_pacientes': self._get_lineas_cant_pacientes,
         })
         
     ret = False
@@ -126,6 +128,20 @@ class Parser(report_sxw.rml_parse):
             tot += practice.q_cantidad
         return tot
 
+    def _get_total_pacientes(self):
+        # este método calcula total del reporte
+        # se invoca como: get_total_pacientes()
+        cr = self.cr 
+        uid = self.uid
+        practice_ids = self._get_practices()
+        tot = 0
+        patient=[]
+        practice_obj = self.pool.get('medical.appointment.practice')
+        for practice in practice_obj.browse(cr, uid, practice_ids):
+            patient.append(practice.appointment_id.patient.id)
+        patient = list(set(patient))
+        return len(patient)
+
     def _get_lineas_prestaciones(self, attr):
         # este metodo calcula total de prestaciones de un médico
         # se lo invoca como _get_lineas_prestaciones(group1.doctor)
@@ -140,6 +156,23 @@ class Parser(report_sxw.rml_parse):
             if practice.doctor_id.name==attr:
                 subtotal+=1
         return subtotal
+
+    def _get_lineas_cant_pacientes(self, attr):
+        # este metodo calcula total de prestaciones de un médico
+        # se lo invoca como _get_lineas_cant_pacientes(group1.doctor)<_get_lineas_cant_pacientes(group1.doctor)>
+        ret = []
+        cr = self.cr 
+        uid = self.uid
+        subtotal = 0
+        form = self.localcontext['data']['form']
+        patient=[]
+        practice_ids = self._get_practices()
+        practice_obj = self.pool.get('medical.appointment.practice')
+        for practice in practice_obj.browse(cr, uid, practice_ids):
+            if practice.doctor_id.name==attr:
+                patient.append(practice.appointment_id.patient.id)
+        patient = list(set(patient))
+        return len(patient)
   
     def _group(self, attr, field):
         group = []
