@@ -2,6 +2,21 @@
 	<data>
 
 		<!-- PARTNER -->
+        <record model="ir.ui.view" id="res_partner_filter_view_medical">
+            <field name="name">res.partner.filter</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="dni"/>
+                </field>
+                <field name="category_id" position="replace"/>
+                <field name="user_id" position="replace"/>
+                <field name="parent_id" position="replace"/>
+                
+            </field>
+        </record>
 
 		<record model="ir.ui.view" id="res_partner_kanban_view_medical">
 			<field name="name">res.partner.tree</field>

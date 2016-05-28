@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
     
                 <field name="city" position="replace">
-                    <field name="city_id" placeholder="City" on_change="onchange_city(city_id)" attrs="{'readonly': [('use_parent_address','=',True)]}"/>
+                    <field name="city_id" placeholder="City" on_change="onchange_city(city_id)" attrs="{'readonly': [('use_parent_address','=',True)]}" options="{'no_create': True}"/>
                     <field name="department_id" />
                 </field>
                 <field name="state_id" position="replace">

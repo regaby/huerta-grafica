@@ -213,6 +213,15 @@ class medical_benefit(osv.osv):
     _sql_constraints = [
         ('code_uniq', 'unique (code)', 'El nro. de Obra Social debe ser único.')
     ]
+    def _check_code(self,cr,uid,ids,context=None):
+        demo_record = self.browse(cr,uid,ids,context=context)[0]
+        try:
+            int(demo_record.code)
+        except:
+            return False
+        return True
+        
+    _constraints = [(_check_code,"El nro. de obra social debe ser de tipo numérico. ",['code'] )]
 medical_benefit ()
 
 class medical_partner(osv.osv):
@@ -372,6 +381,15 @@ class medical_partner(osv.osv):
         'start_date': lambda *a: time.strftime('%Y-%m-%d'),
 
     }
+    def _check_dni(self,cr,uid,ids,context=None):
+        demo_record = self.browse(cr,uid,ids,context=context)[0]
+        partner_ids = self.search(cr, uid, [('dni','=',demo_record.dni),('active','=',True)])
+        partner_ids.remove(ids[0])
+        if len(partner_ids)>0:
+            return False
+        return True
+        
+    _constraints = [(_check_dni,"Ya existe un afiliado cargado con el mismo DNI. ",['dni'] )]
 
     def name_get(self, cr, user, ids, context={}):
         if not len(ids):
