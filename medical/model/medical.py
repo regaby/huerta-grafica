@@ -364,6 +364,7 @@ class medical_partner(osv.osv):
         #'subsidiary_number': fields.integer('Subsidiary Number', help="Identificador único de una sucursal del PAMI."),
         #'subsidiary_id': fields.many2one('medical.subsidiary','Subsidiary', help="Identificador único de una sucursal del PAMI."),
         'module_ids': fields.many2many('medical.module','rel_modulosxprestador','instution_id','module_id','Modules'),
+        'prestaciones_ids': fields.one2many('medical.appointment','patient','Prestaciones',ondelete='cascade'),
 
     }
     _sql_constraints = [

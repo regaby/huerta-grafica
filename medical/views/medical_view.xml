@@ -118,26 +118,13 @@
                     <attribute name="attrs">{'required': [('is_institution','=', True)]}</attribute>
                     <!-- widget="email" -->
                 </xpath>
+                <xpath expr="//field[@name='active']" position="replace"/>
                 <xpath expr="//field[@name='email']" position="after">
                 	<field name="document_type" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_patient','=',True),('is_doctor','=',True)]}"/>
                     <field name="dni" attrs="{'invisible': [('is_institution','!=', False)]}"/>
                     <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
-                    <field name="cuit" placeholder="CUIT" attrs="{'invisible': [('is_doctor','!=', False)],'required': [('is_institution','=', True)]}"/>
-                    <field name="afjp_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}"  widget="selection"/>
-                    <field name="correspondent_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}" on_change="onchange_correspondent_id(correspondent_id)"  widget="selection"/>
-                    <field name="agency_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
-                    <field name="subsidiary_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
-                    <field name="id_sucursal" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)], 'readonly': False}"/>
-                </xpath>
-                <xpath expr="//field[@name='country_id']" position="after">
-                    
-                    <field name="start_date" placeholder="Start Date" attrs="{'required': [('is_institution','=', True)]}"/>
-            		<field name="end_date" placeholder="End Date"/>
-            		<field name="end_reason" placeholder="End Reason"/>
-
-            		<field name='update_date' placeholder="Update Date" attrs="{'invisible': [('is_institution','!=', True)]}"/>
-
-            		<!-- <field name="subsidiary_id" placeholder="Subsidiary" attrs="{'required': [('is_institution','=', True)], 'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)]}"/> -->
+                    <field name="cuit" placeholder="CUIT" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)],'required': [('is_institution','=', True)]}"/>
+                    <field name="active"/>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="after">
                 	<field name="street_number" placeholder="Street Number"/>
@@ -155,8 +142,11 @@
                             <field name="is_doctor" class="oe_inline" invisible="True"/> 
                             <field name="is_institution" class="oe_inline" invisible="True"/> 
                 </xpath>
-                <page name='internal_notes' position="before">
-                	<page name="patient" String="Patient Information" attrs="{'invisible': [('is_patient','=', False)]}">
+                <page name='sales_purchases' position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
+                </page>
+                <page name='internal_notes' position="replace">
+                	<page name="patient" String="Información del Paciente" attrs="{'invisible': [('is_patient','=', False)]}">
                 		<group colspan="4" col="4">
 	                		<!-- <field name="dni" attrs="{'required': [('is_patient','=', True)]}"/> -->
 	                		<!-- <field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>-->
@@ -174,11 +164,26 @@
 							<field name="dod"
 								attrs="{'invisible':[('deceased','=',False)],'required':[('deceased','=',True)]}" />
                 		</group>
+                        <newline />
+                        <separator string="Datos Obra Social" />
+                        <group colspan="4" col="4">
+                            <field name="start_date" placeholder="Start Date" attrs="{'required': [('is_institution','=', True)]}"/>
+                            <field name="end_date" placeholder="End Date"/>
+                            <field name="end_reason" placeholder="End Reason"/>
+                            <field name="afjp_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}"  widget="selection"/>
+                            <field name="correspondent_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}" on_change="onchange_correspondent_id(correspondent_id)"  widget="selection"/>
+                            <field name="agency_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
+                            <field name="subsidiary_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
+                            <field name="id_sucursal" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)], 'readonly': False}"/> 
+                        </group>
                 		<newline />
 						<separator string="Patient Critical Information" colspan="6" />
 						<field colspan="6" name="critical_info" nolabel="1" />
 
                 	</page>
+                    <page string="Prestaciones" attrs="{'invisible': [('is_patient','=', False)]}">
+                        <field name="prestaciones_ids" nolabel="1"/>
+                    </page>
                 	<page name="phisycian" String="Phisycian Information" attrs="{'invisible': [('is_doctor','=', False)]}">
                 		<group colspan="4" col="4">
 	                		<field name="registration_number" attrs="{'required': [('is_doctor','=', True)]}"/>
@@ -199,6 +204,7 @@
 	                		<field name="attention_point" attrs="{'required': [('is_institution','=', True)]}"/>
 	                		
 	                		<field name="nro_sap"/>
+                            <field name='update_date' placeholder="Update Date" attrs="{'invisible': [('is_institution','!=', True)]}"/>
 	                		
 	                	</group>
 	                	<group string="Modules">
