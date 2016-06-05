@@ -40,6 +40,13 @@ class efectores_pami(osv.osv_memory):
         output = 'CABECERA\n'
         outerr = ''
         ## CABECERA
+
+        # buscar visitas...
+        year = this.year
+        month = this.month
+        last_day = calendar.monthrange(year,month)
+        date_bottom = str(datetime(year, month, 1))[0:10]
+        date_top = str(datetime(year, month, last_day[1]))[0:10]
         
         prestador_id = self.pool.get('res.partner').search(cr, uid, [('is_institution','=',True)])
         prestador_pool = self.pool.get('res.partner').browse(cr, uid, prestador_id, context)
@@ -48,7 +55,7 @@ class efectores_pami(osv.osv_memory):
         fecha_emulacion = time.strftime('%d_%m_%Y')
         periodo_emulacion = str(this.month).zfill(2)+'-'+str(this.year)[2:4]
         output += numero_emulacion+';' # numero de emulacion
-        output += time.strftime('%d/%m/%Y')+';' # fecha emulasion
+        output += datetime.strptime(date_top, '%Y-%m-%d').strftime('%d/%m/%Y')+';' # fecha emulasion
 
         output += periodo_emulacion + ';'# mes y año prestacionales
         output += prestador_pool.name+';' # nombre del prestador
@@ -56,17 +63,12 @@ class efectores_pami(osv.osv_memory):
         output += prestador_pool.user_name+';' # nombre de usuario
         output += prestador_pool.instalation_number + '\n' # nro. de instalacion de efectores
 
-        # buscar visitas...
-        year = this.year
-        month = this.month
-        last_day = calendar.monthrange(year,month)
-        date_bottom = str(datetime(year, month, 1))[0:10]
-        #date_top = str(datetime(year, month, last_day[1]))[0:10]
-        month = int(month) + 1
-        if month == 13:
-            month = 1
-            year = year +1
-        date_top = str(year)+'-'+str(month)+'-01'
+        
+        # month = int(month) + 1
+        # if month == 13:
+        #     month = 1
+        #     year = year +1
+        # date_top = str(year)+'-'+str(month)+'-01'
 
         appointment_ids = self.pool.get('medical.appointment.practice').search(cr, uid, [('f_fecha_practica','>=',date_bottom),('f_fecha_practica','<=',date_top)])
 

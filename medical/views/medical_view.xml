@@ -56,6 +56,21 @@
 			</field>
 		</record>
 
+         <record id="view_partner_form_medical_department" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base_department_city.view_partner_form"/>
+            <field name="arch" type="xml">
+    
+                <field name="city_id" position="attributes">
+                    <attribute name="domain">[('municipality','in',[14001,14002,14003,14004,14005,14006,14007,14008,14009,14010,14011,14012,14013,14014,14015,14016,14017])]</attribute>
+                </field>
+
+            </field>
+        </record>
+
+        
+
 		<record model="ir.ui.view" id="view_partner_form_medical">
 			<field name="name">res.partner.form</field>
 			<field name="model">res.partner</field>

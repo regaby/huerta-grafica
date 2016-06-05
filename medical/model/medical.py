@@ -25,6 +25,7 @@ from openerp.osv import fields, osv
 from openerp.tools.translate import _
 
 from lxml import etree
+import re
 
 # DEBUG MODE -- DELETE ME !
 # import pdb
@@ -215,13 +216,18 @@ class medical_benefit(osv.osv):
     ]
     def _check_code(self,cr,uid,ids,context=None):
         demo_record = self.browse(cr,uid,ids,context=context)[0]
+        code = demo_record.code
+        if re.search(r"\s", code):
+            raise osv.except_osv(_('Error'),_('El nro. de obra social no puede contener espacios.') )  
+        if len(code)!=12:
+            raise osv.except_osv(_('Error'),_('El nro. de obra social debe tener 12 dígitos.') )  
         try:
-            int(demo_record.code)
+            int(code)
         except:
-            return False
+            raise osv.except_osv(_('Error'),_('El nro. de obra social debe ser de tipo numérico. ') )  
         return True
         
-    _constraints = [(_check_code,"El nro. de obra social debe ser de tipo numérico. ",['code'] )]
+    _constraints = [(_check_code,"Error",['code'] )]
 medical_benefit ()
 
 class medical_partner(osv.osv):
@@ -510,6 +516,16 @@ class medical_appointment_practice(osv.osv):
         'q_cantidad': lambda *a: 1,
         #'doctor_id': _get_doctor_id,
     }
+    # def _check_code(self,cr,uid,ids,context=None):
+    #     demo_record = self.browse(cr,uid,ids,context=context)[0]
+    #     fecha = demo_record.f_fecha_practica
+    #     try:
+    #         int(fecha)
+    #     except:
+    #         return False
+    #     return True
+        
+    # _constraints = [(_check_code,"La fecha de práctica no puede ser de un mes posterior al actual",['f_fecha_practica'] )]
 medical_appointment_practice ()
 
 class medical_appointment (osv.osv):
