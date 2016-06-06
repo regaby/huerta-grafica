@@ -12,6 +12,9 @@
                         <label align="0.0" string="Generar archivo de Efectores PAMI en formato txt" colspan="4"/>
                         <field name="month"/>
                         <field name="year"/>
+                        <field name="create_date_from"/>
+                        <field name="create_date_to"/>
+                        <field name="doctor_id"/>
                     </group>
                     <footer states="choose">
                         <button special="cancel" icon="gtk-cancel" string="Cancelar"/>

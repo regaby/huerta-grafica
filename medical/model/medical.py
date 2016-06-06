@@ -499,6 +499,29 @@ class medical_appointment_practice(osv.osv):
     #     if context is None:
     #         context = {}
     #     return 1
+    def _get_fecha(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for practice in self.browse(cr, uid, ids, context=context):
+            cr.execute('''select create_date from medical_appointment_practice where id = %d'''%(practice.id))
+            fech = cr.fetchall()
+            if fech:
+                res[practice.id] = fech[0][0][0:10]
+            else: 
+                res[practice.id] = '2000-01-01' # si no tiene fecha de creación , asigno una fecha x para registros previos migracion.
+        return res
+
+    def _search_fecha(self, cr, uid, obj, name, args, context=None):
+        if not args:
+            return []
+        res = []
+        
+        if args[0][1]in ('>=','<='):
+            cr.execute("""select id from medical_appointment_practice where create_date %s '%s'"""%(args[0][1],args[0][2]))
+            res = cr.fetchall()
+            
+        if not res:
+            return [('id', '=', '0')]
+        return [('id', 'in', map(lambda x:x[0], res))]
 
     _columns = {
         'practice_id' : fields.many2one ('medical.practice', 'Practice', required=False),
@@ -508,6 +531,7 @@ class medical_appointment_practice(osv.osv):
         'q_cantidad': fields.integer('Practice Quantity', required=True),
         'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=False),
         'c_profesional_solicita' : fields.char ('c_profesional_solicita'),
+        'f_create_date': fields.function(_get_fecha,fnct_search=_search_fecha, method=True, type= 'date', string='Fecha Creacion'),  
     }
     # _sql_constraints = [
     #     ('code_uniq', 'unique (practice_id,appointment_id)', 'La práctica debe ser única por ambulatorio')

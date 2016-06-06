@@ -25,6 +25,9 @@ class efectores_pami(osv.osv_memory):
                                  ) ),
         'month': fields.selection([(1, 'Enero'), (2, 'Febrero'), (3, 'Marzo'), (4, 'Abril'), (5, 'Mayo'), (6, 'Junio'), (7, 'Julio'), (8, 'Agosto'), (9, 'Septiembre'), (10, 'Octubre'), (11, 'Noviembre'), (12, 'Diciembre')], 'Mes', required=True),
         'year': fields.integer('Año', required=True),
+        'create_date_from': fields.date('Fecha Carga desde', required=False),
+        'create_date_to': fields.date('Fecha Carga hasta', required=False),
+        'doctor_id': fields.many2one('res.partner', 'Profesional', domain=[('is_doctor','=',True)]),
         }
     _defaults = {
          'month': lambda *a: time.gmtime()[1],
@@ -69,8 +72,15 @@ class efectores_pami(osv.osv_memory):
         #     month = 1
         #     year = year +1
         # date_top = str(year)+'-'+str(month)+'-01'
+        args = [('f_fecha_practica','>=',date_bottom),('f_fecha_practica','<=',date_top)]
+        if this.doctor_id:
+            args.append(('doctor_id','=',this.doctor_id.id))
+        if this.create_date_from:
+            args.append(('f_create_date','>=',this.create_date_from))
+        if this.create_date_to:
+            args.append(('f_create_date','<=',this.create_date_to))
 
-        appointment_ids = self.pool.get('medical.appointment.practice').search(cr, uid, [('f_fecha_practica','>=',date_bottom),('f_fecha_practica','<=',date_top)])
+        appointment_ids = self.pool.get('medical.appointment.practice').search(cr, uid, args)
 
         doctors = []
         patients = []
