@@ -23,6 +23,7 @@
                 <footer>
                         <button special="cancel" icon="gtk-cancel" string="Cancelar"/>
                         <button type="object" name="print_report" icon="gtk-print" string="Generar reporte"/>
+                        <button type="object" name="print_report_care_type" icon="gtk-print" string="Generar reporte por Tipo de Atención"/>
                     </footer>
             </form>
             </field>

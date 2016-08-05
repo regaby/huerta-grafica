@@ -20,3 +20,4 @@
 ##############################################################################
 
 import medical_patient_report
+import medical_care_type_report

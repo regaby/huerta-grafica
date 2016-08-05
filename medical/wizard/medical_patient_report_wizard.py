@@ -51,6 +51,19 @@ class medical_patient_report_wizard(osv.osv_memory):
             'report_name': 'medical_patient_report',
             'datas': datas,
         }
+
+    def print_report_care_type(self, cr, uid, ids, context=None):
+        #wizard = self.browse(cr, uid, ids)[0]
+        datas = {
+             'ids': [],
+             'model': 'medical.patient.report.wizard',
+             'form': self.read(cr, uid, ids)[0]
+        }
+        return {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'medical_care_type_report',
+            'datas': datas,
+        }
         
         
 

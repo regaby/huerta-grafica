@@ -15,6 +15,19 @@
         <field name="tml_source">file</field>
     </record>
 
+    <record id="report_medical_care_type_report" model="ir.actions.report.xml">
+        <field name="name">Reporte Prestaciones</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">medical.patient.report.wizard</field>
+        <field name="report_name">medical_care_type_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="parser_loc">medical/report/medical_care_type_report.py</field>
+        <field name="report_rml">medical/report/medical_care_type_report.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
     </data>
 </openerp>
 
