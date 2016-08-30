@@ -89,6 +89,7 @@ class efectores_pami(osv.osv_memory):
             from medical_appointment_practice 
             where id in (%s)
             group by appointment_id
+            order by appointment_id
         """%(','.join(str(x) for x in appointment_ids))
         print sql
         # ids = ('where ai.id in (%s)'%','.join(str(x) for x in form['invoice_ids']))
@@ -97,14 +98,15 @@ class efectores_pami(osv.osv_memory):
 
         for a_group in appoint_group:
             app = self.pool.get('medical.appointment').read(cr, uid, a_group['appointment_id'],['patient','doctor'])
-            print app
             doctors.append(app['doctor'][0])
-            patients.append(app['patient'][0])
+            if app['patient']:
+                patients.append(app['patient'][0])
+            else:
+                appoint_group.remove(a_group)
             #doctor.update({apoint.doctor.id: apoint.doctor.id})
         # elimino los elementos duplicados
         doctors = list(set(doctors))
         patients = list(set(patients))
-
 
         output += 'PROFESIONAL\n'
 
@@ -360,19 +362,11 @@ class efectores_pami(osv.osv_memory):
             output += ';;;;;;;\n' # id_sucursal, id_agencia, id_corresponsalia, id_afjp, vto_afiliado, f_formulario, fecha_baja, codigo_baja
         output += 'PRESTACIONES\n'
 
-        ## agrupo todos los appointments_ids por fecha y 
-        sql = """select appointment_id
-            from medical_appointment_practice 
-            where id in (%s)
-            group by appointment_id
-        """%(','.join(str(x) for x in appointment_ids))
-        print sql
-        # ids = ('where ai.id in (%s)'%','.join(str(x) for x in form['invoice_ids']))
-        cr.execute(sql)
-        appoint_group = cr.dictfetchall()
-        
-        for a_group in appoint_group:
-            apoint = self.pool.get('medical.appointment').browse(cr, uid, a_group['appointment_id'])
+        app_ids = []
+        for x in appoint_group:
+            app_ids.append(x['appointment_id'])
+
+        for apoint in self.pool.get('medical.appointment').browse(cr, uid, app_ids):
             output += 'AMBULATORIOPSI\n'
             output += ';;'
             output += apoint.doctor.registration_number + ';' # matricula nacional del profesional
@@ -390,12 +384,16 @@ class efectores_pami(osv.osv_memory):
                 output += apoint.patient.benefit_id.code + ';' # id_beneficio
             else:
                 outerr+= "El Afiliado %s no tiene benificiario asignado.\n"%(apoint.patient.complete_name)
+                print 'no tiene beneficcc'
+                print apoint
                 print apoint.patient
-                print apoint.patient.name
             if apoint.patient.relationship_id.code:
                 output += apoint.patient.relationship_id.code + ';' # id parentesco
             else:
                 outerr+= "El Afiliado %s no tiene parentesco asignado.\n"%(apoint.patient.complete_name)
+                print 'no tiene rellll'
+                print apoint
+                print apoint.patient
             if apoint.f_fecha_egreso:
                 output += datetime.strptime(apoint.f_fecha_egreso, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
             else:
@@ -429,7 +427,6 @@ class efectores_pami(osv.osv_memory):
                 order by f_fecha_practica
                 """%(a_group['appointment_id'],date_bottom,date_top)
             cr.execute(sql1)
-            print cr.query
             prestaciones = cr.dictfetchall()
             output += 'REL_PRACTICASREALIZADASXAMBULATORIOPSI\n'
             for pres in prestaciones:
