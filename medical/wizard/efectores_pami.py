@@ -84,6 +84,7 @@ class efectores_pami(osv.osv_memory):
 
         doctors = []
         patients = []
+        appoint_group2=[]
 
         sql = """select appointment_id
             from medical_appointment_practice 
@@ -101,8 +102,8 @@ class efectores_pami(osv.osv_memory):
             doctors.append(app['doctor'][0])
             if app['patient']:
                 patients.append(app['patient'][0])
-            else:
-                appoint_group.remove(a_group)
+                appoint_group2.append(a_group)
+                
             #doctor.update({apoint.doctor.id: apoint.doctor.id})
         # elimino los elementos duplicados
         doctors = list(set(doctors))
@@ -363,7 +364,7 @@ class efectores_pami(osv.osv_memory):
         output += 'PRESTACIONES\n'
 
         app_ids = []
-        for x in appoint_group:
+        for x in appoint_group2:
             app_ids.append(x['appointment_id'])
 
         for apoint in self.pool.get('medical.appointment').browse(cr, uid, app_ids):
