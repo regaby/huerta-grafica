@@ -9,15 +9,13 @@
 					<field name="doctor"/>
 					<field name="doc_specility"/>
 					<field name="doc_city_id"/>
-					<field name="pat_benefit_code"/>
-					<field name="pat_relationship_code"/>
+					<field name="afiliado"/>
 					<field name="patient"/>
 					<field name="appointment_date"/>
 					<field name="care_type"/>
 					<field name="pat_diagnostic_name"/>
 					<field name="pat_practice_name"/>
 					<field name="f_fecha_practica"/>
-
 					
 				</tree>
 			</field>
@@ -50,8 +48,8 @@
 							context="{'group_by':'doctor'}" />
 						<filter string="Afiliado" icon="terp-personal" domain="[]"
 							context="{'group_by':'patient'}" />
-						<filter string="Fecha Atención" icon="terp-go-month" domain="[]"
-							context="{'group_by':'appointment_date'}" />
+						<filter string="Tipo de Atención" icon="terp-go-month" domain="[]"
+							context="{'group_by':'care_type'}" />
 						<filter string="Ciudad Profesional" icon="terp-go-month" domain="[]"
 							context="{'group_by':'doc_city_id'}" />
 

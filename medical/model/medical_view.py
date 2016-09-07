@@ -24,6 +24,7 @@ from openerp import tools
 class medical_prestaciones_view(osv.osv):
     _name = 'medical.prestaciones.view'
     _auto = False
+    _order = 'f_fecha_practica'
     _columns = {
     	'doctor': fields.many2one('res.partner', 'Especialista', readonly=True),
     	'doc_specility': fields.char('Especialidad', readonly=True),
@@ -53,6 +54,7 @@ class medical_prestaciones_view(osv.osv):
         'm_tipo_diagnostico': fields.char('m_tipo_diagnostico', readonly=True),
         'pat_practice_code': fields.char('pat_practice_code', readonly=True),
         'q_cantidad': fields.integer('q_cantidad', readonly=True),
+        'afiliado': fields.char('Afiliado', readonly=True),
     }
 
     def init(self, cr):
@@ -67,7 +69,7 @@ class medical_prestaciones_view(osv.osv):
 					pat.city_id as pat_city_id, pat.phone as pat_phone, pat.dob as pat_dob, pat.sex as pat_sex, pat.cuil as pat_cuil, pat.cuit as pat_cuit, mpr.code as pat_relationship_code,
 					ma.appointment_date, ma.id_modalidad_presta, ma.care_type, ma.f_fecha_egreso, ma.id_tipo_egreso, ma.comments, md.code as pat_diagnostic_code, mad.m_tipo_diagnostico,
 					f_fecha_practica, q_cantidad, mp.code as pat_practice_code, pat.end_date as pat_end_date, md.name as pat_diagnostic_name, mp.code as pat_practice_name,
-					ma.doctor, ma.patient, map.appointment_id
+					ma.doctor, ma.patient, map.appointment_id, mb.code || mpr.code as afiliado
 				from medical_appointment_practice map
 					join medical_appointment ma on (map.appointment_id=ma.id)
 					join res_partner doc on (ma.doctor=doc.id)
