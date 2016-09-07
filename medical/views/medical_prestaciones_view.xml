@@ -45,7 +45,7 @@
 					<field name="patient" select="1" />
 					<field name="f_fecha_practica" select="1" />
 					<newline />
-					<group expand="0" string="Group By..." colspan="11" col="11">
+					<group expand="0" string="Agrupar por..." colspan="11" col="11">
 						<filter string="Especialista" icon="terp-personal" domain="[]"
 							context="{'group_by':'doctor'}" />
 						<filter string="Afiliado" icon="terp-personal" domain="[]"
