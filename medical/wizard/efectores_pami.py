@@ -34,6 +34,75 @@ class efectores_pami(osv.osv_memory):
          'year': lambda *a: time.gmtime()[0],
          'state': lambda *a: 'choose',
          }
+
+    def get_ambulatorio(self, cr, uid, apoint, context=None):
+        prestador_id = self.pool.get('res.partner').search(cr, uid, [('is_institution','=',True)])
+        prestador_pool = self.pool.get('res.partner').browse(cr, uid, prestador_id, context)
+        output = 'AMBULATORIOPSI\n'
+        output += ';;'
+        output += apoint['doc_registration_number'] + ';' # matricula nacional del profesional
+        output += '0;0;0;' # c_ambulatorio, id_red, c_prestador
+        output += str(prestador_pool.attention_point) + ';' # boca de atencion
+        output += '0;' # c_profesional
+        # output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y') +';' # fecha de atencion
+        output += datetime.strptime(apoint['appointment_date'], '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de atencion
+        output += ';' # d_estado
+        output += ';' # d_motivo_rechazo
+        output += apoint['id_modalidad_presta'] + ';' # id_modalidad_presta
+        output += ';' # n_nro_orden
+        output += apoint['care_type'] + ';' # id_tipo_atencion 
+        if apoint['pat_benefit_code']:
+            output += apoint['pat_benefit_code'] + ';' # id_beneficio
+        else:
+            outerr+= "El Afiliado %s no tiene benificiario asignado.\n"%(apoint['pat_name'])
+            print 'no tiene beneficcc'
+        if apoint['pat_relationship_code']:
+            output += apoint['pat_relationship_code'] + ';' # id parentesco
+        else:
+            outerr+= "El Afiliado %s no tiene parentesco asignado.\n"%(apoint['pat_name'])
+            print 'no tiene rellll'
+        if apoint['f_fecha_egreso']:
+            output += datetime.strptime(apoint['f_fecha_egreso'], '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
+        else:
+            output += ';' 
+        if apoint['id_tipo_egreso']:
+            output += apoint['id_tipo_egreso'] + ';'
+        else:
+            output += ';' 
+        if apoint['comments']:
+            output += apoint['comments'] + '\n'
+        else:
+            output += '\n' 
+        output += 'REL_DIAGNOSTICOSXAMBULATORIOPSI\n'
+        # if len(apoint.diagnostic_ids)==0:
+        #     outerr+= "El ambultorio de %s no tiene diagnostico cargado.\n"%(apoint.patient.complete_name)
+
+        # for diagnostic in apoint.diagnostic_ids:
+        output += ';;;'
+        output += '0;' # c_ambulatorio
+        output += '1;' # ni_coddiagno
+        # output += diagnostic.diagnostic_id.code + ';' # vch_coddiagnostico
+        # output += diagnostic.m_tipo_diagnostico + '\n' # m_tipo_diagnostico
+        if not apoint['pat_diagnostic_code']:
+            outerr+= "El ambultorio de %s no tiene diagnostico cargado.\n"%(apoint.patient.complete_name)
+
+        output += apoint['pat_diagnostic_code'] + ';' # vch_coddiagnostico
+        output += apoint['m_tipo_diagnostico'] + '\n' # m_tipo_diagnostico
+        #output += '1\n'
+        output += 'REL_PRACTICASREALIZADASXAMBULATORIOPSI\n'
+        return output
+
+    def get_practica(self, cr, uid, apoint, context=None):
+        #for practice in apoint.practice_ids:
+        output = ';;;'
+        output += '0;' # c_ambulatorio
+        output += '1;' # ni_codpresta
+        output += apoint['pat_practice_code'] + ';' # vch_codprestacion
+        output += datetime.strptime(apoint['f_fecha_practica'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') +';' # fecha que se realizó la práctica
+        output += str(apoint['q_cantidad']) + ';' # cantidad de practicas realizadas
+        output += '0;' # c_prestador_solicita
+        output += '0\n' # c_profesional_solicita
+        return output
     
     def generate_file(self,cr,uid,ids,context={}):
 
@@ -73,38 +142,16 @@ class efectores_pami(osv.osv_memory):
         #     year = year +1
         # date_top = str(year)+'-'+str(month)+'-01'
         args = [('f_fecha_practica','>=',date_bottom),('f_fecha_practica','<=',date_top)]
-        if this.doctor_id:
-            args.append(('doctor_id','=',this.doctor_id.id))
-        if this.create_date_from:
-            args.append(('f_create_date','>=',this.create_date_from))
-        if this.create_date_to:
-            args.append(('f_create_date','<=',this.create_date_to))
+        print args
 
-        appointment_ids = self.pool.get('medical.appointment.practice').search(cr, uid, args)
+        appointment_ids = self.pool.get('medical.prestaciones.view').search(cr, uid, args, order='appointment_id')
 
         doctors = []
         patients = []
-        appoint_group2=[]
 
-        sql = """select appointment_id
-            from medical_appointment_practice 
-            where id in (%s)
-            group by appointment_id
-            order by appointment_id
-        """%(','.join(str(x) for x in appointment_ids))
-        print sql
-        # ids = ('where ai.id in (%s)'%','.join(str(x) for x in form['invoice_ids']))
-        cr.execute(sql)
-        appoint_group = cr.dictfetchall()
-
-        for a_group in appoint_group:
-            app = self.pool.get('medical.appointment').read(cr, uid, a_group['appointment_id'],['patient','doctor'])
-            doctors.append(app['doctor'][0])
-            if app['patient']:
-                patients.append(app['patient'][0])
-                appoint_group2.append(a_group)
-                
-            #doctor.update({apoint.doctor.id: apoint.doctor.id})
+        for prestacion in self.pool.get('medical.prestaciones.view').browse(cr, uid, appointment_ids, context=context):
+            doctors.append(prestacion.doctor.id)
+            patients.append(prestacion.patient.id)
         # elimino los elementos duplicados
         doctors = list(set(doctors))
         patients = list(set(patients))
@@ -251,14 +298,6 @@ class efectores_pami(osv.osv_memory):
             else:
                 output += '\n'
 
-
-
-
-        # output += 'REL_PRESTADORESXRED\n'
-        # output += prestador_pool.cuit +';' # CUIT
-        # output += prestador_pool.cuit +';' # CUIT
-        # output += ';0;0;\n' # vacio + 0 + 0
-
         output += 'BENEFICIO\n'
         for pat in self.pool.get('res.partner').browse(cr, uid, patients):
             output += ';;;' # 3 vacios
@@ -363,88 +402,34 @@ class efectores_pami(osv.osv_memory):
             output += ';;;;;;;\n' # id_sucursal, id_agencia, id_corresponsalia, id_afjp, vto_afiliado, f_formulario, fecha_baja, codigo_baja
         output += 'PRESTACIONES\n'
 
-        app_ids = []
-        for x in appoint_group2:
-            app_ids.append(x['appointment_id'])
+        print appointment_ids
+        print len(appointment_ids)
 
-        for apoint in self.pool.get('medical.appointment').browse(cr, uid, app_ids):
-            output += 'AMBULATORIOPSI\n'
-            output += ';;'
-            output += apoint.doctor.registration_number + ';' # matricula nacional del profesional
-            output += '0;0;0;' # c_ambulatorio, id_red, c_prestador
-            output += str(prestador_pool.attention_point) + ';' # boca de atencion
-            output += '0;' # c_profesional
-            # output += datetime.strptime(apoint.f_fecha_practica, '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y') +';' # fecha de atencion
-            output += datetime.strptime(apoint.appointment_date, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de atencion
-            output += ';' # d_estado
-            output += ';' # d_motivo_rechazo
-            output += apoint.id_modalidad_presta + ';' # id_modalidad_presta
-            output += ';' # n_nro_orden
-            output += apoint.care_type + ';' # id_tipo_atencion 
-            if apoint.patient.benefit_id.code:
-                output += apoint.patient.benefit_id.code + ';' # id_beneficio
-            else:
-                outerr+= "El Afiliado %s no tiene benificiario asignado.\n"%(apoint.patient.complete_name)
-                print 'no tiene beneficcc'
-                print apoint
-                print apoint.patient
-            if apoint.patient.relationship_id.code:
-                output += apoint.patient.relationship_id.code + ';' # id parentesco
-            else:
-                outerr+= "El Afiliado %s no tiene parentesco asignado.\n"%(apoint.patient.complete_name)
-                print 'no tiene rellll'
-                print apoint
-                print apoint.patient
-            if apoint.f_fecha_egreso:
-                output += datetime.strptime(apoint.f_fecha_egreso, '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
-            else:
-                output += ';' 
-            if apoint.id_tipo_egreso:
-                output += apoint.id_tipo_egreso + ';'
-            else:
-                output += ';' 
-            if apoint.comments:
-                output += apoint.comments + '\n'
-            else:
-                output += '\n' 
-            output += 'REL_DIAGNOSTICOSXAMBULATORIOPSI\n'
-            if len(apoint.diagnostic_ids)==0:
-                outerr+= "El ambultorio de %s no tiene diagnostico cargado.\n"%(apoint.patient.complete_name)
+        v_app = 0
 
-            for diagnostic in apoint.diagnostic_ids:
-                output += ';;;'
-                output += '0;' # c_ambulatorio
-                output += '1;' # ni_coddiagno
-                output += diagnostic.diagnostic_id.code + ';' # vch_coddiagnostico
-                output += diagnostic.m_tipo_diagnostico + '\n' # m_tipo_diagnostico
-                #output += '1\n'
+        sql = """select * from medical_prestaciones_view
+        where id in (%s)
+        order by appointment_id, f_fecha_practica
+        """%(','.join(str(x) for x in appointment_ids))
+        print sql
+        # ids = ('where ai.id in (%s)'%','.join(str(x) for x in form['invoice_ids']))
+        cr.execute(sql)
+        appoint_group = cr.dictfetchall()
 
-            sql1 = """select map.id, map.f_fecha_practica, map.q_cantidad, mp.code
-                from medical_appointment_practice map
-                join medical_practice mp on (map.practice_id = mp.id)
-                where appointment_id = %s
-                and f_fecha_practica >= '%s'
-                and f_fecha_practica <= '%s 23:59:59'
-                order by f_fecha_practica
-                """%(a_group['appointment_id'],date_bottom,date_top)
-            cr.execute(sql1)
-            prestaciones = cr.dictfetchall()
-            output += 'REL_PRACTICASREALIZADASXAMBULATORIOPSI\n'
-            for pres in prestaciones:
-                
+        for apoint in appoint_group:
 
-                #for practice in apoint.practice_ids:
-                output += ';;;'
-                output += '0;' # c_ambulatorio
-                output += '1;' # ni_codpresta
-                output += pres['code'] + ';' # vch_codprestacion
-                output += datetime.strptime(pres['f_fecha_practica'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') +';' # fecha que se realizó la práctica
-                output += str(pres['q_cantidad']) + ';' # cantidad de practicas realizadas
-                output += '0;' # c_prestador_solicita
-                output += '0\n' # c_profesional_solicita
+            if v_app != apoint['appointment_id']:
+                if v_app > 0:
+                    output += 'MEDICACIONXAMBULATORIOPSI\n'
+                    output += 'FIN AMBULATORIOPSI\n'
+            
+                output += self.get_ambulatorio(cr, uid, apoint)
+            output += self.get_practica(cr, uid, apoint)
 
-            output += 'MEDICACIONXAMBULATORIOPSI\n'
-            output += 'FIN AMBULATORIOPSI\n'
+            v_app = apoint['appointment_id']
+
+        output += 'MEDICACIONXAMBULATORIOPSI\n'
+        output += 'FIN AMBULATORIOPSI\n'
 
 
         #print output
