@@ -534,7 +534,7 @@ class medical_appointment_practice(osv.osv):
         'f_create_date': fields.function(_get_fecha,fnct_search=_search_fecha, method=True, type= 'date', string='Fecha Creacion'),  
     }
     _sql_constraints = [
-        ('code_uniq', 'unique (f_fecha_practica,appointment_id)', 'La práctica debe ser única por horario')
+        ('code_uniq', 'unique (practice_id,f_fecha_practica,appointment_id)', 'La práctica debe ser única por horario')
     ]
     _defaults = {
         'q_cantidad': lambda *a: 1,
