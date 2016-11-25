@@ -24,7 +24,7 @@ from openerp import tools
 class medical_prestaciones_view(osv.osv):
     _name = 'medical.prestaciones.view'
     _auto = False
-    _order = 'f_fecha_practica'
+    _order = 'create_date desc'
     _columns = {
     	'doctor': fields.many2one('res.partner', 'Especialista', readonly=True),
     	'doc_specility': fields.char('Especialidad', readonly=True),
@@ -55,6 +55,8 @@ class medical_prestaciones_view(osv.osv):
         'pat_practice_code': fields.char('pat_practice_code', readonly=True),
         'q_cantidad': fields.integer('q_cantidad', readonly=True),
         'afiliado': fields.char('Afiliado', readonly=True),
+        'create_uid': fields.many2one('res.users', 'Creado por', readonly=True),
+        'create_date': fields.date('Fecha creación', readonly=True),
     }
 
     def init(self, cr):
@@ -68,8 +70,9 @@ class medical_prestaciones_view(osv.osv):
 					pat.nacionality as pat_nacionality, rc.code as pat_nationality_code, pat.street as pat_street, pat.street_number as pat_street_number,pat_city.zip_city as pat_zip_city, 
 					pat.city_id as pat_city_id, pat.phone as pat_phone, pat.dob as pat_dob, pat.sex as pat_sex, pat.cuil as pat_cuil, pat.cuit as pat_cuit, mpr.code as pat_relationship_code,
 					ma.appointment_date, ma.id_modalidad_presta, ma.care_type, ma.f_fecha_egreso, ma.id_tipo_egreso, ma.comments, md.code as pat_diagnostic_code, mad.m_tipo_diagnostico,
-					f_fecha_practica, q_cantidad, mp.code as pat_practice_code, pat.end_date as pat_end_date, md.name as pat_diagnostic_name, mp.code as pat_practice_name,
-					ma.doctor, ma.patient, map.appointment_id, mb.code || mpr.code as afiliado
+					f_fecha_practica, q_cantidad, mp.code as pat_practice_code, pat.end_date as pat_end_date, md.name as pat_diagnostic_name, mp.name as pat_practice_name,
+					ma.doctor, ma.patient, map.appointment_id, mb.code || mpr.code as afiliado,
+                    map.create_uid, map.create_date::date
 				from medical_appointment_practice map
 					join medical_appointment ma on (map.appointment_id=ma.id)
 					join res_partner doc on (ma.doctor=doc.id)

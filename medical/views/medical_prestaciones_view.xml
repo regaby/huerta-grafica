@@ -6,14 +6,13 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string='Prestaciones PAMI'>
+					<field name="create_uid"/>
+					<field name="create_date"/>
 					<field name="doctor"/>
-					<field name="doc_specility"/>
-					<field name="doc_city_id"/>
 					<field name="afiliado"/>
 					<field name="patient"/>
 					<field name="appointment_date"/>
 					<field name="care_type"/>
-					<field name="pat_diagnostic_name"/>
 					<field name="pat_practice_name"/>
 					<field name="f_fecha_practica"/>
 					
@@ -42,6 +41,8 @@
 					<field name="doctor" select="1" />
 					<field name="patient" select="1" />
 					<field name="f_fecha_practica" select="1" />
+					<field name="create_uid"/>
+					<field name="create_date"/>
 					<newline />
 					<group expand="0" string="Agrupar por..." colspan="11" col="11">
 						<filter string="Especialista" icon="terp-personal" domain="[]"
