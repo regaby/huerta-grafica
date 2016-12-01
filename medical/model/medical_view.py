@@ -20,11 +20,47 @@
 ##############################################################################
 from openerp.osv import fields, osv
 from openerp import tools
+import time
+from datetime import datetime
+import calendar
+from openerp.tools.translate import _
 
 class medical_prestaciones_view(osv.osv):
     _name = 'medical.prestaciones.view'
     _auto = False
     _order = 'create_date desc'
+
+    def _get_year(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for practice in self.browse(cr, uid, ids, context=context):
+            cr.execute('''select f_fecha_practica from medical_appointment_practice where id = %d'''%(practice.id))
+            fech = cr.fetchall()
+            if fech:
+                res[practice.id] = fech[0][0][0:7]
+        return res
+
+    def _search_year(self, cr, uid, obj, name, args, context=None):
+        if not args:
+            return []
+        res = []
+        if args[0][1]in ('ilike'):
+            year = args[0][2][0:4]
+            month = args[0][2][5:7]
+            
+            try:
+                to_date = datetime(int(year), int(month), 1)
+            except:
+                raise osv.except_osv(_('Error'),_('El periodo debe tener el formado AAAA-MM') )  
+
+            last_day = calendar.monthrange(int(year),int(month))[1]
+            cr.execute("""select id from medical_appointment_practice where f_fecha_practica between '%s-01 00:00:00' and '%s-%s 23:59:59'"""%(args[0][2],args[0][2],last_day))
+            print cr.query
+            res = cr.fetchall()
+            
+        if not res:
+            return [('id', '=', '0')]
+        return [('id', 'in', map(lambda x:x[0], res))]
+
     _columns = {
     	'doctor': fields.many2one('res.partner', 'Especialista', readonly=True),
     	'doc_specility': fields.char('Especialidad', readonly=True),
@@ -53,10 +89,11 @@ class medical_prestaciones_view(osv.osv):
         'pat_diagnostic_code': fields.char('pat_diagnostic_code', readonly=True),
         'm_tipo_diagnostico': fields.char('m_tipo_diagnostico', readonly=True),
         'pat_practice_code': fields.char('pat_practice_code', readonly=True),
-        'q_cantidad': fields.integer('q_cantidad', readonly=True),
+        'q_cantidad': fields.integer('Cantidad', readonly=True),
         'afiliado': fields.char('Afiliado', readonly=True),
         'create_uid': fields.many2one('res.users', 'Creado por', readonly=True),
         'create_date': fields.date('Fecha creación', readonly=True),
+        'year': fields.function(_get_year,fnct_search=_search_year, method=True, type= 'char', string='Periodo'),  
     }
 
     def init(self, cr):

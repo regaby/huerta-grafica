@@ -13,6 +13,7 @@
 					<field name="patient"/>
 					<field name="appointment_date"/>
 					<field name="care_type"/>
+					<field name="q_cantidad" sum="Total Prestaciones"/>
 					<field name="pat_practice_name"/>
 					<field name="f_fecha_practica"/>
 					
@@ -38,9 +39,10 @@
 
 					<newline />
 					<separator orientation="vertical" />
-					<field name="doctor" select="1" />
-					<field name="patient" select="1" />
-					<field name="f_fecha_practica" select="1" />
+					<field name="doctor" />
+					<field name="patient" />
+					<field name="f_fecha_practica" />
+					<field name="year" />
 					<field name="create_uid"/>
 					<field name="create_date"/>
 					<newline />
