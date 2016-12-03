@@ -49,8 +49,7 @@
 					<newline />
 					<group expand="0" string="Agrupar por..." colspan="11" col="11">
 						
-						<filter string="Afiliado" icon="terp-personal" domain="[]"
-							context="{'group_by':'patient'}" />
+						
 						<filter string="Tipo de Atención" icon="terp-go-month" domain="[]"
 							context="{'group_by':'care_type'}" />
 						<filter string="Ciudad Profesional" icon="terp-go-month" domain="[]"
