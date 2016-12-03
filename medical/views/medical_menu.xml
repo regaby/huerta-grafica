@@ -75,6 +75,13 @@
                         sequence="3"
                     />
 
+                    <menuitem
+                        action="action_medical_prestaciones_by_pat_view"
+                        id="menu_action_medical_prestaciones_by_pat_view"
+                        parent="medical_efectores_pami_submenu"
+                        sequence="4"
+                    />
+
                     
 				
 
