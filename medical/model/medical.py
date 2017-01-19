@@ -211,6 +211,20 @@ class medical_benefit(osv.osv):
         result = map(_name_get, self.read(cr, user, ids, ['name', 'code'], context))
         return result
 
+    def name_search(self, cr, user, name, args=None, operator='ilike', context=None, limit=100):
+        if not args:
+            args=[]
+        if not context:
+            context={}
+            
+        if not name:
+            ids = self.search(cr, user, args, limit=limit, context=context)
+        else:
+            ids = self.search(cr, user, [('code',operator,name)] + args, limit=limit, context=context)
+        if not ids:
+            ids = self.search(cr, user, [('name',operator,name)] + args, limit=limit, context=context)
+        return self.name_get(cr, user, ids, context=context)
+
     _sql_constraints = [
         ('code_uniq', 'unique (code)', 'El nro. de Obra Social debe ser único.')
     ]
