@@ -817,7 +817,7 @@
                         <page string="Afiliados">
                             <group>
                                 <separator string="Afiliados" colspan="6" />
-                                <field colspan="6" name="patient_ids" nolabel="1" />
+                                <field colspan="6" name="patient_ids" nolabel="1" context="{'default_is_patient':1, 'search_default_is_patient':1}"/>
                             </group>
                         </page>
                     </notebook>
