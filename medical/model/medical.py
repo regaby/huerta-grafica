@@ -27,6 +27,17 @@ from openerp.tools.translate import _
 from lxml import etree
 import re
 
+CARE_TYPE = [
+            ('1','Atención Programada a Domicilio'),
+            ('2','Urgencias en Domicilio'),
+            ('3','Atención telefónica'),
+            ('4', 'Consultorio Externo'),
+            ('5', 'Hospital de Dia Jornada Simple'),
+            ('6', 'Hospital de Dia Jornada Completa'),
+            ('7', 'Atención en Jurisdicciónes Alejadas'),
+        ]
+
+
 # DEBUG MODE -- DELETE ME !
 # import pdb
 class medical_speciality (osv.osv):
@@ -538,7 +549,7 @@ class medical_appointment_practice(osv.osv):
         return [('id', 'in', map(lambda x:x[0], res))]
 
     _columns = {
-        'practice_id' : fields.many2one ('medical.practice', 'Practice', required=False),
+        'practice_id' : fields.many2one ('medical.practice', 'Practice', required=True),
         'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=False),
         'vch_codprestacion' : fields.char ('vch_codprestacion'),
         'f_fecha_practica': fields.datetime('Practice Date', required=True),
@@ -606,15 +617,7 @@ class medical_appointment (osv.osv):
 
 # End of additions from hda
 
-        'care_type': fields.selection([
-            ('1','Atención Programada a Domicilio'),
-            ('2','Urgencias en Domicilio'),
-            ('3','Atención telefónica'),
-            ('4', 'Consultorio Externo'),
-            ('5', 'Hospital de Dia Jornada Simple'),
-            ('6', 'Hospital de Dia Jornada Completa'),
-            ('7', 'Atención en Jurisdicciónes Alejadas'),
-        ], 'Care Type'), ##---- Tipo de atencion
+        'care_type': fields.selection(CARE_TYPE, 'Care Type'), ##---- Tipo de atencion
 
         #----------------------- extras migracion
         'c_profesional': fields.integer('c_profesional'),
@@ -673,8 +676,8 @@ class medical_appointment (osv.osv):
         if not len(ids):
             return []
         res = []
-        for r in self.read(cr, uid, ids, ['rec_name', 'appointment_date'], context):
-            date = str(r['appointment_date'] or '')
+        for r in self.read(cr, uid, ids, ['care_type', 'appointment_date'], context):
+            date = str(r['appointment_date'] or '') +' - '+ CARE_TYPE[int(r['care_type'])-1][1]
             res.append((r['id'], date))
         return res
 

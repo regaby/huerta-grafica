@@ -39,6 +39,7 @@ This module provide :
     
     "init_xml": [],
     'data': [
+        ## VISTAS
         'security/medical_security.xml',
         'security/ir.model.access.csv',
         'wizard/efectores_pami_view.xml',
@@ -46,10 +47,11 @@ This module provide :
         'views/medical_view.xml',
         'views/medical_prestaciones_view.xml',
         'views/medical_prestaciones_by_pat_view.xml',
+        'views/medical_turno_view.xml',
+        ## MENU
         'views/medical_menu.xml',
+        ## REPORTE
         'report/medical_patient_report.xml'
-        #'data/medical_data.xml',
-
     ],
     'demo_xml': [],
     'images': [],
