@@ -202,6 +202,7 @@ class medical_benefit(osv.osv):
         'benefit_type_id': fields.many2one('medical.benefit.type','Benefit Type'),
         'start_date': fields.date('Start Date', help="Fecha en la cual se ingresaron los datos del beneficio", required="True"),
         'patient_ids': fields.one2many('res.partner','benefit_id','Patients'),###
+        'insurance_id': fields.many2one('medical.insurance','Financiadora'),
         #'instution_id': fields.many2one('res.partner','Institution', required="True"),
     }
 
@@ -396,6 +397,7 @@ class medical_partner(osv.osv):
         #'subsidiary_id': fields.many2one('medical.subsidiary','Subsidiary', help="Identificador único de una sucursal del PAMI."),
         'module_ids': fields.many2many('medical.module','rel_modulosxprestador','instution_id','module_id','Modules'),
         'prestaciones_ids': fields.one2many('medical.appointment','patient','Prestaciones',ondelete='cascade'),
+        'insurance_id':fields.related('benefit_id', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
 
     }
     _sql_constraints = [
@@ -593,6 +595,7 @@ class medical_appointment (osv.osv):
         'doctor' : fields.many2one ('res.partner', 'Physician',domain=[('is_doctor', '=', "1")], help="Physician's Name"),
         'name' : fields.char ('Appointment ID', size=64, readonly=True, required=False),
         'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name"),
+        'insurance_id':fields.related('patient', 'benefit_id', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'appointment_date' : fields.date ('Date'),
         'institution' : fields.many2one ('res.partner', 'Health Center', domain=[('is_institution', '=', "1")], help="Medical Center"),
         #'speciality' : fields.many2one ('medical.speciality', 'Speciality', help="Medical Speciality / Sector"),

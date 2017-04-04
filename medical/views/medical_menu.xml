@@ -36,6 +36,10 @@
             parent="medical_configuration_submenu"
             action="action_partner_institution_form" sequence="10"/>
 
+            <menuitem id="menu_medical_insurance" name="Financiadora"
+            parent="medical_configuration_submenu"
+            action="medical_action_insurance" sequence="11"/>
+
             <menuitem id="menu_medical_speciality" name="Medical Speciality"
             parent="medical_configuration_submenu"
             action="medical_action_speciality" sequence="20"/>

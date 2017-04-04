@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+    			<!-- especialidades -->
+
+				<record id="mins1" model="medical.insurance">
+					<field name="name">PAMI</field>
+					<field name="code">PAMI</field>
+				</record>
+				
+	</data>
+</openerp>					

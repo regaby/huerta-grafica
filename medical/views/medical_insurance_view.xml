@@ -1,0 +1,57 @@
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="medical_insurance_view">
+			<field name="name">Financiadora</field>
+			<field name="model">medical.insurance</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Financiadora">
+					<group>
+						<field name="name" required="1"></field>
+						<field name="code"></field>
+                        <field name="description"></field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="medical_insurance_tree">
+			<field name="name">Financiadora</field>
+			<field name="model">medical.insurance</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Financiadora">
+					<field name="name"></field>
+					<field name="code"></field>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="medical_action_insurance">
+			<field name="name">Financiadora</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.insurance</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="medical_insurance_tree" />
+		</record>
+
+
+
+		<record id="view_medical_insurance_filter" model="ir.ui.view">
+			<field name="name">medical.insurance.select</field>
+			<field name="model">medical.insurance</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Financiadora">
+
+					<separator orientation="vertical" />
+					<field name="name" select="1" />
+					<field name="code" select="1" />
+					<newline />
+
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>
