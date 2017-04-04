@@ -30,28 +30,29 @@ import re
 class medical_turno (osv.osv):
     _name = "medical.turno"
     _columns = {
-        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        'practice_id' : fields.many2one ('medical.practice', 'Practice', required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        'f_fecha_practica': fields.datetime('Practice Date', required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=True, readonly=True, states={'draft':[('readonly',False)]}),
+        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
+        'practice_id' : fields.many2one ('medical.practice', 'Practice', required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
+        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
+        'f_fecha_practica': fields.datetime('Practice Date', required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
+        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
         'state': fields.selection([
-            ('draft', 'Agendado'),
-            ('present', 'Presente'),
-            ('absent', 'Ausente'),
+            ('Borrador', 'Agendado'),
+            ('Presente', 'Presente'),
+            ('Ausente', 'Ausente'),
         ], 'State', size=16, readonly=True),
         'comments' : fields.text ('Comments'),
+        'insurance_id':fields.related('patient', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
     }
     # _order = ""
     _defaults = {
-        'state': 'draft',
+        'state': 'Borrador',
     }
     _sql_constraints = [
         ('code_uniq', 'unique (patient,f_fecha_practica)', 'La práctica debe ser única por horario')
     ]
 
     def action_present(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'present'})
+        self.write(cr, uid, ids, {'state': 'Presente'})
         turno = self.browse(cr, uid, ids, context=context)
         practice = {
         	'practice_id': turno.practice_id.id,
@@ -65,7 +66,7 @@ class medical_turno (osv.osv):
         return True
 
     def action_absent(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'absent'})
+        self.write(cr, uid, ids, {'state': 'Ausente'})
         return True
     
 medical_turno()
