@@ -512,6 +512,7 @@ class medical_practice(osv.osv):
         'code' : fields.char ('Code', size=10, required="True"),
         'name' :fields.char ('Description', size=1024, required="True" ),
         'frequently_used': fields.boolean('Frequently used'),
+        'consultorio_externo': fields.boolean('Consultorio Externo'),
     }
     _sql_constraints = [
         ('code_uniq', 'unique (code)', 'The code must be unique')

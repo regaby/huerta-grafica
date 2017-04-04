@@ -29,6 +29,17 @@ import re
 
 class medical_turno (osv.osv):
     _name = "medical.turno"
+
+    def onchange_appointment_id (self, cr, uid, ids, appointment_id, context):
+        values={}
+        if appointment_id:
+            appointment_obj = self.pool.get('medical.appointment').browse(cr,uid, appointment_id)
+            if appointment_obj.care_type not in ('5','6'):
+                values['consultorio_externo'] =  True
+            else:
+                values['consultorio_externo'] =  False
+        return {'value': values}
+
     _columns = {
         'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
         'practice_id' : fields.many2one ('medical.practice', 'Practice', required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
@@ -42,6 +53,7 @@ class medical_turno (osv.osv):
         ], 'State', size=16, readonly=True),
         'comments' : fields.text ('Comments'),
         'insurance_id':fields.related('patient', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
+        'consultorio_externo': fields.boolean('Consultorio Externo'),
     }
     # _order = ""
     _defaults = {
