@@ -591,6 +591,16 @@ class medical_appointment (osv.osv):
             'url': url,
             'target': 'new',
                 }
+
+    def onchange_care_type (self, cr, uid, ids, care_type, context):
+        values={}
+        if care_type:
+            # appointment_obj = self.pool.get('medical.appointment').browse(cr,uid, appointment_id)
+            if care_type not in ('5','6'):
+                values['consultorio_externo'] =  True
+            else:
+                values['consultorio_externo'] =  False
+        return {'value': values}
     
     _columns = {
         'doctor' : fields.many2one ('res.partner', 'Physician',domain=[('is_doctor', '=', "1")], help="Physician's Name"),
@@ -645,6 +655,7 @@ class medical_appointment (osv.osv):
         #'diagnostic_ids': fields.many2many('medical.diagnostic','diagnosticosxambulatoriopsi','appointment_id','diagnostic_id','Diagnostic'),
         'diagnostic_ids': fields.one2many('medical.appointment.diagnostic','appointment_id','Diagnostic',ondelete='cascade'),
         'practice_ids': fields.one2many('medical.appointment.practice','appointment_id','Practices',ondelete='cascade'),
+        'consultorio_externo': fields.boolean('Consultorio Externo'),
 
 
     }

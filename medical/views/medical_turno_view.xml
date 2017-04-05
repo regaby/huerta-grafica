@@ -34,9 +34,9 @@
 							<field name="doctor_id" widget="selection" required="True"/>
 							<field name="insurance_id" />
 							<field name="appointment_id" domain="[('patient','=',patient)]" context="{'default_patient':patient, 'default_doctor':doctor_id}" on_change="onchange_appointment_id(appointment_id)"/>
-							<field name="consultorio_externo" invisible="1"/>
 							<field name="practice_id" required="True" domain="[('frequently_used','=',True),('consultorio_externo','=',consultorio_externo)]" widget="selection" />
 							<field name="f_fecha_practica" />
+							<field name="consultorio_externo" invisible="1"/>
 							
 						</group>
 						<group >
