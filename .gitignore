@@ -1,2 +1,9 @@
 *.pyc
 *~
+mail_todo_custom/*
+report_aeroo_controller/*
+report_aeroo_direct_print/*
+report_aeroo_printscreen/*
+report_aeroo_sample/*
+README.md
+
