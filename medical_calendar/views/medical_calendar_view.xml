@@ -1,0 +1,148 @@
+<openerp>
+	<data>
+
+		<menuitem name="Medical Calendar" id="medical_calendar_submenu" parent="medical.medical_root_menu" sequence="1" />
+			<menuitem action="calendar.action_calendar_event" id="medical_calendar_menu" parent="medical_calendar_submenu" sequence="1" name="Medical Calendar"/>
+
+	<!-- <record model="ir.ui.view" id="view_calendar_event_calendar">
+        <field name="name">Meetings Calendar</field>
+        <field name="model">calendar.event</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="Meetings" date_start="start" date_stop="stop" date_delay="duration" all_day="allday" 
+                         display="[name]" color="color_partner_id" attendee="partner_ids" avatar_model="res.partner"
+                         use_contacts="True" event_open_popup="%(calendar.view_calendar_event_form_popup)s">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="color_partner_id"/>
+                <field name="partner_ids"/>
+            </calendar>
+        </field>
+    </record> -->
+    <record model="ir.ui.view" id="view_calendar_event_calendar_inherit">
+        <field name="name">Meetings Calendar</field>
+    	<field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_calendar" />
+        <field name="arch" type="xml">
+        	<calendar string="Meetings" position="replace">
+                <calendar string="Medical Calendar" color="state" date_start="start_datetime" date_stop="stop" date_delay="duration" mode="week" quick_add="False" event_open_popup="%(calendar.view_calendar_event_form_popup)s">
+					
+					<field name="patient" />
+					<field name="doctor_id" />
+					<field name="state" />
+				</calendar>
+			</calendar>
+		</field>
+    </record>
+
+     <record model="ir.ui.view" id="view_calendar_event_form_inherit">
+	        <field name="name">Calendar - Event Form</field>
+	    	<field name="model">calendar.event</field>
+	        <field name="inherit_id" ref="calendar.view_calendar_event_form" />
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	        	<field name="categ_ids" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="location" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="allday" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<label for="allday" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</label>
+	        	<field name="class" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="show_as" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<page string="Invitations" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</page>
+	        	<page string="Misc" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</page>
+	        	<xpath expr="//div[@class='oe_title']" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</xpath>
+	        	<xpath expr="//div[@class='oe_title']" position="after">
+	        		<group name="field" col="4">
+						<field name="patient" context="{'default_is_patient':1, 'search_default_is_patient':1}" options="{'no_create': True}"/>
+						<field name="doctor_id" widget="selection" required="True"/>
+						<field name="insurance_id" />
+						<field name="appointment_id" domain="[('patient','=',patient)]" context="{'default_patient':patient, 'default_doctor':doctor_id}" on_change="onchange_appointment_id(appointment_id)"/>
+						<field name="practice_id" required="True" domain="[('frequently_used','=',True),('consultorio_externo','=',consultorio_externo)]" widget="selection" />
+						<field name="consultorio_externo" invisible="1"/>
+						
+					</group>
+	        	</xpath>
+
+			</field>
+	    </record>
+
+	   <record model="ir.ui.view" id="view_calendar_event_form_popup_inherit">
+	        <field name="name">Calendar - Event Form</field>
+	    	<field name="model">calendar.event</field>
+	    	<field name="priority" eval="1"/>
+	        <field name="inherit_id" ref="calendar.view_calendar_event_form_popup" />
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	        	<field name="categ_ids" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="location" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="partner_ids" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="name" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<label for="name" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</label>
+	        	<field name="start_date" position="after">
+	        		<field name="patient" />
+	        		<field name="doctor_id" />
+	        		<field name="insurance_id" />
+	        		<field name="appointment_id" />
+	        		<field name="practice_id" />
+	        	</field>
+	        	<field name="name" position="after">
+	        		<group col="6" colspan="2">
+	        			<button string="Marcar Presente" type="object"
+                                        name="action_present" states="draft" icon="terp-check" />
+                        <button string="Marcar Ausente" type="object"
+                                        name="action_absent" states="draft" icon="STOCK_CANCEL"/>
+						<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,done,declined"/>
+	        		</group>
+	        	</field>
+			</field>
+	    </record>
+
+	<record model="ir.ui.view" id="view_calendar_event_search_inherit">
+	        <field name="name">CRM - Meetings Search</field>
+        	<field name="model">calendar.event</field>
+	        <field name="inherit_id" ref="calendar.view_calendar_event_search" />
+	        <field name="type">form</field>
+	        <field name="arch" type="xml">
+	        	<field name="name" position="replace">
+	        		<field name="patient" />
+					<field name="doctor_id" />
+					<field name="state" />
+					<field name="insurance_id" />
+	        	</field>
+	        	<field name="partner_ids" position="replace" />
+                <field name="categ_ids" position="replace"/>
+                <field name="user_id" position="replace"/>
+                <field name="show_as" position="replace"/>
+	        	
+			</field>
+	    </record>
+
+	</data>
+</openerp>

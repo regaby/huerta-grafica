@@ -1,0 +1,105 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* medical_calendar
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-05 20:47+0000\n"
+"PO-Revision-Date: 2017-04-05 20:47+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: medical_calendar
+#: field:calendar.event,appointment_id:0
+msgid "Appointment"
+msgstr "Visita"
+
+#. module: medical_calendar
+#: field:calendar.event,consultorio_externo:0
+msgid "Consultorio Externo"
+msgstr "Consultorio Externo"
+
+#. module: medical_calendar
+#: field:calendar.event,doctor_id:0
+msgid "Especialista"
+msgstr "Especialista"
+
+#. module: medical_calendar
+#: model:ir.model,name:medical_calendar.model_calendar_event
+msgid "Event"
+msgstr "Evento"
+
+#. module: medical_calendar
+#: field:calendar.event,insurance_id:0
+msgid "Financiadora"
+msgstr "Financiadora"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_event_form_inherit
+msgid "Invitations"
+msgstr "Invitaciones"
+
+#. module: medical_calendar
+#: sql_constraint:calendar.event:0
+msgid "La práctica debe ser única por horario"
+msgstr "La práctica debe ser única por horario"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
+msgid "Marcar Ausente"
+msgstr "Marcar Ausente"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
+msgid "Marcar Presente"
+msgstr "Marcar Presente"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_event_calendar_inherit
+#: model:ir.ui.menu,name:medical_calendar.medical_calendar_menu
+#: model:ir.ui.menu,name:medical_calendar.medical_calendar_submenu
+msgid "Medical Calendar"
+msgstr "Turnos"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_event_calendar_inherit
+msgid "Meetings"
+msgstr "Turnos"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_event_form_inherit
+msgid "Misc"
+msgstr "Misc."
+
+#. module: medical_calendar
+#: field:calendar.event,patient:0
+msgid "Patient"
+msgstr "Paciente"
+
+#. module: medical_calendar
+#: help:calendar.event,patient:0
+msgid "Patient Name"
+msgstr "Nombre del Paciente"
+
+#. module: medical_calendar
+#: help:calendar.event,doctor_id:0
+msgid "Physician's Name"
+msgstr "Nombre del Especialista"
+
+#. module: medical_calendar
+#: field:calendar.event,practice_id:0
+msgid "Practice"
+msgstr "Práctica"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_event_form_inherit
+#: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
+msgid "True"
+msgstr "True"
+
