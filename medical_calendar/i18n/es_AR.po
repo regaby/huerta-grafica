@@ -6,14 +6,32 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-05 20:47+0000\n"
-"PO-Revision-Date: 2017-04-05 20:47+0000\n"
+"POT-Creation-Date: 2017-04-06 15:48+0000\n"
+"PO-Revision-Date: 2017-04-06 15:48+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: medical_calendar
+#: model:ir.actions.act_window,help:medical_calendar.action_calendar_medical_event
+#: model:ir.actions.act_window,help:medical_calendar.action_calendar_medical_holiday
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"            Click to schedule a new meeting.\n"
+"          </p><p>\n"
+"            The calendar is shared between employees and fully integrated with\n"
+"            other applications such as the employee holidays or the business\n"
+"            opportunities.\n"
+"          </p>\n"
+"        "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"Pulse para planificar una nueva reunión.\n"
+"</p><p>\n"
+"El calendario se comparte entre empleados y está totalmente integrado con otras aplicaciones como las vacaciones de los empleados o las oportunidades de negocio.\n"
+"</p>\n"
+"        "
 
 #. module: medical_calendar
 #: field:calendar.event,appointment_id:0
@@ -33,7 +51,7 @@ msgstr "Especialista"
 #. module: medical_calendar
 #: model:ir.model,name:medical_calendar.model_calendar_event
 msgid "Event"
-msgstr "Evento"
+msgstr "Turno"
 
 #. module: medical_calendar
 #: field:calendar.event,insurance_id:0
@@ -41,14 +59,20 @@ msgid "Financiadora"
 msgstr "Financiadora"
 
 #. module: medical_calendar
+#: selection:calendar.event,type:0
+msgid "Holiday"
+msgstr "Licencia"
+
+#. module: medical_calendar
+#: view:calendar.event:medical_calendar.view_calendar_holiday_calendar_inherit
+#: model:ir.ui.menu,name:medical_calendar.medical_calendar_holiday_menu
+msgid "Holiday Calendar"
+msgstr "Licencias"
+
+#. module: medical_calendar
 #: view:calendar.event:medical_calendar.view_calendar_event_form_inherit
 msgid "Invitations"
 msgstr "Invitaciones"
-
-#. module: medical_calendar
-#: sql_constraint:calendar.event:0
-msgid "La práctica debe ser única por horario"
-msgstr "La práctica debe ser única por horario"
 
 #. module: medical_calendar
 #: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
@@ -68,7 +92,13 @@ msgid "Medical Calendar"
 msgstr "Turnos"
 
 #. module: medical_calendar
-#: view:calendar.event:medical_calendar.view_calendar_event_calendar_inherit
+#: selection:calendar.event,type:0
+msgid "Medical Event"
+msgstr "Turno"
+
+#. module: medical_calendar
+#: model:ir.actions.act_window,name:medical_calendar.action_calendar_medical_event
+#: model:ir.actions.act_window,name:medical_calendar.action_calendar_medical_holiday
 msgid "Meetings"
 msgstr "Turnos"
 
@@ -102,4 +132,19 @@ msgstr "Práctica"
 #: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
 msgid "True"
 msgstr "True"
+
+#. module: medical_calendar
+#: field:calendar.event,type:0
+msgid "Type"
+msgstr "Tipo de Evento"
+
+#. module: medical_calendar
+#: constraint:calendar.event:0
+msgid "Ya existe otra solicitud en la misma fecha!"
+msgstr "Ya existe otra solicitud en la misma fecha!"
+
+#. module: medical_calendar
+#: sql_constraint:calendar.event:0
+msgid "Ya existe otro turno para el mismo rango horario para el paciente actual."
+msgstr "Ya existe otro turno para el mismo rango horario para el paciente actual."
 

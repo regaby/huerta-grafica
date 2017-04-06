@@ -40,39 +40,77 @@ class calendar_event (osv.osv):
                 values['consultorio_externo'] =  False
         return {'value': values}
 
-    def write(self, cr, uid, ids, vals, context=None):
-        print vals
-        print vals
-        print vals
+    def onchange_type (self, cr, uid, ids, event_type, context):
+        values={}
+        if event_type:
+            if event_type=='holiday':
+                values['state'] =  'holiday'
+            else:
+                values['state'] =  'draft'
 
-        return super(calendar_event, self).write(cr, uid, ids, vals, context=context)
+        return {'value': values}
+
+    def _check_days(self,cr,uid,ids,context=None):
+        for holiday in self.browse(cr, uid, ids):
+            if holiday.start and holiday.stop and holiday.type=='event':
+                if holiday.start[0:10] == holiday.stop[0:10]:
+                    holiday_ids = self.search(cr, uid, [('start','<',holiday.start),('stop','>',holiday.start),('patient','=',holiday.patient.id)])
+                    if len(holiday_ids) > 0:
+                        return False
+        return True
+
+    def _check_days_holiday(self,cr,uid,ids,context=None):
+        for holiday in self.browse(cr, uid, ids):
+            if holiday.start and holiday.stop and holiday.type=='holiday':
+                if holiday.start[0:10] == holiday.stop[0:10]:
+                    holiday_ids = self.search(cr, uid, [('start','<',holiday.start),('stop','>',holiday.start),('patient','=',holiday.patient.id)])
+                    if len(holiday_ids) > 0:
+                        return False
+        return True
+
+    def _check_holidays(self,cr,uid,ids,context=None):
+        for holiday in self.browse(cr, uid, ids):
+            if holiday.start and holiday.stop and holiday.type=='event':
+                if holiday.start[0:10] == holiday.stop[0:10]:
+                    holiday_ids = self.search(cr, uid, [('start','<',holiday.start),('stop','>',holiday.start),('doctor_id','=',holiday.doctor_id.id),('type','=','holiday')])
+                    if len(holiday_ids) > 0:
+                        return False
+        return True
+
+    def get_pami_link(self, cr, uid, ids, context=None):
+        this = self.browse(cr, uid, ids, context=context)
+        url = 'http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.patient.benefit_id.code,this.patient.relationship_id.code)
+        return {
+            'type': 'ir.actions.act_url',
+            'url': url,
+            'target': 'new',
+                }
 
     _columns = {
-        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        'practice_id' : fields.many2one ('medical.practice', 'Practice', required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        # 'f_fecha_practica': fields.datetime('Practice Date', required=True, readonly=True, states={'Borrador':[('readonly',False)]}),
-        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=True, readonly=True, states={'draft':[('readonly',False)]}),
-        # 'state': fields.selection([
-        #     ('Borrador', 'Agendado'),
-        #     ('Presente', 'Presente'),
-        #     ('Ausente', 'Ausente'),
-        # ], 'State', size=16, readonly=True),
-        # 'comments' : fields.text ('Comments'),
+        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", readonly=True, states={'draft':[('readonly',False)]}),
+        'practice_id' : fields.many2one ('medical.practice', 'Practice', readonly=True, states={'draft':[('readonly',False)]}),
+        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', readonly=True, states={'draft':[('readonly',False)]}),
+        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", readonly=True, required=True, states={'draft':[('readonly',False)],'holiday':[('readonly',False)]}),
         'insurance_id':fields.related('patient', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'consultorio_externo': fields.boolean('Consultorio Externo'),
-        'name': fields.char('Meeting Subject', required=False),
-        'state': fields.selection([('draft', 'Unconfirmed'), ('open', 'Confirmed'),('done', 'Presente'),('declined', 'Ausente')], string='Status', readonly=True, track_visibility='onchange'),
+        'name': fields.char('Meeting Subject'),
+        'state': fields.selection([('draft', 'Unconfirmed'), ('open', 'Confirmed'),('done', 'Presente'),('declined', 'Ausente'),('holiday', 'Vacaciones')], string='Status', track_visibility='onchange'),
         'description': fields.text('Description', readonly=False),
+        'type': fields.selection([('event', 'Medical Event'), ('holiday', 'Holiday')], string='Type'),
     }
-    # _order = ""
     _defaults = {
-        # 'state': 'Borrador',
-        'name': '.'
+        'state': 'draft',
+        'name': '.',
+        'type': 'event',
     }
     _sql_constraints = [
-        ('code_uniq', 'unique (patient,start_datetime)', 'La práctica debe ser única por horario')
+        ('code_uniq', 'unique (patient,start_datetime)', 'Ya existe otro turno en el mismo horario para el paciente actual.')
     ]
+    _constraints = [
+        (_check_days, 'Ya existe otro turno en el mismo rango horario para el paciente actual!',['start']),
+        (_check_days_holiday, 'Ya existe otra licencia en el mismo rango de dias para el profesional actual!',['start']),
+        (_check_holidays, 'No se puede crear este turno porque el especialista tiene una licencia cargada este dia!',['doctor_id']),
+    ] 
 
     def action_present(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'done'})
