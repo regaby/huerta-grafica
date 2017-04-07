@@ -124,7 +124,9 @@ class medical_prestaciones_view(osv.osv):
 					join medical_appointment_diagnostic mad on (mad.appointment_id=ma.id)
 					left join medical_diagnostic md on (mad.diagnostic_id=md.id)
 					join medical_practice mp on (map.practice_id=mp.id)
+                    join medical_insurance mi on (mb.insurance_id=mi.id)
 				where pat.end_date is null
+                and mi.code ='PAMI'
             """)
 
 medical_prestaciones_view()  

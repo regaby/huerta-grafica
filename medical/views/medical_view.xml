@@ -2,6 +2,17 @@
 	<data>
 
 		<!-- PARTNER -->
+        <record model="ir.ui.view" id="res_partner_opt_out_form_inherit">
+            <field name="name">res.partner.opt_out.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="email_template.res_partner_opt_out_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='opt_out']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="res_partner_filter_view_medical">
             <field name="name">res.partner.filter</field>
             <field name="model">res.partner</field>
@@ -52,6 +63,7 @@
 					<field name='cuit'/>
 					<field name='benefit_id'/>
 					<field name='relationship_id'/>
+                    <field name='insurance_id'/>
 				</field>
 
 
@@ -142,6 +154,7 @@
                     <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
                     <field name="cuit" placeholder="CUIT" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)],'required': [('is_institution','=', True)]}"/>
                     <field name="active"/>
+                    <field name="has_insurance"/>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="after">
                 	<field name="street_number" placeholder="Street Number"/>
@@ -168,9 +181,9 @@
 	                		<!-- <field name="dni" attrs="{'required': [('is_patient','=', True)]}"/> -->
 	                		<!-- <field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>-->
 	                		<!-- <field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}" placeholder="xxxxxxxxxxxxxxx/nn" on_change="onchange_insurance_number(insurance_number)"/>/>  -->
-	                		<field name="benefit_id" attrs="{'required': [('is_patient','=', True)]}"/>
-	                		<field name="relationship_id" attrs="{'required': [('is_patient','=', True)]}" widget="selection"/>
-	                		<field name="insurance_id"/>
+	                		<field name="benefit_id" attrs="{'required': [('is_patient','=', True),('has_insurance','=',True)],'invisible':[('has_insurance','=',False)]}"/>
+	                		<field name="relationship_id" attrs="{'required': [('is_patient','=', True),('has_insurance','=',True)],'invisible':[('has_insurance','=',False)]}" widget="selection"/>
+	                		<field name="insurance_id" attrs="{'invisible':[('has_insurance','=',False)]}"/>
                             <newline/>
                             <field name="marital_status"/>
 	                		<field name="nacionality"/>
@@ -183,8 +196,8 @@
 								attrs="{'invisible':[('deceased','=',False)],'required':[('deceased','=',True)]}" />
                 		</group>
                         <newline />
-                        <separator string="Datos Obra Social" />
-                        <group colspan="4" col="4">
+                        <separator string="Datos Obra Social" attrs="{'invisible':[('has_insurance','=',False)]}"/>
+                        <group colspan="4" col="4" attrs="{'invisible':[('has_insurance','=',False)]}">
                             <field name="start_date" placeholder="Start Date" attrs="{'required': [('is_institution','=', True)]}"/>
                             <field name="end_date" placeholder="End Date"/>
                             <field name="end_reason" placeholder="End Reason"/>
@@ -252,7 +265,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
             <field name="view_type">form</field>
-            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_mode">tree,kanban,form</field>
             <field name="domain">[('is_patient','=',1)]</field>
             <field name="context">{'default_is_patient':1, 'search_default_is_patient':1}</field>
             <field name="filter" eval="True"/>
@@ -332,7 +345,7 @@
 						<field name="name" colspan="3"/>
 						<!-- <field name="institution" context="{'default_is_institution': 1}" colspan="3"/> -->
 						<newline/>
-						<field name="patient" required="1" colspan="3" context="{'default_is_patient': 1}" options="{'no_create': True}"/>
+						<field name="patient" required="1" colspan="3" context="{'default_is_patient': 1}" options="{'no_create': True}" domain="[('end_date','=',False)]"/>
 						<field name="appointment_date" required="1" colspan="3"/>
                         <field name="insurance_id" colspan="3"/>
 						<newline/>
@@ -842,8 +855,8 @@
 				<tree string="Medical benefit">
 					<field name="name"></field>
 					<field name="code"></field>
-					<field name="insurance_id"></field>
 					<field name="start_date"></field>
+                    <field name="insurance_id"></field>
 				</tree>
 			</field>
 		</record>

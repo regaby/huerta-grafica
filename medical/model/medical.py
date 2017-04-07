@@ -238,7 +238,7 @@ class medical_benefit(osv.osv):
         return self.name_get(cr, user, ids, context=context)
 
     _sql_constraints = [
-        ('code_uniq', 'unique (code)', 'El nro. de Obra Social debe ser único.')
+        ('code_uniq', 'unique (code,insurance_id)', 'El nro. de Obra Social debe ser único.')
     ]
     def _check_code(self,cr,uid,ids,context=None):
         demo_record = self.browse(cr,uid,ids,context=context)[0]
@@ -398,6 +398,7 @@ class medical_partner(osv.osv):
         'module_ids': fields.many2many('medical.module','rel_modulosxprestador','instution_id','module_id','Modules'),
         'prestaciones_ids': fields.one2many('medical.appointment','patient','Prestaciones',ondelete='cascade'),
         'insurance_id':fields.related('benefit_id', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
+        'has_insurance' : fields.boolean ('Tiene financiadora'),
 
     }
     _sql_constraints = [
@@ -413,6 +414,7 @@ class medical_partner(osv.osv):
         'nacionality': '1',
         'nacionality_id': lambda self,cr,uid,context: self.pool.get('res.country').search(cr, uid, [('name','=','Argentina')])[0],
         'start_date': lambda *a: time.strftime('%Y-%m-%d'),
+        'has_insurance':lambda *a: True,
 
     }
     def _check_dni(self,cr,uid,ids,context=None):
