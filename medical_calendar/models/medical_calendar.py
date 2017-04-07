@@ -40,16 +40,6 @@ class calendar_event (osv.osv):
                 values['consultorio_externo'] =  False
         return {'value': values}
 
-    def onchange_type (self, cr, uid, ids, event_type, context):
-        values={}
-        if event_type:
-            if event_type=='holiday':
-                values['state'] =  'holiday'
-            else:
-                values['state'] =  'draft'
-
-        return {'value': values}
-
     def _check_days(self,cr,uid,ids,context=None):
         for holiday in self.browse(cr, uid, ids):
             if holiday.start and holiday.stop and holiday.type=='event':
@@ -86,6 +76,22 @@ class calendar_event (osv.osv):
             'target': 'new',
                 }
 
+    def unlink(self, cr, uid, ids, context=None):
+        orden = self.read(cr, uid, ids, ['state'], context=context)
+        unlink_ids = []
+        for s in orden:
+            if s['state'] in ['draft','holiday']:
+                unlink_ids.append(s['id'])
+            else:
+                raise osv.except_osv(_('Invalid action !'), _('No se puede eliminar un turno que esté en estado presente o ausente'))
+        return super(calendar_event, self).unlink(cr, uid, unlink_ids, context=context)
+
+    def write(self, cr, uid,ids, vals, context=None):
+        state = self.read(cr, uid, ids, ['state'], context=context)[0]['state']
+        if 'start' in vals.keys() and state not in ['draft','holiday']:
+            raise osv.except_osv(_('Invalid action !'), _('No se puede modificar la fecha de un turno que esté en estado presente o ausente'))
+        return super(calendar_event, self).write(cr, uid, ids, vals, context)
+
     _columns = {
         'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", readonly=True, states={'draft':[('readonly',False)]}),
         'practice_id' : fields.many2one ('medical.practice', 'Practice', readonly=True, states={'draft':[('readonly',False)]}),
@@ -94,7 +100,7 @@ class calendar_event (osv.osv):
         'insurance_id':fields.related('patient', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'consultorio_externo': fields.boolean('Consultorio Externo'),
         'name': fields.char('Meeting Subject'),
-        'state': fields.selection([('draft', 'Unconfirmed'), ('open', 'Confirmed'),('done', 'Presente'),('declined', 'Ausente'),('holiday', 'Vacaciones')], string='Status', track_visibility='onchange'),
+        'state': fields.selection([('draft', 'Unconfirmed'), ('open', 'Confirmed'),('done', 'Presente'),('declined', 'Ausente'),('holiday', 'Licencia')], string='Status', track_visibility='onchange'),
         'description': fields.text('Description', readonly=False),
         'type': fields.selection([('event', 'Medical Event'), ('holiday', 'Holiday')], string='Type'),
     }

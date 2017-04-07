@@ -6,7 +6,7 @@
         <field name="model">calendar.event</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-            <calendar string="Medical Calendar" color="state" date_start="start" date_stop="stop" mode="week" quick_add="False" event_open_popup="%(calendar.view_calendar_event_form_popup)s">
+            <calendar string="Medical Calendar" color="state" date_start="start" date_stop="stop" mode="week" quick_add="False" >
 					
 					<field name="patient" />
 					<field name="doctor_id" />
@@ -19,7 +19,7 @@
         <field name="model">calendar.event</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-            <calendar string="Holiday Calendar" color="doctor_id" date_start="start" date_stop="stop" mode="month" quick_add="False" event_open_popup="%(calendar.view_calendar_event_form_popup)s">
+            <calendar string="Holiday Calendar" color="doctor_id" date_start="start" date_stop="stop" mode="month" quick_add="False" >
 					<field name="doctor_id" />
 				</calendar>
         </field>
@@ -32,6 +32,9 @@
 	        <field name="type">form</field>
 	        <field name="arch" type="xml">
 	        	<field name="categ_ids" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="alarm_ids" position="attributes">
 	        		<attribute name="invisible">True</attribute>
 	        	</field>
 	        	<field name="location" position="attributes">
@@ -67,13 +70,17 @@
 	        		<attribute name="required">True</attribute>
 	        	</field>
 	        	<xpath expr="//div[@class='oe_title']" position="after">
-	        		<div class="oe_title" invisible="1">
-	        			<field name="type" on_change="onchange_type(type)"/>
-	        			<field name="state" invisible="0"/>
-                    </div>
+	        		<header>
+	        				<button name="get_pami_link" string="Ver Padrón PAMI" type="object" attrs="{'invisible': [('type','!=','event')]}" class="oe_highlight"/>
+		        			<button string="Marcar Presente" type="object"
+	                                        name="action_present" states="draft" icon="terp-check" />
+	                        <button string="Marcar Ausente" type="object"
+	                                        name="action_absent" states="draft" icon="STOCK_CANCEL"/>
+							<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,done,declined"/>
+							
+		        		</header>
+	        		<field name="type" invisible="1"/>
 	        		<group name="medical_event" col="4">
-	        			<button name="get_pami_link" string="Ver Padrón PAMI" type="object" attrs="{'invisible': [('type','!=','event')]}"/>
-	        			<newline/>
 						<field name="patient" context="{'default_is_patient':1, 'search_default_is_patient':1}" options="{'no_create': True}" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
 						<field name="doctor_id" options="{'no_create': True}"/>
 						<field name="appointment_id" domain="[('patient','=',patient),('f_fecha_egreso','=',False)]" context="{'default_patient':patient, 'default_doctor':doctor_id}" on_change="onchange_appointment_id(appointment_id)" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
@@ -88,44 +95,41 @@
 			</field>
 	    </record>
 
-	   <record model="ir.ui.view" id="view_calendar_event_form_popup_inherit">
-	        <field name="name">Calendar - Event Form</field>
+	<record model="ir.ui.view" id="view_calendar_event_tree_inherit">
+	        <field name="name">CRM - Meetings Tree</field>
 	    	<field name="model">calendar.event</field>
-	    	<field name="priority" eval="1"/>
-	        <field name="inherit_id" ref="calendar.view_calendar_event_form_popup" />
-	        <field name="type">form</field>
+	        <field name="inherit_id" ref="calendar.view_calendar_event_tree" />
 	        <field name="arch" type="xml">
-	        	<field name="categ_ids" position="attributes">
+	        	<field name="name" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="start_date" position="attributes">
+	        		<attribute name="invisible">True</attribute>
+	        	</field>
+	        	<field name="user_id" position="attributes">
 	        		<attribute name="invisible">True</attribute>
 	        	</field>
 	        	<field name="location" position="attributes">
 	        		<attribute name="invisible">True</attribute>
 	        	</field>
-	        	<field name="partner_ids" position="attributes">
+	        	<field name="show_as" position="attributes">
 	        		<attribute name="invisible">True</attribute>
 	        	</field>
-	        	<field name="name" position="attributes">
+	        	<field name="class" position="attributes">
 	        		<attribute name="invisible">True</attribute>
 	        	</field>
-	        	<label for="name" position="attributes">
+	        	<field name="duration" position="attributes">
 	        		<attribute name="invisible">True</attribute>
-	        	</label>
-	        	<field name="start_date" position="after">
+	        	</field>
+	        	<field name="start_datetime" position="after">
 	        		<field name="patient" />
 	        		<field name="doctor_id" />
 	        		<field name="insurance_id" />
 	        		<field name="appointment_id" />
 	        		<field name="practice_id" />
+	        		<field name="state" />
 	        	</field>
-	        	<field name="name" position="after">
-	        		<header>
-	        			<button string="Marcar Presente" type="object"
-                                        name="action_present" states="draft" icon="terp-check" />
-                        <button string="Marcar Ausente" type="object"
-                                        name="action_absent" states="draft" icon="STOCK_CANCEL"/>
-						<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,done,declined"/>
-	        		</header>
-	        	</field>
+	        	
 			</field>
 	    </record>
 
@@ -135,19 +139,34 @@
 	        <field name="inherit_id" ref="calendar.view_calendar_event_search" />
 	        <field name="type">form</field>
 	        <field name="arch" type="xml">
-	        	<field name="name" position="replace">
+	        	<field name="partner_ids" position="replace" />
+                <field name="categ_ids" position="replace"/>
+                <field name="user_id" position="replace"/>
+                <field name="show_as" position="replace"/>
+                <filter string="My Events" position="replace"/>
+                <filter string="My Meetings" position="replace"/>
+                <filter string="Unread Messages" position="replace"/>
+                <filter string="Responsible" position="replace"/>
+                <filter string="Availability" position="replace"/>
+                <filter string="Privacy" position="replace"/>
+                <field name="name" position="replace">
 	        		<field name="patient" />
 					<field name="doctor_id" />
 					<field name="state" />
 					<field name="insurance_id" />
 	        	</field>
-	        	<field name="partner_ids" position="replace" />
-                <field name="categ_ids" position="replace"/>
-                <field name="user_id" position="replace"/>
-                <field name="show_as" position="replace"/>
+                <group position="inside">
+                	<!-- <filter icon="terp-go-today" string="My Events" domain="[('doctor_id','=',uid)]" help="My Events"/> -->
+                	<filter string="Draft" domain="[('state','=','draft')]" />
+                	<filter string="Done" domain="[('state','=','done')]" />
+                	<filter string="Declined" domain="[('state','=','declined')]" />
+                </group>
+
 	        	
 			</field>
 	    </record>
+
+
 
 	<record id="action_calendar_medical_event" model="ir.actions.act_window">
         <field name="name">Meetings</field>
