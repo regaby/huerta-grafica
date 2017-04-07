@@ -103,11 +103,14 @@ class calendar_event (osv.osv):
         'state': fields.selection([('draft', 'Unconfirmed'), ('open', 'Confirmed'),('done', 'Presente'),('declined', 'Ausente'),('holiday', 'Licencia')], string='Status', track_visibility='onchange'),
         'description': fields.text('Description', readonly=False),
         'type': fields.selection([('event', 'Medical Event'), ('holiday', 'Holiday')], string='Type'),
+        'create_user_id': fields.many2one ('res.users', 'Creado por', readonly=True),
     }
     _defaults = {
         'state': 'draft',
         'name': '.',
         'type': 'event',
+        'create_user_id': lambda self, cr, uid, c: self.pool.get('res.users').browse(cr, uid, uid, c).id ,
+        'duration': 1,
     }
     _sql_constraints = [
         ('code_uniq', 'unique (patient,start_datetime)', 'Ya existe otro turno en el mismo horario para el paciente actual.')

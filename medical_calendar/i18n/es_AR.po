@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-07 15:01+0000\n"
-"PO-Revision-Date: 2017-04-07 15:01+0000\n"
+"POT-Creation-Date: 2017-04-07 18:43+0000\n"
+"PO-Revision-Date: 2017-04-07 18:43+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,6 +47,11 @@ msgstr "Disponibilidad"
 #: field:calendar.event,consultorio_externo:0
 msgid "Consultorio Externo"
 msgstr "Consultorio Externo"
+
+#. module: medical_calendar
+#: field:calendar.event,create_user_id:0
+msgid "Creado por"
+msgstr "Creado por"
 
 #. module: medical_calendar
 #: view:calendar.event:medical_calendar.view_calendar_event_search_inherit
@@ -103,13 +108,11 @@ msgstr "Invitaciones"
 
 #. module: medical_calendar
 #: view:calendar.event:medical_calendar.view_calendar_event_form_inherit
-#: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
 msgid "Marcar Ausente"
 msgstr "Marcar Ausente"
 
 #. module: medical_calendar
 #: view:calendar.event:medical_calendar.view_calendar_event_form_inherit
-#: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
 msgid "Marcar Presente"
 msgstr "Marcar Presente"
 
@@ -195,7 +198,6 @@ msgstr "Responsable"
 
 #. module: medical_calendar
 #: view:calendar.event:medical_calendar.view_calendar_event_form_inherit
-#: view:calendar.event:medical_calendar.view_calendar_event_form_popup_inherit
 #: view:calendar.event:medical_calendar.view_calendar_event_tree_inherit
 msgid "True"
 msgstr "True"

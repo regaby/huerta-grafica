@@ -86,6 +86,7 @@
 						<field name="appointment_id" domain="[('patient','=',patient),('f_fecha_egreso','=',False)]" context="{'default_patient':patient, 'default_doctor':doctor_id}" on_change="onchange_appointment_id(appointment_id)" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
 						<field name="insurance_id" attrs="{'invisible': [('type','!=','event')]}" />
 						<field name="practice_id" domain="[('frequently_used','=',True),('consultorio_externo','=',consultorio_externo)]" widget="selection" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
+						<field name="create_user_id" />
 						<field name="consultorio_externo" invisible="1"/>
 
 						
@@ -127,6 +128,7 @@
 	        		<field name="insurance_id" />
 	        		<field name="appointment_id" />
 	        		<field name="practice_id" />
+	        		<field name="create_user_id" />
 	        		<field name="state" />
 	        	</field>
 	        	
@@ -157,6 +159,7 @@
 	        	</field>
                 <group position="inside">
                 	<!-- <filter icon="terp-go-today" string="My Events" domain="[('doctor_id','=',uid)]" help="My Events"/> -->
+                	<filter icon="terp-go-today" string="My Events" domain="[('create_user_id','=',uid)]" name="my_events"/>
                 	<filter string="Draft" domain="[('state','=','draft')]" />
                 	<filter string="Done" domain="[('state','=','done')]" />
                 	<filter string="Declined" domain="[('state','=','declined')]" />
@@ -175,7 +178,7 @@
         <field name="view_id" ref="view_calendar_event_calendar_inherit"/>
         <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
         <field name="domain">[('type','=','event')]</field>
-        <field name="context">{'default_type': 'event'}</field>
+        <field name="context">{'default_type': 'event','search_default_my_events': 1}</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
             Click to schedule a new meeting.
