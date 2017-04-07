@@ -81,7 +81,7 @@
 		        		</header>
 	        		<field name="type" invisible="1"/>
 	        		<group name="medical_event" col="4">
-						<field name="patient" context="{'default_is_patient':1, 'search_default_is_patient':1}" options="{'no_create': True}" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
+						<field name="patient" context="{'default_is_patient':1, 'search_default_is_patient':1}" options="{'no_create': True}" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}" domain="[('end_date','=',False)]"/>
 						<field name="doctor_id" options="{'no_create': True}"/>
 						<field name="appointment_id" domain="[('patient','=',patient),('f_fecha_egreso','=',False)]" context="{'default_patient':patient, 'default_doctor':doctor_id}" on_change="onchange_appointment_id(appointment_id)" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
 						<field name="insurance_id" attrs="{'invisible': [('type','!=','event')]}" />
