@@ -35,7 +35,7 @@ class StateDepartment(osv.osv):
         
         'name': fields.char('Department', size=50, required=True),
         'zone': fields.integer('Zone', required=True),
-        'state_id' : fields.many2one('res.country.state','State', required=True),
+        'state_id' : fields.many2one('res.country.state','State', required=False),
         
     }
     
