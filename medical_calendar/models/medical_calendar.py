@@ -87,9 +87,10 @@ class calendar_event (osv.osv):
         return super(calendar_event, self).unlink(cr, uid, unlink_ids, context=context)
 
     def write(self, cr, uid,ids, vals, context=None):
-        state = self.read(cr, uid, ids, ['state'], context=context)[0]['state']
-        if 'start' in vals.keys() and state not in ['draft','holiday']:
-            raise osv.except_osv(_('Invalid action !'), _('No se puede modificar la fecha de un turno que esté en estado presente o ausente'))
+        if 'start' in vals.keys():
+            state = self.read(cr, uid, ids, ['state'], context=context)[0]['state']
+            if state not in ['draft','holiday']:
+                raise osv.except_osv(_('Invalid action !'), _('No se puede modificar la fecha de un turno que esté en estado presente o ausente'))
         return super(calendar_event, self).write(cr, uid, ids, vals, context)
 
     _columns = {

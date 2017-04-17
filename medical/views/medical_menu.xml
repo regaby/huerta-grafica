@@ -29,14 +29,17 @@
             parent="medical_phisicyan_submenu"
             action="action_partner_phisicyan_form" sequence="10"/>
 
+            <menuitem name="Financiadora" id="medical_insurance_submenu" parent="medical_root_menu" sequence="40" />
+            <menuitem id="menu_medical_insurance" name="Financiadora"
+            parent="medical_insurance_submenu"
+            action="medical_action_insurance" sequence="11"/>
+
             <menuitem name="Configuration" id="medical_configuration_submenu" parent="medical_root_menu" sequence="100" groups="group_medical_user"/>
             <menuitem id="menu_medical_institution" name="Institution"
             parent="medical_configuration_submenu"
             action="action_partner_institution_form" sequence="10"/>
 
-            <menuitem id="menu_medical_insurance" name="Financiadora"
-            parent="medical_configuration_submenu"
-            action="medical_action_insurance" sequence="11"/>
+            
 
             <menuitem id="menu_medical_speciality" name="Medical Speciality"
             parent="medical_configuration_submenu"

@@ -2,16 +2,6 @@
 	<data>
 
 		<!-- PARTNER -->
-        <record model="ir.ui.view" id="res_partner_opt_out_form_inherit">
-            <field name="name">res.partner.opt_out.form</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="email_template.res_partner_opt_out_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='opt_out']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-            </field>
-        </record>
 
         <record model="ir.ui.view" id="res_partner_filter_view_medical">
             <field name="name">res.partner.filter</field>
@@ -415,14 +405,13 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string='Appointment Information'>
-					<field name="insurance_id"></field>
 					<field name="patient"></field>
 					<field name="care_type"></field>
 					<!-- <field name="urgency"></field> -->
 					<field name="appointment_date" />
 					<!-- <field name="speciality"></field> -->
 					<field name="doctor"></field>
-					<field name="institution"></field>
+					<field name="insurance_id"></field>
 				</tree>
 			</field>
 		</record>
