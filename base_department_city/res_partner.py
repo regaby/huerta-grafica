@@ -40,7 +40,7 @@ class res_partner(osv.osv, format_address):
         
     _columns = {
         
-        'city_id' : fields.many2one('res.department.city','City', required=True),
+        'city_id' : fields.many2one('res.department.city','City', required=False),
         'department_id': fields.related('city_id','department_id', relation='res.state.department', string='Department', type='many2one', readonly=True),
         'state_rel_id': fields.related('department_id','state_id', relation='res.country.state', string='State', type='many2one', readonly=True),
         'country_rel_id': fields.related('state_rel_id','country_id', relation='res.country', string='Country', type='many2one', readonly=True),
