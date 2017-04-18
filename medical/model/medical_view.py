@@ -105,7 +105,7 @@ class medical_prestaciones_view(osv.osv):
 					city.zip_city as doc_zip_city, doc.city_id as doc_city_id, doc.phone as doc_phone, doc.start_date as doc_start_date, mb.code as pat_benefit_code, mbt.code as pat_benefit_type_code, 
 					mb.name as pat_benefit_name, mb.start_date, pat.name as pat_name, pat.document_type as pat_document_type, pat.dni as pat_dni, pat.marital_status as pat_marital_status, 
 					pat.nacionality as pat_nacionality, rc.code as pat_nationality_code, pat.street as pat_street, pat.street_number as pat_street_number,pat_city.zip_city as pat_zip_city, 
-					pat.city_id as pat_city_id, pat.phone as pat_phone, pat.dob as pat_dob, pat.sex as pat_sex, pat.cuil as pat_cuil, pat.cuit as pat_cuit, mpr.code as pat_relationship_code,
+					pat.city_id as pat_city_id, pat.attention_city_id , pat.attention_department_id , pat.phone as pat_phone, pat.dob as pat_dob, pat.sex as pat_sex, pat.cuil as pat_cuil, pat.cuit as pat_cuit, mpr.code as pat_relationship_code,
 					ma.appointment_date, ma.id_modalidad_presta, ma.care_type, ma.f_fecha_egreso, ma.id_tipo_egreso, ma.comments, md.code as pat_diagnostic_code, mad.m_tipo_diagnostico,
 					f_fecha_practica, q_cantidad, mp.code as pat_practice_code, pat.end_date as pat_end_date, md.name as pat_diagnostic_name, mp.name as pat_practice_name,
 					ma.doctor, ma.patient, map.appointment_id, mb.code || mpr.code as afiliado,

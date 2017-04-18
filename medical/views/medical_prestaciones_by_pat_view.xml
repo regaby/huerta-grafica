@@ -8,7 +8,7 @@
 				<tree string='Pacientes PAMI'>
 					<field name="care_type"/>
 					<field name="patient"/>
-					<field name="pat_city_id"/>
+					<field name="attention_department_id"/>
 					<field name="year"/>
 				</tree>
 			</field>
@@ -44,7 +44,7 @@
 					<separator orientation="vertical" />
 					<field name="care_type"/>
 					<field name="patient"/>
-					<field name="pat_city_id"/>
+					<field name="attention_department_id"/>
 					<field name="year"/>
 					<newline />
 					<group expand="0" string="Agrupar por..." colspan="11" col="11">
@@ -52,8 +52,8 @@
 						
 						<filter string="Tipo de Atención" icon="terp-go-month" domain="[]"
 							context="{'group_by':'care_type'}" />
-						<filter string="Ciudad Afiliado" icon="terp-go-month" domain="[]"
-							context="{'group_by':'pat_city_id'}" />
+						<filter string="Departamento Afiliado" icon="terp-go-month" domain="[]"
+							context="{'group_by':'attention_department_id'}" />
 
 					</group>
 

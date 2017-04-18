@@ -34,7 +34,9 @@ class medical_prestaciones_by_pat_view(osv.osv):
 
     _columns = {
     	'doc_city_id': fields.many2one('res.department.city', 'Cuidad Profesional', readonly=True),
-        'pat_city_id': fields.many2one('res.department.city', 'Cuidad Afiliado', readonly=True),
+     #    'attention_city_id': fields.many2one('res.department.city', 'Cuidad Afiliado', readonly=True),
+     #    'pat_department_id': fields.related('attention_city_id','department_id', relation='res.state.department', string='Departamento Afiliado', type='many2one', readonly=True),
+        'attention_department_id': fields.many2one('res.state.department', 'Departamento Afiliado', readonly=True),
     	'patient': fields.many2one('res.partner', 'Afiliado', readonly=True),
     	'care_type': fields.selection([
             ('1','Atención Programada a Domicilio'),
@@ -53,9 +55,9 @@ class medical_prestaciones_by_pat_view(osv.osv):
       tools.drop_view_if_exists(cr, 'medical_prestaciones_by_pat_view')
       cr.execute("""
             CREATE OR REPLACE VIEW medical_prestaciones_by_pat_view AS
-                select min(id) as id, care_type, patient, doc_city_id, left(f_fecha_practica::text,7) as year, pat_city_id
+                select min(id) as id, care_type, patient, doc_city_id, left(f_fecha_practica::text,7) as year, attention_department_id
                 from medical_prestaciones_view 
-                group by care_type, patient, doc_city_id, left(f_fecha_practica::text,7), pat_city_id
+                group by care_type, patient, doc_city_id, left(f_fecha_practica::text,7), attention_department_id
             """)
 
 medical_prestaciones_by_pat_view()  
