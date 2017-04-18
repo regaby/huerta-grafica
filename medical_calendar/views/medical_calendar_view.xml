@@ -12,6 +12,16 @@
             </field>
         </record>
 
+    <record id="medical_calendar_event_view_graph" model="ir.ui.view">
+            <field name="name">calendar.event.graph</field>
+            <field name="model">calendar.event</field>
+            <field name="arch" type="xml">
+                <graph string="Análisis de Turnos" type="pivot">
+                    <field name="state" type="row"/>
+                </graph>
+            </field>
+        </record>
+
     <record model="ir.ui.view" id="view_calendar_event_calendar_inherit">
         <field name="name">Turno</field>
         <field name="model">calendar.event</field>
@@ -170,13 +180,15 @@
 					<field name="doctor_id" />
 					<field name="state" />
 					<field name="insurance_id" />
+					<field name="period" />
 	        	</field>
                 <group position="inside">
                 	<!-- <filter icon="terp-go-today" string="My Events" domain="[('doctor_id','=',uid)]" help="My Events"/> -->
-                	<filter icon="terp-go-today" string="My Events" domain="[('create_user_id','=',uid)]" name="my_events"/>
+                	<!-- <filter icon="terp-go-today" string="My Events" domain="[('create_user_id','=',uid)]" name="my_events"/>
                 	<filter string="Draft" domain="[('state','=','draft')]" />
                 	<filter string="Done" domain="[('state','=','done')]" />
-                	<filter string="Declined" domain="[('state','=','declined')]" />
+                	<filter string="Declined" domain="[('state','=','declined')]" /> -->
+                	<filter string="Estado" context="{'group_by':'state'}" />
                 </group>
 
 	        	
@@ -188,7 +200,7 @@
 	<record id="action_calendar_medical_event" model="ir.actions.act_window">
         <field name="name">Meetings</field>
         <field name="res_model">calendar.event</field>
-        <field name="view_mode">calendar,tree,form</field>
+        <field name="view_mode">calendar,tree,form,graph</field>
         <field name="view_id" ref="view_calendar_event_calendar_inherit"/>
         <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
         <field name="domain">[('type','=','event')]</field>

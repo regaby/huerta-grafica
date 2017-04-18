@@ -20,6 +20,7 @@ import time
 from datetime import date
 from datetime import datetime
 from dateutil import relativedelta
+import calendar
 
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
@@ -93,6 +94,37 @@ class calendar_event (osv.osv):
                 raise osv.except_osv(_('Invalid action !'), _('No se puede modificar la fecha de un turno que esté en estado presente o ausente'))
         return super(calendar_event, self).write(cr, uid, ids, vals, context)
 
+    def _get_period(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        for event in self.browse(cr, uid, ids, context=context):
+            cr.execute('''select start from calendar_event where id = %d'''%(event.id))
+            fech = cr.fetchall()
+            if fech:
+                res[event.id] = fech[0][0][0:7]
+        return res
+
+    def _search_period(self, cr, uid, obj, name, args, context=None):
+        if not args:
+            return []
+        res = []
+        if args[0][1]in ('ilike'):
+            year = args[0][2][0:4]
+            month = args[0][2][5:7]
+            
+            try:
+                to_date = datetime(int(year), int(month), 1)
+            except:
+                raise osv.except_osv(_('Error'),_('El periodo debe tener el formado AAAA-MM') )  
+
+            last_day = calendar.monthrange(int(year),int(month))[1]
+            cr.execute("""select id from calendar_event where start between '%s-01 00:00:00' and '%s-%s 23:59:59'"""%(args[0][2],args[0][2],last_day))
+            print cr.query
+            res = cr.fetchall()
+            
+        if not res:
+            return [('id', '=', '0')]
+        return [('id', 'in', map(lambda x:x[0], res))]
+
     _columns = {
         'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", readonly=True, states={'draft':[('readonly',False)]}),
         'practice_id' : fields.many2one ('medical.practice', 'Practice', readonly=True, states={'draft':[('readonly',False)]}),
@@ -105,6 +137,7 @@ class calendar_event (osv.osv):
         'description': fields.text('Description', readonly=False),
         'type': fields.selection([('event', 'Medical Event'), ('holiday', 'Holiday')], string='Type'),
         'create_user_id': fields.many2one ('res.users', 'Creado por', readonly=True),
+        'period': fields.function(_get_period,fnct_search=_search_period, method=True, type= 'char', string='Periodo'),  
     }
     _defaults = {
         'state': 'draft',
