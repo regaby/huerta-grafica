@@ -26,6 +26,9 @@ from openerp.tools.translate import _
 
 from lxml import etree
 import re
+import logging
+
+_logger = logging.getLogger(__name__)
 
 CARE_TYPE = [
             ('1','Atención Programada a Domicilio'),
@@ -40,6 +43,7 @@ CARE_TYPE = [
 
 # DEBUG MODE -- DELETE ME !
 # import pdb
+
 class medical_speciality (osv.osv):
     _name = "medical.speciality"
     _columns = {
@@ -256,6 +260,15 @@ class medical_benefit(osv.osv):
     _constraints = [(_check_code,"Error",['code'] )]
 medical_benefit ()
 
+class DepartmentCity(osv.osv):
+    
+    _name = 'res.department.city'
+    _inherit = 'res.department.city'
+    _columns = {
+        'attention': fields.boolean('Attention')
+    }
+DepartmentCity()
+
 class medical_partner(osv.osv):
     _name = "res.partner"
     _inherit = "res.partner"
@@ -296,6 +309,15 @@ class medical_partner(osv.osv):
             'url': url,
             'target': 'new',
                 }
+
+    def onchange_attention_city(self, cr, uid, ids, city_id, context=None):
+        if city_id:
+            city = self.pool.get('res.department.city').browse(cr, uid, city_id, context)
+            val = {'attention_country_rel_id':city.department_id.state_id.country_id.id,
+                   'attention_state_rel_id':city.department_id.state_id.id,
+                   'attention_department_id':city.department_id.id,}
+            return {'value': val}
+        return {}
 
     _columns = {
         'is_patient' : fields.boolean('Patient', help="Check if the partner is a patient"),
@@ -399,6 +421,11 @@ class medical_partner(osv.osv):
         'prestaciones_ids': fields.one2many('medical.appointment','patient','Prestaciones',ondelete='cascade'),
         'insurance_id':fields.related('benefit_id', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'has_insurance' : fields.boolean ('Tiene financiadora'),
+        'attention_city_id' : fields.many2one('res.department.city','Ciudad de Atención', required=False),
+
+        'attention_department_id': fields.related('attention_city_id','department_id', relation='res.state.department', string='Department', type='many2one', readonly=True, store=True),
+        'attention_state_rel_id': fields.related('attention_department_id','state_id', relation='res.country.state', string='State', type='many2one', readonly=True),
+        'attention_country_rel_id': fields.related('attention_state_rel_id','country_id', relation='res.country', string='Country', type='many2one', readonly=True),
 
     }
     _sql_constraints = [
@@ -716,3 +743,19 @@ class medical_appointment (osv.osv):
     #     return osv.osv.search(self, cr, uid, args, offset=offset, limit=limit, order=order, context=context, count=count)
 
 medical_appointment()
+
+class medical_init(osv.osv_memory):
+    _name = 'medical.init'
+    _log_access = True
+
+    def _auto_init(self, cr, context=None):
+        ## aca van todos los scripts de base de datos
+        sql = ('''update res_department_city set attention=True where municipality in (14001,14002,14003,14004,14005,14006,14007,14008,14009,14010,14011,14012,14013,14014,14015,14016,14017)
+                and name in ('ELDORADO','IGUAZU','PUERTO LIBERTAD','PUERTO ESPERANZA','COLONIA WANDA','JARDIN AMERICA','LEANDRO N.ALEM',
+                'SANTA RITA','2 DE MAYO','ARISTOBULO DEL VALLE','VILLA SALTO ENCANTADO','25 DE MAYO','SAN JAVIER','SAN VICENTE','EL SOBERBIO',
+                'SAN PEDRO','BERNARDO DE IRIGOYEN','OBERA')''')
+        cr.execute(sql)
+        
+        return super(medical_init, self)._auto_init(cr, context=context)
+
+medical_init()

@@ -69,6 +69,10 @@
                 <field name="city_id" position="attributes">
                     <attribute name="domain">[('municipality','in',[14001,14002,14003,14004,14005,14006,14007,14008,14009,14010,14011,14012,14013,14014,14015,14016,14017])]</attribute>
                 </field>
+                <field name="country_id" position="after">
+                    <field name="attention_city_id" required="True" placeholder="Ciudad de Atención" on_change="onchange_attention_city(attention_city_id)" attrs="{'readonly': [('use_parent_address','=',True)]}" options="{'no_create': True}" domain="[('attention','=',True)]"/>
+                    <field name="attention_department_id" />
+                </field>
 
             </field>
         </record>
