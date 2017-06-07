@@ -685,6 +685,7 @@ class medical_appointment (osv.osv):
         'diagnostic_ids': fields.one2many('medical.appointment.diagnostic','appointment_id','Diagnostic',ondelete='cascade'),
         'practice_ids': fields.one2many('medical.appointment.practice','appointment_id','Practices',ondelete='cascade'),
         'consultorio_externo': fields.boolean('Consultorio Externo'),
+        'symptom': fields.text('Síntomas'),
 
 
     }

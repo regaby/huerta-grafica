@@ -1,0 +1,85 @@
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="medical_diagnostic_view_tree">
+			<field name="name">Análisis de Diagnósticos</field>
+			<field name="model">medical.diagnostic.view</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string='Análisis de Diagnósticos'>
+					<field name="appointment_date"/>
+					<field name="patient_id"/>
+					<field name="diagnostic_id"/>
+					<field name="m_tipo_diagnostico"/>
+					<field name="symptom"/>
+					<field name="attention_city_id"/>
+					<field name="attention_department_id"/>
+					<field name="sex"/>
+					<field name="age"/>
+					
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_medical_diagnostic_view_graph" model="ir.ui.view">
+            <field name="name">medical.diagnostic.view.graph</field>
+            <field name="model">medical.diagnostic.view</field>
+            <field name="arch" type="xml">
+                <graph string="Análisis de Diagnósticos" type="pivot">
+                    
+                    <field name="diagnostic_id" type="row"/>
+                    
+                </graph>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="action_medical_diagnostic_view">
+			<field name="name">Análisis de Diagnósticos</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.diagnostic.view</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+		</record>
+
+		<record id="view_medical_diagnostic_view_filter" model="ir.ui.view">
+			<field name="name">medical.diagnostic.view.select</field>
+			<field name="model">medical.diagnostic.view</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Análisis de Diagnósticos">
+					<newline />
+					<separator orientation="vertical" />
+					<field name="patient_id"/>
+					<field name="diagnostic_id"/>
+					<field name="m_tipo_diagnostico"/>
+					<field name="symptom"/>
+					<field name="sex"/>
+					<field name="age"/>
+					<field name="attention_city_id"/>
+					<field name="attention_department_id"/>
+					<newline />
+					<group expand="0" string="Agrupar por..." colspan="11" col="11">
+						
+						
+						<filter string="Paciente" icon="terp-go-month" domain="[]"
+							context="{'group_by':'patient_id'}" />
+						<filter string="Diagnóstico" icon="terp-go-month" domain="[]"
+							context="{'group_by':'diagnostic_id'}" />
+						<filter string="Tipo de Diagnóstico" icon="terp-go-month" domain="[]"
+							context="{'group_by':'m_tipo_diagnostico'}" />
+						<filter string="Sexo" icon="terp-go-month" domain="[]"
+							context="{'group_by':'sex'}" />
+						<filter string="Edad" icon="terp-go-month" domain="[]"
+							context="{'group_by':'age'}" />
+						<filter string="Ciudad de atención" icon="terp-go-month" domain="[]"
+							context="{'group_by':'attention_city_id'}" />
+						<filter string="Departamento" icon="terp-go-month" domain="[]"
+							context="{'group_by':'attention_department_id'}" />
+						
+					</group>
+
+				</search>
+			</field>
+		</record>
+
+	</data>
+</openerp>

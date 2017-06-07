@@ -9,7 +9,7 @@
 
 			<menuitem name="Appointments" id="medical_appointment_submenu" parent="medical_root_menu" sequence="10" />
 		 		<menuitem action="medical_action_form_appointment" id="medical_conf_appointment_add" parent="medical_appointment_submenu" sequence="1" />
-				<menuitem action="medical_action_form_new_appointment" id="medical_conf_new_appointment" parent="medical_appointment_submenu" sequence="3" />
+				<!-- <menuitem action="medical_action_form_new_appointment" id="medical_conf_new_appointment" parent="medical_appointment_submenu" sequence="3" /> -->
 	
 		
 		<!-- Patients -->
@@ -29,7 +29,21 @@
             parent="medical_phisicyan_submenu"
             action="action_partner_phisicyan_form" sequence="10"/>
 
-            <menuitem name="Financiadora" id="medical_insurance_submenu" parent="medical_root_menu" sequence="40" />
+            <menuitem name="Análisis" id="medical_report_submenu" parent="medical_root_menu" sequence="40" />
+            
+            <menuitem id="menu_medical_practice_view" name="Prestaciones por Profesional"
+            parent="medical_report_submenu"
+            action="action_medical_practice_view" sequence="10"/>
+
+            <menuitem id="menu_medical_diagnostic_view" name="Análisis de Diagnósticos"
+            parent="medical_report_submenu"
+            action="action_medical_diagnostic_view" sequence="20"/>
+
+            <menuitem id="menu_medical_diagnostic" name="Diagnóstico"
+            parent="medical_report_submenu"
+            action="medical_action_diagnostic" sequence="30"/>
+
+            <menuitem name="Financiadora" id="medical_insurance_submenu" parent="medical_root_menu" sequence="60" />
             <menuitem id="menu_medical_insurance" name="Financiadora"
             parent="medical_insurance_submenu"
             action="medical_action_insurance" sequence="11"/>

@@ -49,6 +49,8 @@ This module provide :
         'views/medical_prestaciones_by_pat_view.xml',
         # 'views/medical_turno_view.xml',
         'views/medical_insurance_view.xml',
+        'views/medical_practice_view.xml',
+        'views/medical_diagnostic_view.xml',
         ## MENU
         'views/medical_menu.xml',
         ## REPORTE

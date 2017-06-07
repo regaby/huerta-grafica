@@ -1,0 +1,82 @@
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="medical_practice_view_tree">
+			<field name="name">Prestaciones por Profesional</field>
+			<field name="model">medical.practice.view</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string='Prestaciones por Profesional'>
+					<field name="doctor_id"/>
+					<field name="patient_id"/>
+					<field name="f_fecha_practica"/>
+					<field name="care_type"/>
+					<field name="practice_id"/>
+					<field name="attention_city_id"/>
+					<field name="attention_department_id"/>
+					<field name="sex"/>
+					<field name="age"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_medical_practice_view_graph" model="ir.ui.view">
+            <field name="name">medical.practice.view.graph</field>
+            <field name="model">medical.practice.view</field>
+            <field name="arch" type="xml">
+                <graph string="Prestaciones por Profesional" type="pivot">
+                    
+                    <field name="doctor_id" type="row"/>
+                    
+                </graph>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="action_medical_practice_view">
+			<field name="name">Prestaciones por Profesional</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.practice.view</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+		</record>
+
+		<record id="view_medical_practice_view_filter" model="ir.ui.view">
+			<field name="name">medical.practice.view.select</field>
+			<field name="model">medical.practice.view</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Prestaciones por Profesional">
+					<newline />
+					<separator orientation="vertical" />
+					<field name="doctor_id"/>
+					<field name="patient_id"/>
+					<field name="f_fecha_practica"/>
+					<field name="practice_id"/>
+					<field name="sex"/>
+					<field name="age"/>
+					<field name="attention_city_id"/>
+					<field name="attention_department_id"/>
+					<newline />
+					<group expand="0" string="Agrupar por..." colspan="11" col="11">
+						
+						
+						
+						<filter string="Especialista" icon="terp-go-month" domain="[]"
+							context="{'group_by':'doctor_id'}" />
+						<filter string="Práctica Realizada" icon="terp-go-month" domain="[]"
+							context="{'group_by':'practice_id'}" />
+						<filter string="Modalidad Atención" icon="terp-go-month" domain="[]"
+							context="{'group_by':'care_type'}" />
+						<filter string="Ciudad de atención" icon="terp-go-month" domain="[]"
+							context="{'group_by':'attention_city_id'}" />
+						<filter string="Departamento" icon="terp-go-month" domain="[]"
+							context="{'group_by':'attention_department_id'}" />
+						
+
+					</group>
+
+				</search>
+			</field>
+		</record>
+
+	</data>
+</openerp>
