@@ -138,6 +138,7 @@ class calendar_event (osv.osv):
         'type': fields.selection([('event', 'Medical Event'), ('holiday', 'Holiday')], string='Type'),
         'create_user_id': fields.many2one ('res.users', 'Creado por', readonly=True),
         'period': fields.function(_get_period,fnct_search=_search_period, method=True, type= 'char', string='Periodo'),  
+        'phone': fields.char('Telefono',size=20, readonly=True, states={'draft':[('readonly',False)]}),
     }
     _defaults = {
         'state': 'draft',
