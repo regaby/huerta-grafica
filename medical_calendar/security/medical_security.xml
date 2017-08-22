@@ -1,0 +1,47 @@
+<openerp>
+	<data noupdate="0">
+		<delete model="ir.rule" id="calendar.calendar_event_rule_employee"/>
+	</data>
+	<data noupdate="1">
+
+
+        <record id="group_medical_doctor" model="res.groups">
+              <field name="name">Medical Doctor</field>
+              <field name="category_id" ref="medical.module_medical"/>
+        </record>
+
+        <record id="rule_calendar_propio" model="ir.rule"
+		context="{'noadmin':True}">
+			<field name="name">Acceso Calendar event Propias</field>
+			<field name="model_id" search="[('model','=','calendar.event')]"
+				model="ir.model" />
+			<field name="groups" eval="[(6,0,[ref('group_medical_doctor')])]" />
+			<field name="domain_force">[('doctor_id','=',user.partner_id.id)]</field>
+			<field eval="0" name="perm_unlink" />
+			<field eval="0" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="0" name="perm_create" />
+		</record>
+
+		<record id="rule_medical_appointment_propio" model="ir.rule"
+		context="{'noadmin':True}">
+			<field name="name">Acceso Medical appointment Propias</field>
+			<field name="model_id" search="[('model','=','medical.appointment')]"
+				model="ir.model" />
+			<field name="groups" eval="[(6,0,[ref('group_medical_doctor')])]" />
+			<field name="domain_force">[('doctor','=',user.partner_id.id)]</field>
+			<field eval="0" name="perm_unlink" />
+			<field eval="0" name="perm_write" />
+			<field eval="1" name="perm_read" />
+			<field eval="0" name="perm_create" />
+		</record>
+
+		<record id="calendar_event_rule_medical_demo" model="ir.rule">
+            <field ref="model_calendar_event" name="model_id"/>
+            <field name="name">All Calendar Event for demo user</field>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field eval="[(4,ref('medical.group_medical_demo'))]" name="groups"/>
+        </record>
+
+	</data>
+</openerp>

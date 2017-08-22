@@ -24,7 +24,7 @@
             parent="medical_patients_submenu"
             action="medical_action_benefit" sequence="20"/>
 
-            <menuitem name="Phisicyan" id="medical_phisicyan_submenu" parent="medical_root_menu" sequence="30" />
+            <menuitem name="Phisicyan" id="medical_phisicyan_submenu" parent="medical_root_menu" sequence="30" groups="group_medical_demo"/>
             <menuitem id="menu_medical_phisicyan" name="Phisicyan"
             parent="medical_phisicyan_submenu"
             action="action_partner_phisicyan_form" sequence="10"/>
