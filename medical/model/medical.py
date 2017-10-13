@@ -345,7 +345,7 @@ class medical_partner(osv.osv):
         'dod' : fields.datetime ('Date of Death'),
         'insurance': fields.char('Insurance', size=64, required=False, select=True, ),
         'insurance_number': fields.char('Insurance Number', size=15, required=False, select=True, ),
-        'dni': fields.char('DNI', size=64, required=True, select=True, help="DNI"),
+        'dni': fields.char('DNI', size=64, required=False, select=True, help="DNI"),
         'critical_info' : fields.text ('Important disease, allergy or procedures information', help="Write any important information on the patient's disease, surgeries, allergies, ..."),
         'sex' : fields.selection([
             ('m', 'Male'),
@@ -446,6 +446,8 @@ class medical_partner(osv.osv):
     }
     def _check_dni(self,cr,uid,ids,context=None):
         demo_record = self.browse(cr,uid,ids,context=context)[0]
+        if demo_record.has_insurance == False:
+            return True
         partner_ids = self.search(cr, uid, [('dni','=',demo_record.dni),('active','=',True)])
         partner_ids.remove(ids[0])
         if len(partner_ids)>0:
