@@ -92,6 +92,19 @@ class calendar_event (osv.osv):
             state = self.read(cr, uid, ids, ['state'], context=context)[0]['state']
             if state not in ['draft','holiday']:
                 raise osv.except_osv(_('Invalid action !'), _('No se puede modificar la fecha de un turno que esté en estado presente o ausente'))
+        if 'state' in vals.keys():
+            recurrency = self.read(cr, uid, ids, ['recurrency'], context=context)[0]['recurrency']
+            if recurrency:
+                new_id = self._detach_one_event(cr, uid, ids[0], context=context)
+                super(calendar_event, self).write(cr, uid, new_id, vals, context)
+                return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'calendar.event',
+                    'view_mode': 'form',
+                    'res_id': new_id,
+                    'target': 'current',
+                    'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}}
+                }
         return super(calendar_event, self).write(cr, uid, ids, vals, context)
 
     def _get_period(self, cr, uid, ids, field_name, arg, context=None):
@@ -148,7 +161,7 @@ class calendar_event (osv.osv):
         'duration': 1,
     }
     _sql_constraints = [
-        ('code_uniq', 'unique (patient,start_datetime)', 'Ya existe otro turno en el mismo horario para el paciente actual.')
+        ('code_uniq', 'unique (patient,start_datetime,currency)', 'Ya existe otro turno en el mismo horario para el paciente actual.')
     ]
     _constraints = [
         (_check_days, 'Ya existe otro turno en el mismo rango horario para el paciente actual!',['start']),
