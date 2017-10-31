@@ -27,10 +27,10 @@
         <field name="model">calendar.event</field>
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
-            <calendar string="Medical Calendar" color="state" date_start="start" date_stop="stop" mode="week" quick_add="False" >
-					
-					<field name="patient" />
+            <calendar string="Medical Calendar" color="state" date_start="start" date_stop="stop" mode="day" quick_add="False" >
 					<field name="doctor_id" />
+					<field name="patient" />
+					
 				</calendar>
         </field>
     </record>

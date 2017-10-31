@@ -93,6 +93,12 @@ class calendar_event (osv.osv):
             if state not in ['draft','holiday']:
                 raise osv.except_osv(_('Invalid action !'), _('No se puede modificar la fecha de un turno que esté en estado presente o ausente'))
         if 'state' in vals.keys():
+            # si el estado que quiero cambiar es = presente, controlo que la fecha del turno sea <= al dia de hoy
+            if vals['state']=='done':
+                start_datetime = self.read(cr, uid, ids, ['start_datetime'], context=context)[0]['start_datetime'][0:10]
+                start_datetime = datetime.strptime(start_datetime, '%Y-%m-%d')
+                if start_datetime > datetime.now():
+                    raise osv.except_osv(_('Invalid action !'), _('No se puede marcar como presente un turno posterior a la fecha actual'))
             recurrency = self.read(cr, uid, ids, ['recurrency'], context=context)[0]['recurrency']
             if recurrency:
                 new_id = self._detach_one_event(cr, uid, ids[0], context=context)
