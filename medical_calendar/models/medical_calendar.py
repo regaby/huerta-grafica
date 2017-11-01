@@ -184,6 +184,7 @@ class calendar_event (osv.osv):
         	'f_fecha_practica': turno.start_datetime,
         	'doctor_id': turno.doctor_id.id,
         	'q_cantidad': 1,
+            'calendar_event_id': turno.id,
         }
         
         self.pool.get('medical.appointment.practice').create(cr, uid, practice)
@@ -192,5 +193,28 @@ class calendar_event (osv.osv):
     def action_absent(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'declined'})
         return True
+
+    def set_draft(self, cr, uid, ids, context=None):
+        turno = self.browse(cr, uid, ids, context=context)
+        practice_pool = self.pool.get('medical.appointment.practice')
+        if turno.state=='declined':
+            self.write(cr, uid, ids, {'state': 'draft'})
+            return True
+        else:
+            turno_id = practice_pool.search(cr, uid, [('calendar_event_id','=',turno.id)])
+            if turno_id:
+                practice_pool.unlink(cr, uid, turno_id)
+            else:
+                turno_id = practice_pool.search(cr, uid, [('practice_id','=',turno.practice_id.id),
+                                                          ('appointment_id','=',turno.appointment_id.id),
+                                                          ('f_fecha_practica','=',turno.start_datetime),
+                                                          ('doctor_id','=',turno.doctor_id.id),])
+                if turno_id:
+                    practice_pool.unlink(cr, uid, turno_id)
+            self.write(cr, uid, ids, {'state': 'draft'})
+            return True
+
+
+
     
 calendar_event()

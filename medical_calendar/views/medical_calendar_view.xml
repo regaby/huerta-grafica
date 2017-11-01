@@ -100,6 +100,8 @@
 	                                        name="action_present" states="draft" icon="terp-check" />
 	                        <button string="Marcar Ausente" type="object"
 	                                        name="action_absent" states="draft" icon="STOCK_CANCEL"/>
+	                        <button string="Volver a sin confirmar" type="object"
+	                                        name="set_draft" states="done,declined" icon="gtk-convert" />
 							<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,done,declined"/>
 							
 		        		</header>

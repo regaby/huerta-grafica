@@ -591,6 +591,7 @@ class medical_appointment_practice(osv.osv):
         'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=False),
         'c_profesional_solicita' : fields.char ('c_profesional_solicita'),
         'f_create_date': fields.function(_get_fecha,fnct_search=_search_fecha, method=True, type= 'date', string='Fecha Creacion'),  
+        'calendar_event_id': fields.many2one ('calendar.event', 'Calendar event', required=False),
     }
     _sql_constraints = [
         ('code_uniq', 'unique (practice_id,f_fecha_practica,appointment_id)', 'La práctica debe ser única por horario')
