@@ -111,7 +111,7 @@
 						<field name="doctor_id" options="{'no_create': True}"/>
 						<field name="appointment_id" domain="[('patient','=',patient),('f_fecha_egreso','=',False)]" context="{'default_patient':patient, 'default_doctor':doctor_id}" on_change="onchange_appointment_id(appointment_id)" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
 						<field name="insurance_id" attrs="{'invisible': [('type','!=','event')]}" />
-						<field name="practice_id" domain="[('frequently_used','=',True),('consultorio_externo','=',consultorio_externo)]" widget="selection" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
+						<field name="practice_id" domain="[('frequently_used','=',True),('consultorio_externo','=',consultorio_externo)]" widget="selection" attrs="{'required': [('type','=','event')],'invisible': ['|',('appointment_id','=',False),('type','!=','event')]}"/>
 						<field name="create_user_id" />
 						<field name="phone" />
 						<field name="consultorio_externo" invisible="1"/>
