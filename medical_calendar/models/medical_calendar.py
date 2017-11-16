@@ -103,15 +103,9 @@ class calendar_event (osv.osv):
             if recurrency:
                 new_id = self._detach_one_event(cr, uid, ids[0], context=context)
                 super(calendar_event, self).write(cr, uid, new_id, vals, context)
-                return {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'calendar.event',
-                    'view_mode': 'form',
-                    'res_id': new_id,
-                    'target': 'current',
-                    'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}}
-                }
-        return super(calendar_event, self).write(cr, uid, ids, vals, context)
+                return new_id
+        super(calendar_event, self).write(cr, uid, ids, vals, context)
+        return ids
 
     def _get_period(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
@@ -167,7 +161,7 @@ class calendar_event (osv.osv):
         'duration': 1,
     }
     _sql_constraints = [
-        ('code_uniq', 'unique (patient,start_datetime,currency)', 'Ya existe otro turno en el mismo horario para el paciente actual.')
+        ('code_uniq', 'unique (patient,start_datetime,recurrency)', 'Ya existe otro turno en el mismo horario para el paciente actual.')
     ]
     _constraints = [
         (_check_days, 'Ya existe otro turno en el mismo rango horario para el paciente actual!',['start']),
@@ -176,7 +170,9 @@ class calendar_event (osv.osv):
     ] 
 
     def action_present(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'done'})
+        new_id = self.write(cr, uid, ids, {'state': 'done'})
+        if not isinstance(new_id, (int, long)):
+            new_id = new_id[0]
         turno = self.browse(cr, uid, ids, context=context)
         practice = {
         	'practice_id': turno.practice_id.id,
@@ -184,15 +180,31 @@ class calendar_event (osv.osv):
         	'f_fecha_practica': turno.start_datetime,
         	'doctor_id': turno.doctor_id.id,
         	'q_cantidad': 1,
-            'calendar_event_id': turno.id,
+            'calendar_event_id': new_id,
         }
         
         self.pool.get('medical.appointment.practice').create(cr, uid, practice)
-        return True
+        return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'calendar.event',
+                    'view_mode': 'form',
+                    'res_id': new_id,
+                    'target': 'current',
+                    # 'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}}
+                }
 
     def action_absent(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'declined'})
-        return True
+        new_id = self.write(cr, uid, ids, {'state': 'declined'})
+        if not isinstance(new_id, (int, long)):
+            new_id = new_id[0]
+        return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'calendar.event',
+                    'view_mode': 'form',
+                    'res_id': new_id,
+                    'target': 'current',
+                    # 'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}}
+                }
 
     def set_draft(self, cr, uid, ids, context=None):
         turno = self.browse(cr, uid, ids, context=context)
