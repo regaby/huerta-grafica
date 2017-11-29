@@ -191,6 +191,7 @@
                 	<filter string="Draft" domain="[('state','=','draft')]" />
                 	<filter string="Done" domain="[('state','=','done')]" />
                 	<filter string="Declined" domain="[('state','=','declined')]" /> -->
+                	<filter icon="terp-go-today" string="Mis Turnos" domain="[('create_user_id','=',uid)]" name="my_events"/>
                 	<filter string="Estado" context="{'group_by':'state'}" />
                 </group>
 
