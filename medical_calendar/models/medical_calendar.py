@@ -99,6 +99,8 @@ class calendar_event (osv.osv):
                 start_datetime = datetime.strptime(start_datetime, '%Y-%m-%d')
                 if start_datetime > datetime.now():
                     raise osv.except_osv(_('Invalid action !'), _('No se puede marcar como presente un turno posterior a la fecha actual'))
+                if not self._check_holidays(cr, uid, ids):
+                    raise osv.except_osv(_('Invalid action !'), _('No se puede aprobar este turno porque el especialista tiene una licencia cargada este dia!'))
             recurrency = self.read(cr, uid, ids, ['recurrency'], context=context)[0]['recurrency']
             if recurrency:
                 new_id = self._detach_one_event(cr, uid, ids[0], context=context)
@@ -142,7 +144,7 @@ class calendar_event (osv.osv):
         'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", readonly=True, states={'draft':[('readonly',False)]}),
         'practice_id' : fields.many2one ('medical.practice', 'Practice', readonly=True, states={'draft':[('readonly',False)]}),
         'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', readonly=True, states={'draft':[('readonly',False)]}),
-        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", readonly=True, required=True, states={'draft':[('readonly',False)],'holiday':[('readonly',False)]}),
+        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", readonly=True, required=False, states={'draft':[('readonly',False)],'holiday':[('readonly',False)]}),
         'insurance_id':fields.related('patient', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'consultorio_externo': fields.boolean('Consultorio Externo'),
         'name': fields.char('Meeting Subject'),
@@ -152,6 +154,8 @@ class calendar_event (osv.osv):
         'create_user_id': fields.many2one ('res.users', 'Creado por', readonly=True),
         'period': fields.function(_get_period,fnct_search=_search_period, method=True, type= 'char', string='Periodo'),  
         'phone': fields.char('Telefono',size=20, readonly=True, states={'draft':[('readonly',False)]}),
+        'holiday_type': fields.selection([('(Licencia)', 'Licencia'), ('(Feriado)', 'Feriado')], string='Tipo'),
+        'holiday_name': fields.char('Feriado'),
     }
     _defaults = {
         'state': 'draft',

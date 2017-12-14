@@ -28,8 +28,10 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Medical Calendar" color="state" date_start="start" date_stop="stop" mode="day" quick_add="False" >
+					<field name="holiday_type" />
 					<field name="doctor_id" />
 					<field name="patient" />
+					<field name="holiday_name" />
 					
 				</calendar>
         </field>
@@ -41,7 +43,9 @@
         <field name="priority" eval="2"/>
         <field name="arch" type="xml">
             <calendar string="Holiday Calendar" color="doctor_id" date_start="start" date_stop="stop" mode="month" quick_add="False" >
+					<field name="holiday_type" />
 					<field name="doctor_id" />
+					<field name="holiday_name" />
 				</calendar>
         </field>
     </record>
@@ -106,17 +110,19 @@
 							
 		        		</header>
 	        		<field name="type" invisible="1"/>
+	        		<group>
+	        			<field name="holiday_type" attrs="{'required': [('type','=','holiday')],'invisible': [('type','!=','holiday')]}"/>
+	        		</group>
 	        		<group name="medical_event" col="4">
 						<field name="patient" context="{'default_is_patient':1, 'search_default_is_patient':1}" options="{'no_create': True}" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}" domain="[('end_date','=',False)]"/>
-						<field name="doctor_id" options="{'no_create': True}"/>
+						<field name="doctor_id" options="{'no_create': True}" attrs="{'required': ['|',('type','=','event'),'&amp;',('type','=','holiday'),('holiday_type','=','licencia')],'invisible': ['&amp;',('type','=','holiday'),('holiday_type','!=','licencia')]}"/>
 						<field name="appointment_id" domain="[('patient','=',patient),('f_fecha_egreso','=',False)]" context="{'default_patient':patient, 'default_doctor':doctor_id}" on_change="onchange_appointment_id(appointment_id)" attrs="{'required': [('type','=','event')],'invisible': [('type','!=','event')]}"/>
 						<field name="insurance_id" attrs="{'invisible': [('type','!=','event')]}" />
 						<field name="practice_id" domain="[('frequently_used','=',True),('consultorio_externo','=',consultorio_externo)]" widget="selection" attrs="{'required': [('type','=','event')],'invisible': ['|',('appointment_id','=',False),('type','!=','event')]}"/>
+						<field name="holiday_name" attrs="{'required': ['&amp;',('type','=','holiday'),('holiday_type','=','feriado')],'invisible': ['|',('type','=','event'),'&amp;',('type','=','holiday'),('holiday_type','!=','feriado')]}"/>
 						<field name="create_user_id" />
-						<field name="phone" />
+						<field name="phone" attrs="{'invisible': [('type','!=','event')]}"/>
 						<field name="consultorio_externo" invisible="1"/>
-
-						
 					</group>
 	        	</xpath>
 
@@ -191,7 +197,8 @@
                 	<filter string="Draft" domain="[('state','=','draft')]" />
                 	<filter string="Done" domain="[('state','=','done')]" />
                 	<filter string="Declined" domain="[('state','=','declined')]" /> -->
-                	<filter icon="terp-go-today" string="Mis Turnos" domain="[('create_user_id','=',uid)]" name="my_events"/>
+                	<filter icon="terp-go-today" string="Mis Turnos" domain="['|',('type','=','holiday'),'&amp;',('type','=','event'),('create_user_id','=',uid)]" name="my_events"/>
+                	
                 	<filter string="Estado" context="{'group_by':'state'}" />
                 </group>
 
@@ -207,7 +214,7 @@
         <field name="view_mode">calendar,tree,form,graph</field>
         <field name="view_id" ref="view_calendar_event_calendar_inherit"/>
         <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
-        <field name="domain">[('type','=','event')]</field>
+        <field name="domain">[('type','in',['event','holiday'])]</field>
         <field name="context">{'default_type': 'event','search_default_my_events': 1}</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
@@ -220,8 +227,27 @@
         </field>
     </record>
 
+    <record id="action_calendar_medical_event_doctor" model="ir.actions.act_window">
+        <field name="name">Mis Turnos</field>
+        <field name="res_model">calendar.event</field>
+        <field name="view_mode">calendar,tree,form,graph</field>
+        <field name="view_id" ref="view_calendar_event_calendar_inherit"/>
+        <field name="search_view_id" ref="calendar.view_calendar_event_search"/>
+        <field name="domain">[('type','in',['event','holiday'])]</field>
+        <field name="context">{'default_type': 'event'}</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click to schedule a new meeting.
+          </p><p>
+            The calendar is shared between employees and fully integrated with
+            other applications such as the employee holidays or the business
+            opportunities.
+          </p>
+        </field>
+    </record>
+
     <record id="action_calendar_medical_holiday" model="ir.actions.act_window">
-        <field name="name">Meetings</field>
+        <field name="name">Licencias / Feriados</field>
         <field name="res_model">calendar.event</field>
         <field name="view_mode">calendar,tree,form</field>
         <field name="view_id" ref="view_calendar_holiday_calendar_inherit"/>
@@ -239,9 +265,10 @@
         </field>
     </record>
 
-		<menuitem name="Medical Calendar" id="medical_calendar_submenu" parent="medical.medical_root_menu" sequence="1" />
-			<menuitem action="action_calendar_medical_event" id="medical_calendar_menu" parent="medical_calendar_submenu" sequence="1" name="Medical Calendar"/>
-			<menuitem action="action_calendar_medical_holiday" id="medical_calendar_holiday_menu" parent="medical_calendar_submenu" sequence="2" name="Holiday Calendar"/>
+		<menuitem name="Medical Calendar" id="medical_calendar_submenu" parent="medical.medical_root_menu" sequence="10" />
+			<menuitem action="action_calendar_medical_event" id="medical_calendar_menu" parent="medical_calendar_submenu" sequence="1" name="Medical Calendar" groups="medical.group_medical_demo,medical.group_medical_user"/>
+			<menuitem action="action_calendar_medical_event_doctor" id="medical_calendar_menu_doctor" parent="medical_calendar_submenu" sequence="20" name="Mis Turnos" groups="medical_calendar.group_medical_doctor"/>
+			<menuitem action="action_calendar_medical_holiday" id="medical_calendar_holiday_menu" parent="medical_calendar_submenu" sequence="30" name="Holiday Calendar"/>
 
 	</data>
 </openerp>

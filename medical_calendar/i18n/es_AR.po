@@ -92,7 +92,7 @@ msgstr "Licencia"
 #: view:calendar.event:medical_calendar.view_calendar_holiday_calendar_inherit
 #: model:ir.ui.menu,name:medical_calendar.medical_calendar_holiday_menu
 msgid "Holiday Calendar"
-msgstr "Licencias"
+msgstr "Licencias / Feriados"
 
 #. module: medical_calendar
 #: code:addons/medical_calendar/models/medical_calendar.py:86
