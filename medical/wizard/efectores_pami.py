@@ -6,15 +6,13 @@ import time
 import calendar
 from datetime import datetime
 
-CARE_TYPE = [
-            ('1','Atencion Programada a Domicilio'),
-            ('2','Urgencias en Domicilio'),
-            ('3','Atencion telefonica'),
-            ('4', 'Consultorio Externo'),
-            ('5', 'Hospital de Dia Jornada Simple'),
-            ('6', 'Hospital de Dia Jornada Completa'),
-            ('7', 'Atencion en Jurisdicciones Alejadas'),
-        ]
+CARE_TYPE = {'1': 'Atencion Programada a Domicilio',
+            '2': 'Urgencias en Domicilio',
+            '3': 'Atencion telefonica',
+            '4':  'Consultorio Externo',
+            '5':  'Hospital de Dia Jornada Simple',
+            '6':  'Hospital de Dia Jornada Completa',
+            '7':  'Atencion en Jurisdicciones Alejadas',}
 
 class efectores_pami(osv.osv_memory):
     """
@@ -169,7 +167,8 @@ class efectores_pami(osv.osv_memory):
         sin_diagnostico = cr.dictfetchall()
         if len(sin_diagnostico) > 0:
             for sd in sin_diagnostico:
-                outerr+= "La prestacion del paciente: %s, modalidad: %s no tiene diagnostico asignado.\n"%(sd['name'],CARE_TYPE[int(sd['care_type'])][1].upper())
+                
+                outerr+= "La prestacion del paciente: %s, modalidad: %s no tiene diagnostico asignado.\n"%(sd['name'],CARE_TYPE[sd['care_type']].upper())
         appointment_ids = self.pool.get('medical.prestaciones.view').search(cr, uid, args, order='appointment_id')
 
         doctors = []
