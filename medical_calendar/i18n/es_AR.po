@@ -86,7 +86,7 @@ msgstr "Financiadora"
 #. module: medical_calendar
 #: selection:calendar.event,type:0
 msgid "Holiday"
-msgstr "Licencia"
+msgstr "Licencia / Feriado"
 
 #. module: medical_calendar
 #: view:calendar.event:medical_calendar.view_calendar_holiday_calendar_inherit
