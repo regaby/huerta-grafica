@@ -63,7 +63,16 @@ class calendar_event (osv.osv):
         for holiday in self.browse(cr, uid, ids):
             if holiday.start and holiday.stop and holiday.type=='event':
                 if holiday.start[0:10] == holiday.stop[0:10]:
-                    holiday_ids = self.search(cr, uid, [('start','<',holiday.start),('stop','>',holiday.start),('doctor_id','=',holiday.doctor_id.id),('type','=','holiday')])
+                    holiday_ids = self.search(cr, uid, [('start','<',holiday.start),('stop','>',holiday.start),('doctor_id','=',holiday.doctor_id.id),('type','=','holiday'),('holiday_type','=','(Licencia)')])
+                    if len(holiday_ids) > 0:
+                        return False
+        return True
+
+    def _check_feriados(self,cr,uid,ids,context=None):
+        for holiday in self.browse(cr, uid, ids):
+            if holiday.start and holiday.stop and holiday.type=='event':
+                if holiday.start[0:10] == holiday.stop[0:10]:
+                    holiday_ids = self.search(cr, uid, [('start','<',holiday.start),('stop','>',holiday.start),('type','=','holiday'),('holiday_type','=','(Feriado)')])
                     if len(holiday_ids) > 0:
                         return False
         return True
@@ -101,6 +110,8 @@ class calendar_event (osv.osv):
                     raise osv.except_osv(_('Invalid action !'), _('No se puede marcar como presente un turno posterior a la fecha actual'))
                 if not self._check_holidays(cr, uid, ids):
                     raise osv.except_osv(_('Invalid action !'), _('No se puede aprobar este turno porque el especialista tiene una licencia cargada este dia!'))
+                if not self._check_feriados(cr, uid, ids):
+                    raise osv.except_osv(_('Invalid action !'), _('No se puede aprobar este turno porque el dia seleccionado es feriado!'))
             recurrency = self.read(cr, uid, ids, ['recurrency'], context=context)[0]['recurrency']
             if recurrency:
                 new_id = self._detach_one_event(cr, uid, ids[0], context=context)
@@ -171,6 +182,7 @@ class calendar_event (osv.osv):
         (_check_days, 'Ya existe otro turno en el mismo rango horario para el paciente actual!',['start']),
         (_check_days_holiday, 'Ya existe otra licencia en el mismo rango de dias para el profesional actual!',['start']),
         (_check_holidays, 'No se puede crear este turno porque el especialista tiene una licencia cargada este dia!',['doctor_id']),
+        (_check_feriados, 'No se puede crear este turno porque el dia seleccionado es feriado!',['name']),
     ] 
 
     def action_present(self, cr, uid, ids, context=None):
