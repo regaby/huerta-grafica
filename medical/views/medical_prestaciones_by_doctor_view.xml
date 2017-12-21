@@ -1,0 +1,71 @@
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="medical_prestaciones_by_doctor_view_tree">
+			<field name="name">Prestaciones PAMI por Profesional</field>
+			<field name="model">medical.prestaciones.by.doctor.view</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string='Prestaciones PAMI por Profesional'>
+					<field name="doctor"/>
+					<field name="speciality_id"/>
+					<field name="patient"/>
+					<field name="care_type"/>
+					<field name="year"/>
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_medical_prestaciones_by_doctor_view_graph" model="ir.ui.view">
+            <field name="name">medical.prestaciones.by.doctor.view.graph</field>
+            <field name="model">medical.prestaciones.by.doctor.view</field>
+            <field name="arch" type="xml">
+                <graph string="Análisis de Prestaciones" type="pivot">
+                    
+                    <field name="care_type" type="row"/>
+                    
+                </graph>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="action_medical_prestaciones_by_doctor_view">
+			<field name="name">Prestaciones por Profesional</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.prestaciones.by.doctor.view</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+		</record>
+
+		<record id="view_medical_prestaciones_by_doctor_view_filter" model="ir.ui.view">
+			<field name="name">medical.prestaciones.by.doctor.view.select</field>
+			<field name="model">medical.prestaciones.by.doctor.view</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Prestaciones PAMI por Profesional">
+					<newline />
+					<separator orientation="vertical" />
+					<field name="care_type"/>
+					<field name="patient"/>
+					<field name="doctor"/>
+					<field name="speciality_id"/>
+					<field name="year"/>
+					<newline />
+					<group expand="0" string="Agrupar por..." colspan="11" col="11">
+						
+						
+						<filter string="Tipo de Atención" icon="terp-go-month" domain="[]"
+							context="{'group_by':'care_type'}" />
+						<filter string="Profesional" icon="terp-go-month" domain="[]"
+							context="{'group_by':'doctor'}" />
+						<filter string="Especialidad" icon="terp-go-month" domain="[]"
+							context="{'group_by':'speciality_id'}" />
+						<filter string="Afiliado" icon="terp-go-month" domain="[]"
+							context="{'group_by':'patient'}" />
+
+					</group>
+
+				</search>
+			</field>
+		</record>
+
+	</data>
+</openerp>

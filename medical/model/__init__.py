@@ -25,3 +25,4 @@ import medical_view
 import medical_by_pat_view
 import medical_diagnostic_view
 import medical_practice_view
+import medical_by_doctor_view
