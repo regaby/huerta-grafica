@@ -63,12 +63,10 @@ class efectores_pami(osv.osv_memory):
             output += apoint['pat_benefit_code'] + ';' # id_beneficio
         else:
             outerr+= "El Afiliado %s no tiene benificiario asignado.\n"%(apoint['pat_name'])
-            print 'no tiene beneficcc'
         if apoint['pat_relationship_code']:
             output += apoint['pat_relationship_code'] + ';' # id parentesco
         else:
             outerr+= "El Afiliado %s no tiene parentesco asignado.\n"%(apoint['pat_name'])
-            print 'no tiene rellll'
         if apoint['f_fecha_egreso']:
             output += datetime.strptime(apoint['f_fecha_egreso'], '%Y-%m-%d').strftime('%d/%m/%Y') +';' # fecha de egreso
         else:
@@ -150,7 +148,6 @@ class efectores_pami(osv.osv_memory):
         #     year = year +1
         # date_top = str(year)+'-'+str(month)+'-01'
         args = [('f_fecha_practica','>=',date_bottom),('f_fecha_practica','<=',date_top)]
-        print args
 
         sql = """select distinct (ma.id), pat.name, mi.code, ma.care_type
             from medical_appointment ma
@@ -168,7 +165,37 @@ class efectores_pami(osv.osv_memory):
         if len(sin_diagnostico) > 0:
             for sd in sin_diagnostico:
                 
-                outerr+= "La prestacion del paciente: %s, modalidad: %s no tiene diagnostico asignado.\n"%(sd['name'],CARE_TYPE[sd['care_type']].upper())
+                outerr+= "La prestacion del paciente: %s, modalidad: %s no tiene DIAGNOSTICO asignado.\n"%(sd['name'],CARE_TYPE[sd['care_type']].upper())
+
+        sql = """select ma.patient, doc.name, ma.care_type, ma.appointment_date
+            from medical_appointment_practice map
+            join medical_appointment ma on (map.appointment_id=ma.id) 
+            join res_partner doc on (ma.doctor=doc.id)
+            where patient is null
+            and f_fecha_practica between '%s' and '%s'
+        """%(date_bottom,date_top)
+        cr.execute(sql)
+        sin_paciente = cr.dictfetchall()
+        if len(sin_paciente) > 0:
+            for sd in sin_paciente:
+                
+                outerr+= "La prestacion del profesional: %s, modalidad: %s, fecha: %s no tiene PACIENTE asignado.\n"%(sd['name'],CARE_TYPE[sd['care_type']].upper(),sd['appointment_date'])
+
+        sql = """select ma.patient,  pat.name, ma.care_type, ma.appointment_date
+            from medical_appointment_practice map
+            join medical_appointment ma on (map.appointment_id=ma.id) 
+            join res_partner pat on (ma.patient=pat.id)
+            where ma.doctor is null
+            and f_fecha_practica between '%s' and '%s'
+        """%(date_bottom,date_top)
+        cr.execute(sql)
+        sin_profesional = cr.dictfetchall()
+        if len(sin_profesional) > 0:
+            for sd in sin_profesional:
+                
+                outerr+= "La prestacion del paciente: %s, modalidad: %s no tiene PROFESIONAL asignado.\n"%(sd['name'],CARE_TYPE[sd['care_type']].upper())
+
+
         appointment_ids = self.pool.get('medical.prestaciones.view').search(cr, uid, args, order='appointment_id')
 
         doctors = []
@@ -356,8 +383,6 @@ class efectores_pami(osv.osv_memory):
                 output += pat.dni + ';' # nro de documento
             else:
                 outerr+= "El afiliado %s no tiene DNI asignado.\n"%(pat.complete_name)
-                print pat
-                print pat.name
             if pat.marital_status: 
                 output += pat.marital_status + ';' 
             else: 
@@ -414,21 +439,14 @@ class efectores_pami(osv.osv_memory):
                 output += pat.benefit_id.code + ';' # id beneficio
             else:
                 outerr+= "El afiliado %s no tiene codigo de beneficio relacionado.\n"%(pat.complete_name)
-                print pat
-                print pat.name
 
             if pat.relationship_id.code:
                 output += pat.relationship_id.code + ';' # id parentesco
             else:
                 outerr+= "El afiliado %s no tiene el campo parentesco asignado.\n"%(pat.complete_name)
-                print pat
-                print pat.name
                 
             output += ';;;;;;;\n' # id_sucursal, id_agencia, id_corresponsalia, id_afjp, vto_afiliado, f_formulario, fecha_baja, codigo_baja
         output += 'PRESTACIONES\n'
-
-        print appointment_ids
-        print len(appointment_ids)
 
         v_app = 0
 
@@ -436,7 +454,6 @@ class efectores_pami(osv.osv_memory):
         where id in (%s)
         order by appointment_id, f_fecha_practica
         """%(','.join(str(x) for x in appointment_ids))
-        print sql
         # ids = ('where ai.id in (%s)'%','.join(str(x) for x in form['invoice_ids']))
         cr.execute(sql)
         appoint_group = cr.dictfetchall()
@@ -455,10 +472,6 @@ class efectores_pami(osv.osv_memory):
 
         output += 'MEDICACIONXAMBULATORIOPSI\n'
         output += 'FIN AMBULATORIOPSI\n'
-
-
-        #print output
-        #print outerr
 
         MONTH = {1: 'Ene',
                 2: 'Feb',
