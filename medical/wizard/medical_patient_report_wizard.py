@@ -16,8 +16,9 @@ class medical_patient_report_wizard(osv.osv_memory):
         'doctor_id': fields.many2one('res.partner', 'Profesional', domain=[('is_doctor','=',True)]),
         'patient_id': fields.many2one('res.partner', 'Patient', domain=[('is_patient','=',True)]),
         'city_id' : fields.many2one('res.department.city','Ciudad'),
-        'mostrar_pacientes': fields.boolean('Mostrar detalle de pacientes?')
+        'mostrar_pacientes': fields.boolean('Mostrar detalle de pacientes?'),
         #'product_id': fields.many2one('product.product', 'Producto'),
+        'year': fields.char('Periodo',required=True)
     }
 
     def _get_inicio_mes(self, cr, uid, context=None):
@@ -48,20 +49,7 @@ class medical_patient_report_wizard(osv.osv_memory):
         }
         return {
             'type': 'ir.actions.report.xml',
-            'report_name': 'medical_patient_report',
-            'datas': datas,
-        }
-
-    def print_report_care_type(self, cr, uid, ids, context=None):
-        #wizard = self.browse(cr, uid, ids)[0]
-        datas = {
-             'ids': [],
-             'model': 'medical.patient.report.wizard',
-             'form': self.read(cr, uid, ids)[0]
-        }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'medical_care_type_report',
+            'report_name': 'medical_prestaciones_by_doctor_report',
             'datas': datas,
         }
         

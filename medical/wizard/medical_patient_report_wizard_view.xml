@@ -9,13 +9,14 @@
             <form string="Reporte Prestaciones" version="7.0">
                 <group col="2" fill="0" height="400">
                     <group colspan="2">
-                        <field name="date_from"/>
+                        <!-- <field name="date_from"/>
                         <field name="date_to"/>
                         <newline />
                         <field name="doctor_id" />
                         <field name="patient_id" />
                         <field name="city_id" />
-                        <field name="mostrar_pacientes" />
+                        <field name="mostrar_pacientes" /> -->
+                        <field name="year" />
                         
                     </group>
                     
@@ -23,7 +24,7 @@
                 <footer>
                         <button special="cancel" icon="gtk-cancel" string="Cancelar"/>
                         <button type="object" name="print_report" icon="gtk-print" string="Generar reporte"/>
-                        <button type="object" name="print_report_care_type" icon="gtk-print" string="Generar reporte por Tipo de Atención"/>
+                        <!-- <button type="object" name="print_report_care_type" icon="gtk-print" string="Generar reporte por Tipo de Atención"/> -->
                     </footer>
             </form>
             </field>
