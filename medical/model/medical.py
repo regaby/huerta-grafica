@@ -319,6 +319,15 @@ class medical_partner(osv.osv):
             return {'value': val}
         return {}
 
+    def unlink(self, cr, uid, ids, context=None):
+        appointment_pool = self.pool.get('medical.appointment')
+        is_patient = self.read(cr, uid, ids, ['is_patient'], context=context)
+        if is_patient:
+            appoint_ids = appointment_pool.search(cr, uid, [('patient','=',ids)])
+            if len(appoint_ids)>0:
+                raise osv.except_osv(_('Invalid action !'), _('No se puede eliminar un paciente que tiene prestaciones asignadas, si quiere darlo de baja, complete el campo fecha de baja'))
+        return super(medical_partner, self).unlink(cr, uid, unlink_ids, context=context)
+
     _columns = {
         'is_patient' : fields.boolean('Patient', help="Check if the partner is a patient"),
         'is_doctor' : fields.boolean('Doctor', help="Check if the partner is a doctor"),
@@ -635,9 +644,9 @@ class medical_appointment (osv.osv):
         return {'value': values}
     
     _columns = {
-        'doctor' : fields.many2one ('res.partner', 'Physician',domain=[('is_doctor', '=', "1")], help="Physician's Name"),
+        'doctor' : fields.many2one ('res.partner', 'Physician',domain=[('is_doctor', '=', "1")], help="Physician's Name", ondelete='restrict'),
         'name' : fields.char ('Appointment ID', size=64, readonly=True, required=False),
-        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name"),
+        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", ondelete='restrict'),
         'insurance_id':fields.related('patient', 'benefit_id', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'appointment_date' : fields.date ('Date'),
         'institution' : fields.many2one ('res.partner', 'Health Center', domain=[('is_institution', '=', "1")], help="Medical Center"),

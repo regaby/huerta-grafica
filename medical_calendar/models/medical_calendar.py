@@ -152,10 +152,10 @@ class calendar_event (osv.osv):
         return [('id', 'in', map(lambda x:x[0], res))]
 
     _columns = {
-        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", readonly=True, states={'draft':[('readonly',False)]}),
+        'patient' : fields.many2one ('res.partner','Patient', domain=[('is_patient', '=', "1")], help="Patient Name", readonly=True, states={'draft':[('readonly',False)]}, ondelete='restrict'),
         'practice_id' : fields.many2one ('medical.practice', 'Practice', readonly=True, states={'draft':[('readonly',False)]}),
-        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', readonly=True, states={'draft':[('readonly',False)]}),
-        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", readonly=True, required=False, states={'draft':[('readonly',False)],'holiday':[('readonly',False)]}),
+        'appointment_id' : fields.many2one ('medical.appointment', 'Appointment', readonly=True, states={'draft':[('readonly',False)]}, ondelete='restrict'),
+        'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", readonly=True, required=False, states={'draft':[('readonly',False)],'holiday':[('readonly',False)]}, ondelete='restrict'),
         'insurance_id':fields.related('patient', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'consultorio_externo': fields.boolean('Consultorio Externo'),
         'name': fields.char('Meeting Subject'),
