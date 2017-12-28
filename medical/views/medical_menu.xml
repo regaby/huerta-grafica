@@ -106,10 +106,17 @@
                     />
 
                     <menuitem
+                        action="action_medical_prestaciones_by_speciality_view"
+                        id="menu_action_medical_prestaciones_by_speciality_view"
+                        parent="medical_efectores_pami_submenu"
+                        sequence="5"
+                    />
+
+                    <menuitem
                         action="action_medical_patient_report_wizard"
                         id="menu_report_medical_patient_report_wizard"
                         parent="medical_efectores_pami_submenu"
-                        sequence="5"
+                        sequence="10"
                     />
 
                     

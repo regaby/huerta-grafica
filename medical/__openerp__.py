@@ -48,6 +48,7 @@ This module provide :
         'views/medical_prestaciones_view.xml',
         'views/medical_prestaciones_by_pat_view.xml',
         'views/medical_prestaciones_by_doctor_view.xml',
+        'views/medical_prestaciones_by_speciality_view.xml',
         # 'views/medical_turno_view.xml',
         'views/medical_insurance_view.xml',
         'views/medical_practice_view.xml',

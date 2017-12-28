@@ -1,0 +1,57 @@
+<openerp>
+	<data>
+		<record model="ir.ui.view" id="medical_prestaciones_by_speciality_view_tree">
+			<field name="name">Prestaciones PAMI por Especialidad</field>
+			<field name="model">medical.prestaciones.by.speciality.view</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string='Prestaciones PAMI por Especialidad'>
+					<field name="year"/>
+					<field name="patient"/>
+					<field name="psiq"/>
+					<field name="psicol"/>
+					<field name="psicop"/>
+					
+				</tree>
+			</field>
+		</record>
+
+		<record id="action_medical_prestaciones_by_speciality_view_graph" model="ir.ui.view">
+            <field name="name">medical.prestaciones.by.speciality.view.graph</field>
+            <field name="model">medical.prestaciones.by.speciality.view</field>
+            <field name="arch" type="xml">
+                <graph string="Análisis de Prestaciones" type="pivot">
+                    
+                    <field name="patient" type="row"/>
+                    
+                </graph>
+            </field>
+        </record>
+
+		<record model="ir.actions.act_window" id="action_medical_prestaciones_by_speciality_view">
+			<field name="name">Prestaciones por Especialidad</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">medical.prestaciones.by.speciality.view</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,graph</field>
+		</record>
+
+		<record id="view_medical_prestaciones_by_speciality_view_filter" model="ir.ui.view">
+			<field name="name">medical.prestaciones.by.speciality.view.select</field>
+			<field name="model">medical.prestaciones.by.speciality.view</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search Prestaciones PAMI por Especialidad">
+					<newline />
+					<separator orientation="vertical" />
+					<field name="year"/>
+					<field name="patient"/>
+					<filter string="Psicologia + Psiquiatria" domain="['&amp;',('psicol','&gt;',0),('psiq','&gt;',0)]" />
+					<filter string="Psicologia + Psicopedagogia" domain="['&amp;',('psicol','&gt;',0),('psicop','&gt;',0)]" />
+					<filter string="Psicologia + Psiquiatria + Psicopedagogia" domain="['&amp;',('psiq','&gt;',0),'&amp;',('psicol','&gt;',0),('psicop','&gt;',0)]" />
+				</search>
+			</field>
+		</record>
+
+	</data>
+</openerp>
