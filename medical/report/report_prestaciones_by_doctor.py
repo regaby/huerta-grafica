@@ -45,14 +45,19 @@ class Parser(report_sxw.rml_parse):
         uid = self.uid
         form = self.localcontext['data']['form']
         periodo = form['year'] 
+        doctor_id = form['doctor_id']
+        w_and = ''
+        if doctor_id:
+            w_and = 'and doctor = %d'%(doctor_id[0])
         sql = """select doc.name as doctor, pat.name as patient, count(*) as cantidad
                 from medical_prestaciones_by_doctor_view v
                 join res_partner doc on (doc.id=v.doctor)
                 join res_partner pat on (pat.id=v.patient)
                 where  year='%s'
+                %s
                 group by doc.name, pat.name
                 order by doc.name
-            """%(periodo)
+            """%(periodo,w_and)
         cr.execute(sql)
         ret = cr.dictfetchall()
         
@@ -102,10 +107,15 @@ class Parser(report_sxw.rml_parse):
         uid = self.uid
         form = self.localcontext['data']['form']
         periodo = form['year'] 
+        doctor_id = form['doctor_id']
+        w_and = ''
+        if doctor_id:
+            w_and = 'and doctor = %d'%(doctor_id[0])
         sql = """select count(*) as total
                 from medical_prestaciones_by_doctor_view v
                 where  year='%s'
-            """%(periodo)
+                %s
+            """%(periodo, w_and)
         cr.execute(sql)
         ret = cr.dictfetchall()
         return ret[0]['total']

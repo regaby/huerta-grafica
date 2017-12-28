@@ -17,6 +17,7 @@
                         <field name="city_id" />
                         <field name="mostrar_pacientes" /> -->
                         <field name="year" />
+                        <field name="doctor_id" />
                         
                     </group>
                     
