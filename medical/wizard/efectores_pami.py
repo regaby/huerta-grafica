@@ -4,7 +4,7 @@ from openerp.osv import fields,osv
 from openerp.tools.translate import _
 import time
 import calendar
-from datetime import datetime
+from datetime import datetime, timedelta
 
 CARE_TYPE = {'1': 'Atencion Programada a Domicilio',
             '2': 'Urgencias en Domicilio',
@@ -104,7 +104,7 @@ class efectores_pami(osv.osv_memory):
         output += '0;' # c_ambulatorio
         output += '1;' # ni_codpresta
         output += apoint['pat_practice_code'] + ';' # vch_codprestacion
-        output += datetime.strptime(apoint['f_fecha_practica'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') +';' # fecha que se realizó la práctica
+        output +=  (datetime(*time.strptime(apoint['f_fecha_practica'], "%Y-%m-%d %H:%M:%S")[0:5])-timedelta(hours=3)).strftime("%d/%m/%Y %H:%M") + ';'
         output += str(apoint['q_cantidad']) + ';' # cantidad de practicas realizadas
         output += '0;' # c_prestador_solicita
         output += '0\n' # c_profesional_solicita
