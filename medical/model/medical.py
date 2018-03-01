@@ -457,7 +457,7 @@ class medical_partner(osv.osv):
         demo_record = self.browse(cr,uid,ids,context=context)[0]
         if demo_record.has_insurance == False:
             return True
-        partner_ids = self.search(cr, uid, [('dni','=',demo_record.dni),('active','=',True)])
+        partner_ids = self.search(cr, uid, [('dni','=',demo_record.dni),('document_type','=',demo_record.document_type),('active','=',True)])
         partner_ids.remove(ids[0])
         if len(partner_ids)>0:
             return False
