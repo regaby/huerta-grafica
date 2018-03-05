@@ -39,6 +39,8 @@ This module provide :
         'security/ir.model.access.csv',
         'views/medical_calendar_view.xml',
         'views/my_css.xml',
+        'wizard/medical_calendar_report_wizard_view.xml',
+        'report/medical_calendar_report.xml',
         
     ],
     'demo_xml': [],

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record id="report_medical_calendar_report" model="ir.actions.report.xml">
+        <field name="name">Reporte Ausencias</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">medical.calendar.report.wizard</field>
+        <field name="report_name">medical_calendar_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-odt</field>
+        <field name="parser_loc">medical_calendar/report/medical_calendar_report.py</field>
+        <field name="report_rml">medical_calendar/report/medical_calendar_report.odt</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
+    </data>
+</openerp>
+

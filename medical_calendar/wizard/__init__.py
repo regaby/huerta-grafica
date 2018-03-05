@@ -19,6 +19,4 @@
 #    along with this program.  If not, see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-import models
-import wizard
-import report
+import medical_calendar_report_wizard
