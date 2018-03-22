@@ -326,7 +326,7 @@ class medical_partner(osv.osv):
             appoint_ids = appointment_pool.search(cr, uid, [('patient','=',ids)])
             if len(appoint_ids)>0:
                 raise osv.except_osv(_('Invalid action !'), _('No se puede eliminar un paciente que tiene prestaciones asignadas, si quiere darlo de baja, complete el campo fecha de baja'))
-        return super(medical_partner, self).unlink(cr, uid, unlink_ids, context=context)
+        return super(medical_partner, self).unlink(cr, uid, ids, context=context)
 
     _columns = {
         'is_patient' : fields.boolean('Patient', help="Check if the partner is a patient"),
@@ -457,7 +457,7 @@ class medical_partner(osv.osv):
         demo_record = self.browse(cr,uid,ids,context=context)[0]
         if demo_record.has_insurance == False:
             return True
-        partner_ids = self.search(cr, uid, [('dni','=',demo_record.dni),('document_type','=',demo_record.document_type),('active','=',True)])
+        partner_ids = self.search(cr, uid, [('dni','=',demo_record.dni),('document_type','=',demo_record.document_type),('active','=',True),('is_patient','=',demo_record.is_patient)])
         partner_ids.remove(ids[0])
         if len(partner_ids)>0:
             return False
