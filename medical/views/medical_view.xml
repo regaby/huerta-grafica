@@ -149,7 +149,7 @@
                     <field name="cuit" placeholder="CUIT" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)],'required': [('is_institution','=', True)]}"/>
                     <field name="active"/>
                     <field name="has_insurance"/>
-                    <field name="has_relationship" />
+                    <field name="has_relationship" invisible="True"/>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="after">
                 	<field name="street_number" placeholder="Street Number"/>
