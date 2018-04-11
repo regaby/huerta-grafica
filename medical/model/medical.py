@@ -201,7 +201,7 @@ medical_benefit_type ()
 class medical_benefit(osv.osv):
     _name = "medical.benefit"
     _columns = {
-        'code' : fields.char ('Nro. Obra Social', size=12, required="True"),
+        'code' : fields.char ('Nro. Obra Social', size=120, required="True"),
         'name' :fields.char ('Beneficiario', size=128 ),
         'benefit_type_id': fields.many2one('medical.benefit.type','Benefit Type'),
         'start_date': fields.date('Start Date', help="Fecha en la cual se ingresaron los datos del beneficio", required="True"),
@@ -249,8 +249,9 @@ class medical_benefit(osv.osv):
         code = demo_record.code
         if re.search(r"\s", code):
             raise osv.except_osv(_('Error'),_('El nro. de obra social no puede contener espacios.') )  
-        if len(code)!=12:
-            raise osv.except_osv(_('Error'),_('El nro. de obra social debe tener 12 dígitos.') )  
+        size = demo_record.insurance_id.size
+        if size and len(code)!=size:
+            raise osv.except_osv(_('Error'),_('El nro. de obra social debe tener %s dígitos.')%(size) )  
         try:
             int(code)
         except:
@@ -381,6 +382,7 @@ class medical_partner(osv.osv):
         'cuil': fields.char('CUIL', size=15, required=False, select=True, ),
         'benefit_id': fields.many2one('medical.benefit','Benefit'),
         'relationship_id': fields.many2one('medical.patient.relationship','Relationship'),
+        'has_relationship': fields.boolean('Tiene parentesco?'),
 
         'id_sucursal': fields.integer('Id Sucursal'),
         'id_agencia': fields.integer('Id Agencia'),
@@ -511,6 +513,14 @@ class medical_partner(osv.osv):
             city = self.pool.get('medical.correspondent').browse(cr, uid, correspondent_id, context)
             val = {'agency_id':city.agency_id.id,
                    'subsidiary_id':city.subsidiary_id.id,}
+            
+            return {'value': val}
+        return {}
+
+    def onchange_benefit_id(self, cr, uid, ids, benefit_id, context=None):
+        if benefit_id:
+            benefit = self.pool.get('medical.benefit').browse(cr, uid, benefit_id, context)
+            val = {'has_relationship':benefit.insurance_id.has_relationship}
             
             return {'value': val}
         return {}
