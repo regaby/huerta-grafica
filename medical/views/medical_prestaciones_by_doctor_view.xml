@@ -62,6 +62,8 @@
 							context="{'group_by':'speciality_id'}" />
 						<filter string="Afiliado" icon="terp-go-month" domain="[]"
 							context="{'group_by':'patient'}" />
+						<filter string="Financiadora" icon="terp-go-month" domain="[]"
+							context="{'group_by':'insurance_id'}" />
 
 					</group>
 
