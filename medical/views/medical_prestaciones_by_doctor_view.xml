@@ -10,6 +10,7 @@
 					<field name="speciality_id"/>
 					<field name="patient"/>
 					<field name="care_type"/>
+					<field name="insurance_id"/>
 					<field name="year"/>
 				</tree>
 			</field>
@@ -48,6 +49,7 @@
 					<field name="doctor"/>
 					<field name="speciality_id"/>
 					<field name="year"/>
+					<field name="insurance_id"/>
 					<newline />
 					<group expand="0" string="Agrupar por..." colspan="11" col="11">
 						

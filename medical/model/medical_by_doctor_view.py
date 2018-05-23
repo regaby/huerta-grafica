@@ -43,14 +43,15 @@ class medical_prestaciones_by_doctor_view(osv.osv):
             ('6', 'Hospital de Dia Jornada Completa'),
             ('7', 'Atención en Jurisdicciónes Alejadas'),
         ], 'Tipo de Atención'), ##---- Tipo de atencion
-        'year': fields.char('Período')
+        'year': fields.char('Período'),
+        'insurance_id': fields.many2one('medical.insurance','Financiadora'),
     }
 
     def init(self, cr):
       tools.drop_view_if_exists(cr, 'medical_prestaciones_by_doctor_view')
       cr.execute("""
             CREATE OR REPLACE VIEW medical_prestaciones_by_doctor_view AS
-                select map.id, ma.patient, ma.doctor, doc.speciality_id, left(f_fecha_practica::text,7) as year, ma.care_type, doc.city_id as doc_city_id
+                select map.id, ma.patient, map.doctor_id as doctor, doc.speciality_id, left(f_fecha_practica::text,7) as year, ma.care_type, doc.city_id as doc_city_id, mb.insurance_id
 				from medical_appointment_practice map
 				join medical_appointment ma on (map.appointment_id=ma.id)
 				join res_partner doc on (map.doctor_id=doc.id)
@@ -60,7 +61,7 @@ class medical_prestaciones_by_doctor_view(osv.osv):
 				join medical_benefit mb on (pat.benefit_id=mb.id)
 				join medical_insurance mi on (mb.insurance_id=mi.id)
 			where pat.end_date is null
-            and mi.code ='PAMI'
+            --and mi.code ='PAMI'
             """)
 
 medical_prestaciones_by_doctor_view()  
