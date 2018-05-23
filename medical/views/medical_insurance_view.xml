@@ -12,6 +12,7 @@
 						<field name="code"></field>
 						<field name="size"></field>
 						<field name="has_relationship"></field>
+						<field name="has_code"></field>
                         <field name="description"></field>
 					</group>
 				</form>

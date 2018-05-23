@@ -37,9 +37,13 @@ class medical_insurance (osv.osv):
         'description': fields.text ('Descripción'),
         'size': fields.integer('Longitud Nro. Obra Social'),
         'has_relationship': fields.boolean('Tiene parentesco?'),
+        'has_code': fields.boolean('Tiene Nro. de obra social?'),
     }
     _sql_constraints = [
         ('code_uniq', 'unique (code)', 'The code must be unique'),
         ('name_uniq', 'unique (name)', 'The name must be unique')
     ]
+    _defaults = {
+        'has_code': True,
+    }
 medical_insurance ()

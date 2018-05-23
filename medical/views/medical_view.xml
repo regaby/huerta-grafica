@@ -143,13 +143,14 @@
                 </xpath>
                 <xpath expr="//field[@name='active']" position="replace"/>
                 <xpath expr="//field[@name='email']" position="after">
-                	<field name="document_type" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
-                    <field name="dni" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
+                	<field name="document_type" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_code','=',True)]}"/>
+                    <field name="dni" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_code','=',True)]}"/>
                     <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
                     <field name="cuit" placeholder="CUIT" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)],'required': [('is_institution','=', True)]}"/>
                     <field name="active"/>
-                    <field name="has_insurance"/>
+                    <field name="has_insurance" invisible="True"/>
                     <field name="has_relationship" invisible="True"/>
+                    <field name="has_code" invisible="True"/>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="after">
                 	<field name="street_number" placeholder="Street Number"/>
@@ -825,10 +826,11 @@
                         <page string="Datos Afiliado">
                             <group>
                                 <field name="name" required="1"/>
-                                <field name="insurance_id" required="1" options="{'no_create': True}"/>
-                                <field name="code"/>
+                                <field name="insurance_id" required="1" options="{'no_create': True}" widget="selection" on_change="onchange_insurance_id(insurance_id)"/>
+                                <field name="code" attrs="{'required': [('has_code','=',True)]}"/>
                                 <field name="benefit_type_id"/>
-                                <field name="start_date"/>
+                                <field name="start_date" />
+                                <field name="has_code" invisible="1"/>
                             </group>
                         </page>
                         <page string="Afiliados">

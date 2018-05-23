@@ -201,14 +201,22 @@ medical_benefit_type ()
 class medical_benefit(osv.osv):
     _name = "medical.benefit"
     _columns = {
-        'code' : fields.char ('Nro. Obra Social', size=120, required="True"),
+        'code' : fields.char ('Nro. Obra Social', size=120, required="False"),
         'name' :fields.char ('Beneficiario', size=128 ),
         'benefit_type_id': fields.many2one('medical.benefit.type','Benefit Type'),
         'start_date': fields.date('Start Date', help="Fecha en la cual se ingresaron los datos del beneficio", required="True"),
         'patient_ids': fields.one2many('res.partner','benefit_id','Patients'),###
-        'insurance_id': fields.many2one('medical.insurance','Financiadora'),
+        'insurance_id': fields.many2one('medical.insurance','Financiadora', required="True"),
+        'has_code': fields.boolean('Tiene Nro. de obra social?'),
         #'instution_id': fields.many2one('res.partner','Institution', required="True"),
     }
+
+    def onchange_insurance_id(self, cr, uid, ids, insurance_id, context=None):
+        if insurance_id:
+            insurance_id = self.pool.get('medical.insurance').browse(cr, uid, insurance_id, context)
+            val = {'has_code':insurance_id.has_code}
+            return {'value': val}
+        return {}
 
     def name_get(self, cr, user, ids, context={}):
         if not len(ids):
@@ -222,7 +230,7 @@ class medical_benefit(osv.osv):
             if code and name:
                 complete_name = '%s - %s' % (code,name)
             else:
-                complete_name = code
+                complete_name = name
             return (d['id'], complete_name)
         result = map(_name_get, self.read(cr, user, ids, ['name', 'code'], context))
         return result
@@ -247,6 +255,8 @@ class medical_benefit(osv.osv):
     def _check_code(self,cr,uid,ids,context=None):
         demo_record = self.browse(cr,uid,ids,context=context)[0]
         code = demo_record.code
+        if not code:
+            return True
         if re.search(r"\s", code):
             raise osv.except_osv(_('Error'),_('El nro. de obra social no puede contener espacios.') )  
         size = demo_record.insurance_id.size
@@ -383,6 +393,7 @@ class medical_partner(osv.osv):
         'benefit_id': fields.many2one('medical.benefit','Benefit'),
         'relationship_id': fields.many2one('medical.patient.relationship','Relationship'),
         'has_relationship': fields.boolean('Tiene parentesco?'),
+        'has_code': fields.boolean('Tiene Nro. de obra social?'),
 
         'id_sucursal': fields.integer('Id Sucursal'),
         'id_agencia': fields.integer('Id Agencia'),
@@ -520,7 +531,9 @@ class medical_partner(osv.osv):
     def onchange_benefit_id(self, cr, uid, ids, benefit_id, context=None):
         if benefit_id:
             benefit = self.pool.get('medical.benefit').browse(cr, uid, benefit_id, context)
-            val = {'has_relationship':benefit.insurance_id.has_relationship}
+            val = {'has_relationship':benefit.insurance_id.has_relationship,
+            'has_code':benefit.insurance_id.has_code,
+            }
             
             return {'value': val}
         return {}
