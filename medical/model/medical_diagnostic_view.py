@@ -54,6 +54,7 @@ class medical_diagnostic_view(osv.osv):
             ('7', 'Atención en Jurisdicciónes Alejadas'),
         ], 'Tipo de Atención'), ##---- Tipo de atencion 
         'm_tipo_diagnostico': fields.selection([('1','Principal'),('2','Secundario')],'Tipo de Diagnóstico', readonly=True),
+        'year': fields.char('Período')
     }
 
     def init(self, cr):
@@ -62,7 +63,8 @@ class medical_diagnostic_view(osv.osv):
             CREATE OR REPLACE VIEW medical_diagnostic_view AS
                 select mad.id, ma.patient as patient_id, --map.f_fecha_practica, map.practice_id, map.doctor_id, 
                 mad.diagnostic_id, ma.symptom, mad.m_tipo_diagnostico,
-                    pat.attention_city_id, pat.attention_department_id, pat.sex, extract(year from age(pat.dob)) as age, ma.care_type, ma.appointment_date
+                    pat.attention_city_id, pat.attention_department_id, pat.sex, extract(year from age(pat.dob)) as age, ma.care_type, ma.appointment_date,
+                    left(appointment_date::text,7) as year
                 from --medical_appointment_practice map join 
                 medical_appointment ma --on (map.appointment_id=ma.id)
                 join medical_appointment_diagnostic mad on (mad.appointment_id=ma.id)

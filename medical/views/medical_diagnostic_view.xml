@@ -56,6 +56,7 @@
 					<field name="age"/>
 					<field name="attention_city_id"/>
 					<field name="attention_department_id"/>
+					<field name="year"/>
 					<newline />
 					<group expand="0" string="Agrupar por..." colspan="11" col="11">
 						

@@ -50,6 +50,7 @@ class medical_practice_view(osv.osv):
             ('6', 'Hospital de Dia Jornada Completa'),
             ('7', 'Atención en Jurisdicciónes Alejadas'),
         ], 'Tipo de Atención'), ##---- Tipo de atencion 
+        'year': fields.char('Período')
     }
 
     def init(self, cr):
@@ -57,7 +58,8 @@ class medical_practice_view(osv.osv):
       cr.execute("""
             CREATE OR REPLACE VIEW medical_practice_view AS
                 select map.id, ma.patient as patient_id, map.f_fecha_practica, map.practice_id, map.doctor_id, 
-                    pat.attention_city_id, pat.attention_department_id, pat.sex, extract(year from age(pat.dob)) as age, ma.care_type
+                    pat.attention_city_id, pat.attention_department_id, pat.sex, extract(year from age(pat.dob)) as age, ma.care_type,
+                    left(f_fecha_practica::text,7) as year
                 from medical_appointment_practice map join 
                 medical_appointment ma on (map.appointment_id=ma.id)
                 join res_partner pat on (ma.patient=pat.id)
