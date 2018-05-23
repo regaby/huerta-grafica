@@ -148,7 +148,7 @@
                     <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
                     <field name="cuit" placeholder="CUIT" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)],'required': [('is_institution','=', True)]}"/>
                     <field name="active"/>
-                    <field name="has_insurance" invisible="True"/>
+                    <field name="has_insurance" />
                     <field name="has_relationship" invisible="True"/>
                     <field name="has_code" invisible="True"/>
                 </xpath>
@@ -177,9 +177,9 @@
 	                		<!-- <field name="dni" attrs="{'required': [('is_patient','=', True)]}"/> -->
 	                		<!-- <field name="insurance" attrs="{'required': [('is_patient','=', True)]}"/>-->
 	                		<!-- <field name="insurance_number" attrs="{'required': [('is_patient','=', True)]}" placeholder="xxxxxxxxxxxxxxx/nn" on_change="onchange_insurance_number(insurance_number)"/>/>  -->
-	                		<field name="benefit_id" attrs="{'required': [('is_patient','=', True),('has_insurance','=',True)],'invisible':[('has_insurance','=',False)]}" on_change="onchange_benefit_id(benefit_id)"/>
+	                		<field name="benefit_id" attrs="{'required': [('is_patient','=', True)]}" on_change="onchange_benefit_id(benefit_id)"/>
 	                		<field name="relationship_id" attrs="{'required': [('is_patient','=', True),('has_relationship','=',True)],'invisible':[('has_relationship','=',False)]}" widget="selection"/>
-	                		<field name="insurance_id" attrs="{'invisible':[('has_insurance','=',False)]}"/>
+	                		<field name="insurance_id"/>
                             <newline/>
                             <field name="marital_status"/>
 	                		<field name="nacionality"/>
