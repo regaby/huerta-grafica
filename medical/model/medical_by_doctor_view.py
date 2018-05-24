@@ -60,7 +60,7 @@ class medical_prestaciones_by_doctor_view(osv.osv):
 				join res_partner pat on (ma.patient=pat.id)
 				join medical_benefit mb on (pat.benefit_id=mb.id)
 				join medical_insurance mi on (mb.insurance_id=mi.id)
-			where pat.end_date is null
+			--where pat.end_date is null
             --and mi.code ='PAMI'
             """)
 
