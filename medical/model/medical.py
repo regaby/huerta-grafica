@@ -229,8 +229,10 @@ class medical_benefit(osv.osv):
             #     name = '[%s] %s' % (idx, name)
             if code and name:
                 complete_name = '%s - %s' % (code,name)
-            else:
+            elif name:
                 complete_name = name
+            else:
+                complete_name = code
             return (d['id'], complete_name)
         result = map(_name_get, self.read(cr, user, ids, ['name', 'code'], context))
         return result
