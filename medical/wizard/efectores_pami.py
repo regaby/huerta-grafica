@@ -185,7 +185,10 @@ class efectores_pami(osv.osv_memory):
             from medical_appointment_practice map
             join medical_appointment ma on (map.appointment_id=ma.id) 
             join res_partner pat on (ma.patient=pat.id)
-            where ma.doctor is null
+            join medical_benefit mb on (pat.benefit_id=mb.id)
+            join medical_insurance mi on (mb.insurance_id=mi.id)
+            where mi.code='PAMI'
+            and ma.doctor is null
             and f_fecha_practica between '%s' and '%s'
         """%(date_bottom,date_top)
         cr.execute(sql)
@@ -194,6 +197,58 @@ class efectores_pami(osv.osv_memory):
             for sd in sin_profesional:
                 
                 outerr+= "La prestacion del paciente: %s, modalidad: %s no tiene PROFESIONAL asignado.\n"%(sd['name'],CARE_TYPE[sd['care_type']].upper())
+
+        sql = """(select ma.patient, pat.name, ma.care_type, mp.name practica
+            from medical_appointment  ma
+            join medical_appointment_practice map on (ma.id=map.appointment_id)
+            join medical_practice mp on (map.practice_id=mp.id)
+            join res_partner pat on (ma.patient=pat.id)
+            join medical_benefit mb on (pat.benefit_id=mb.id)
+            join medical_insurance mi on (mb.insurance_id=mi.id)
+            where mi.code='PAMI'
+            and f_fecha_practica between '%s' and '%s'
+            and ma.care_type not in ('5','6')
+            and mp.consultorio_externo is null)
+        UNION
+            (select ma.patient, pat.name, ma.care_type, mp.name practica            
+            from medical_appointment  ma
+            join medical_appointment_practice map on (ma.id=map.appointment_id)
+            join medical_practice mp on (map.practice_id=mp.id)
+            join res_partner pat on (ma.patient=pat.id)
+            join medical_benefit mb on (pat.benefit_id=mb.id)
+            join medical_insurance mi on (mb.insurance_id=mi.id)
+            where mi.code='PAMI'
+            and f_fecha_practica between '%s' and '%s'
+            and ma.care_type in ('5','6')
+            and mp.consultorio_externo = true            )
+        """%(date_bottom,date_top,date_bottom,date_top)
+        cr.execute(sql)
+        sin_profesional = cr.dictfetchall()
+        if len(sin_profesional) > 0:
+            for sd in sin_profesional:
+                
+                outerr+= "La prestacion del paciente: %s, modalidad: %s tiene asignada una practica incorrecta: %s.\n"%(sd['name'],CARE_TYPE[sd['care_type']].upper(),sd['practica'])
+
+        sql = """select pat.name, ma.appointment_date
+            from medical_appointment  ma
+                        join medical_appointment_practice map on (ma.id=map.appointment_id)
+                        join medical_practice mp on (map.practice_id=mp.id)
+                        join res_partner pat on (ma.patient=pat.id)
+                        join medical_benefit mb on (pat.benefit_id=mb.id)
+                        join medical_insurance mi on (mb.insurance_id=mi.id)
+                        where mi.code='PAMI'
+                        and f_fecha_practica between '%s' and '%s'
+            and ma.appointment_date > '%s'
+            group by pat.name , ma.appointment_date
+            order by pat.name
+            """%(date_bottom,date_top,date_top)
+        cr.execute(sql)
+        sin_profesional = cr.dictfetchall()
+        if len(sin_profesional) > 0:
+            for sd in sin_profesional:
+                ap_date = datetime.strptime(sd['appointment_date'], '%Y-%m-%d').strftime('%d/%m/%Y')
+                outerr+= "La fecha de prestacion del paciente %s (%s) debe corresponder al mes seleccionado.\n"%(sd['name'],ap_date)
+
 
 
         appointment_ids = self.pool.get('medical.prestaciones.view').search(cr, uid, args, order='appointment_id')
