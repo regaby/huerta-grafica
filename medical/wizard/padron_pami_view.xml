@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_padron_pami_form" model="ir.ui.view">
+            <field name="name">padron.pami.form</field>
+            <field name="model">padron.pami</field>
+            
+            <field name="arch" type="xml">
+                <form string="Padron PAMI" version="7.0">
+                    <group colspan="2" col="4" states="choose">
+                        <label align="0.0" string="Controlar Padron PAMI" colspan="4"/>
+                        <field name="month"/>
+                        <field name="year"/>
+                    </group>
+                    <footer states="choose">
+                        <button special="cancel" icon="gtk-cancel" string="Cancelar"/>
+                        <button type="object" name="generate_file" icon="gtk-go-forward" string="Generar"/>
+                        <field invisible="1" name="state"/>
+                    </footer>
+                    <group colspan="4" col="4" states="get">
+                        <separator colspan="4" string="Archivo generado"/>
+                        <field name="name" invisible="1"/>
+                        <field name="data" nolabel="1" readonly="1" filename="name"/>
+                        <field name="info2" colspan="4" nolabel="1" readonly="True"/>
+                    </group>
+                    <group colspan="4" col="4" states="error">
+                        <separator colspan="4" string="Registros con errores"/>
+                        <field name="info" colspan="4" nolabel="1" readonly="True"/>
+                        <separator colspan="4" string="El proceso no pudo llevarse a cabo"/>
+                    </group>
+                    <footer states="get,error">
+                        <button special="cancel" icon="gtk-cancel" string="Cerrar"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_padron_pami">
+            <field name="name">Controlar Padron PAMI</field>
+            <field name="res_model">padron.pami</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_padron_pami_form" />
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

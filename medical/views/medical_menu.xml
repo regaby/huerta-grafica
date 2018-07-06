@@ -83,6 +83,8 @@
 			<menuitem name="Efectores Pami" id="medical_efectores_pami_submenu" parent="medical_root_menu" sequence="40"  groups="group_medical_user"/>
 		 		<menuitem action="action_efectores_pami" id="medical_efectores_pami_menu" parent="medical_efectores_pami_submenu" sequence="1" />
 
+                <menuitem action="action_padron_pami" id="medical_padron_pami_menu" parent="medical_efectores_pami_submenu" sequence="2" />
+
 
                     <menuitem
                         action="action_medical_prestaciones_view"
