@@ -24,7 +24,7 @@ class padron_pami(osv.osv_memory):
     _columns = {
         'data': fields.binary('File', readonly=True),
         'name': fields.char('Filename', 16, readonly=True),
-        
+
         'info': fields.text('Info'),
         'info2': fields.text('Info'),
         'state': fields.selection( ( ('choose','choose'),
@@ -43,7 +43,7 @@ class padron_pami(osv.osv_memory):
          'year': lambda *a: time.gmtime()[0],
          'state': lambda *a: 'choose',
          }
-    
+
     def generate_file(self,cr,uid,ids,context={}):
 
         this = self.browse(cr, uid, ids)[0]
@@ -59,7 +59,7 @@ class padron_pami(osv.osv_memory):
         last_day = calendar.monthrange(year,month)
         date_bottom = str(datetime(year, month, 1))[0:10]
         date_top = str(datetime(year, month, last_day[1]))[0:10]
-        
+
         prestador_id = self.pool.get('res.partner').search(cr, uid, [('is_institution','=',True)])
         prestador_pool = self.pool.get('res.partner').browse(cr, uid, prestador_id, context)
         output += prestador_pool.cuit +';' # CUIT
@@ -75,7 +75,7 @@ class padron_pami(osv.osv_memory):
         output += prestador_pool.user_name+';' # nombre de usuario
         output += prestador_pool.instalation_number + '\n' # nro. de instalacion de efectores
 
-        
+
         # month = int(month) + 1
         # if month == 13:
         #     month = 1
@@ -94,7 +94,10 @@ class padron_pami(osv.osv_memory):
         print cr.query
         result = cr.dictfetchall()
         for r in result:
-            response = urllib.urlopen('http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s'%(r['beneficio'],r['relacion']))
+            try:
+                response = urllib.urlopen('http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s'%(r['beneficio'],r['relacion']))
+            except Exception, e:
+                raise osv.except_osv(_('Error'),_('Error: %s. Beneficio: %s. Relacion: %s' % (e, r['beneficio'],r['relacion'])) )
             headers = response.info()
             data = response.read()
             if 'RED PREVENIR' in data:
@@ -108,7 +111,7 @@ class padron_pami(osv.osv_memory):
         if outerr=="":
             msj = 'Padron correcto'
             out=base64.encodestring(output.encode('utf-8'))
-            self.write(cr, uid, ids, {'state':'get', 
+            self.write(cr, uid, ids, {'state':'get',
                 'info2': msj}, context=context)
         else:
             out=base64.encodestring(outerr.encode('utf-8'))
