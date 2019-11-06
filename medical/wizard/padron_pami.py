@@ -106,7 +106,7 @@ class padron_pami(osv.osv_memory):
                 raise osv.except_osv(_('Error'),_('Error: %s. Beneficio: %s. Relacion: %s' % (e, r['beneficio'],r['relacion'])) )
             headers = response.info()
             data = response.read()
-            _logger.info('%s', data)
+            _logger.info('\n\n\ndata %s', data)
             print 'data', data
             if 'RED PREVENIR' in data:
                 print 'exito'
