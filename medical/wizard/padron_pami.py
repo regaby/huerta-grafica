@@ -106,13 +106,14 @@ class padron_pami(osv.osv_memory):
                 raise osv.except_osv(_('Error'),_('Error: %s. Beneficio: %s. Relacion: %s' % (e, r['beneficio'],r['relacion'])) )
             headers = response.info()
             data = response.read()
-            # print 'data', data
+            print 'data', data
             if 'RED PREVENIR' in data:
                 print 'exito'
                 exito += 1
             else:
                 print 'fallo'
                 outerr+= "Afiliado: %s no esta dado de alta en el padron de PAMI\n"%(r['name'])
+            1/0
 
 
 
