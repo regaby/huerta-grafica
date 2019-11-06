@@ -6,6 +6,9 @@ import time
 import calendar
 from datetime import datetime, timedelta
 import urllib
+import logging
+
+_logger = logging.getLogger(__name__)
 
 CARE_TYPE = {'1': 'Atencion Programada a Domicilio',
             '2': 'Urgencias en Domicilio',
@@ -74,6 +77,7 @@ class padron_pami(osv.osv_memory):
         output += str(prestador_pool.institution_type)+';' # tipo de prestador
         output += prestador_pool.user_name+';' # nombre de usuario
         output += prestador_pool.instalation_number + '\n' # nro. de instalacion de efectores
+        exito = 0
 
 
         # month = int(month) + 1
@@ -95,13 +99,17 @@ class padron_pami(osv.osv_memory):
         result = cr.dictfetchall()
         for r in result:
             try:
-                response = urllib.urlopen('http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s'%(r['beneficio'],r['relacion']))
+                url = 'http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s'%(r['beneficio'],r['relacion'])
+                _logger.info('%s', url)
+                response = urllib.urlopen(url)
             except Exception, e:
                 raise osv.except_osv(_('Error'),_('Error: %s. Beneficio: %s. Relacion: %s' % (e, r['beneficio'],r['relacion'])) )
             headers = response.info()
             data = response.read()
+            # print 'data', data
             if 'RED PREVENIR' in data:
                 print 'exito'
+                exito += 1
             else:
                 print 'fallo'
                 outerr+= "Afiliado: %s no esta dado de alta en el padron de PAMI\n"%(r['name'])
@@ -110,11 +118,13 @@ class padron_pami(osv.osv_memory):
 
         if outerr=="":
             msj = 'Padron correcto'
+            msj += 'Resultado: %s coincidencias de %s\n'%(exito, len(result))
             out=base64.encodestring(output.encode('utf-8'))
             self.write(cr, uid, ids, {'state':'get',
                 'info2': msj}, context=context)
         else:
             out=base64.encodestring(outerr.encode('utf-8'))
+            outerr += 'Resultado: %s coincidencias de %s\n'%(exito, len(result))
             self.write(cr, uid, ids, {'state':'error', 'info':outerr, 'name':''}, context=context)
 
         # se agrega return de vista para la version 7.0, antes el return hacia con self.write, pero esto cerraba el wizard
