@@ -111,10 +111,12 @@ class padron_pami(osv.osv_memory):
             if 'RED PREVENIR' in data:
                 print 'exito'
                 exito += 1
+            elif 'Pagina Rechazada' in data:
+                outerr+= data
+                break
             else:
                 print 'fallo'
                 outerr+= "Afiliado: %s no esta dado de alta en el padron de PAMI\n"%(r['name'])
-            1/0
 
 
 
