@@ -10,8 +10,8 @@
 			<menuitem name="Appointments" id="medical_appointment_submenu" parent="medical_root_menu" sequence="10" />
 		 		<menuitem action="medical_action_form_appointment" id="medical_conf_appointment_add" parent="medical_appointment_submenu" sequence="1" />
 				<!-- <menuitem action="medical_action_form_new_appointment" id="medical_conf_new_appointment" parent="medical_appointment_submenu" sequence="3" /> -->
-	
-		
+
+
 		<!-- Patients -->
 		<!-- <menuitem name="Patients" id="medical_patients_menu" sequence="2" /> -->
 			<menuitem name="Patients" id="medical_patients_submenu" parent="medical_root_menu" sequence="20" />
@@ -30,7 +30,7 @@
             action="action_partner_phisicyan_form" sequence="10"/>
 
             <menuitem name="Análisis" id="medical_report_submenu" parent="medical_root_menu" sequence="40" />
-            
+
             <menuitem id="menu_medical_practice_view" name="Prestaciones por Profesional"
             parent="medical_report_submenu"
             action="action_medical_practice_view" sequence="10"/>
@@ -53,7 +53,7 @@
             parent="medical_configuration_submenu"
             action="action_partner_institution_form" sequence="10"/>
 
-            
+
 
             <menuitem id="menu_medical_speciality" name="Medical Speciality"
             parent="medical_configuration_submenu"
@@ -121,11 +121,13 @@
                         sequence="10"
                     />
 
-                    
-				
-
-				
+                    <menuitem
+                        action="action_medical_patient_report_new"
+                        id="menu_report_medical_patient_report_new"
+                        parent="medical_efectores_pami_submenu"
+                        sequence="11"
+                    />
 
 	</data>
 </openerp>
-		
+

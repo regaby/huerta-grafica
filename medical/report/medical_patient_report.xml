@@ -41,6 +41,19 @@
         <field name="tml_source">file</field>
     </record>
 
+    <record id="report_medical_pacientes_report" model="ir.actions.report.xml">
+        <field name="name">Reporte Pacientes</field>
+        <field name="type">ir.actions.report.xml</field>
+        <field name="model">medical.patient.report.new</field>
+        <field name="report_name">medical_pacientes_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-odt</field>
+        <field name="parser_loc">medical/report/medical_pacientes_report.py</field>
+        <field name="report_rml">medical/report/medical_pacientes_report.ods</field>
+        <field name="parser_state">loc</field>
+        <field name="tml_source">file</field>
+    </record>
+
     </data>
 </openerp>
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_medical_patient_report_new" model="ir.ui.view">
+            <field name="name">medical.patient.report.new</field>
+            <field name="model">medical.patient.report.new</field>
+            <field name="arch" type="xml">
+            <form string="Reporte Pacientes" version="7.0">
+                <group col="2" fill="0" height="400">
+                    <group colspan="2">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <newline />
+                        <field name="psiquiatria" />
+                        <field name="psicologia" />
+                        <field name="psicopedadogia" />
+                        <field name="care_type" />
+                        <field name="insurance_id" widget="selection"/>
+
+                    </group>
+
+                </group>
+                <footer>
+                        <button special="cancel" icon="gtk-cancel" string="Cancelar"/>
+                        <button type="object" name="print_report" icon="gtk-print" string="Generar reporte"/>
+                    </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_medical_patient_report_new" model="ir.actions.act_window">
+            <field name="name">Reporte Pacientes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">medical.patient.report.new</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+<!--
+        <record model="ir.values" id="medical_patient_report_new_values">
+            <field name="model_id" ref="hr.model_hr_employee" />
+            <field name="name">Control de Stock por Departamento</field>
+            <field name="key2">client_print_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_medical_patient_report_new'))" />
+            <field name="key">action</field>
+            <field name="model">hr.attendance</field>
+        </record> -->
+
+
+    </data>
+</openerp>

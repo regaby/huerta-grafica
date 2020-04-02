@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (C) 2004-2010 Tiny SPRL (http://tiny.be). All Rights Reserved
-#    
+#
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ This module provide :
         "base_department_city",
         'report_aeroo',
         ],
-    
+
     "init_xml": [],
     'data': [
         ## VISTAS
@@ -44,6 +44,7 @@ This module provide :
         'security/ir.model.access.csv',
         'wizard/efectores_pami_view.xml',
         'wizard/medical_patient_report_wizard_view.xml',
+        'wizard/medical_patient_report_new.xml',
         'views/medical_view.xml',
         'views/medical_prestaciones_view.xml',
         'views/medical_prestaciones_by_pat_view.xml',

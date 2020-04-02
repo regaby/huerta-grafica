@@ -31,14 +31,14 @@ import logging
 _logger = logging.getLogger(__name__)
 
 CARE_TYPE = [
-            ('1','Atención Programada a Domicilio'),
-            ('2','Urgencias en Domicilio'),
-            ('3','Atención telefónica'),
-            ('4', 'Consultorio Externo'),
-            ('5', 'Hospital de Dia Jornada Simple'),
-            ('6', 'Hospital de Dia Jornada Completa'),
-            ('7', 'Atención en Jurisdicciónes Alejadas'),
-        ]
+    ('1', 'Atención Programada a Domicilio'),
+    ('2', 'Urgencias en Domicilio'),
+    ('3', 'Atención telefónica'),
+    ('4', 'Consultorio Externo'),
+    ('5', 'Hospital de Dia Jornada Simple'),
+    ('6', 'Hospital de Dia Jornada Completa'),
+    ('7', 'Atención en Jurisdicciónes Alejadas'),
+]
 
 
 # DEBUG MODE -- DELETE ME !
@@ -156,34 +156,34 @@ class Country(osv.osv):
         'code': fields.char('Country Code', size=3,
             help='The ISO country code in two chars.\n'
             'You can use this field for quick search.'),
-        
+
     }
 Country()
 
 class DepartmentCity(osv.osv):
-    
+
     _name = 'res.department.city'
     _inherit = 'res.department.city'
     _columns = {
-        
+
         # 'name': fields.char('City', size=50, required=True),
-        # 'municipality': fields.integer('Municipality'),        
+        # 'municipality': fields.integer('Municipality'),
         # 'department_id' : fields.many2one('res.state.department','Department'), # 'state__id' : State relacion a "res.country.state
         # 'zip_city' : fields.integer('Zip'),
         'id_sucursal': fields.integer('Id Sucursal'),
         'id_agencia': fields.integer('Id Agencia'),
         'id_correspon': fields.integer('Id Agencia'),
         'correspondent_id': fields.many2one('medical.correspondent','Correspondent'),
-        
+
     }
-    
+
     sql_constraints = [
-        
+
         ('city_zipe_uniq', 'unique(zipe)', 'The zip must be unique.'),
         ('department_name_uniq', 'unique(department_id, name)', 'The Name must be Unique per Department.'),
-        
+
     ]
-    
+
 DepartmentCity()
 
 
@@ -242,7 +242,7 @@ class medical_benefit(osv.osv):
             args=[]
         if not context:
             context={}
-            
+
         if not name:
             ids = self.search(cr, user, args, limit=limit, context=context)
         else:
@@ -260,21 +260,21 @@ class medical_benefit(osv.osv):
         if not code:
             return True
         if re.search(r"\s", code):
-            raise osv.except_osv(_('Error'),_('El nro. de obra social no puede contener espacios.') )  
+            raise osv.except_osv(_('Error'),_('El nro. de obra social no puede contener espacios.') )
         size = demo_record.insurance_id.size
         if size and len(code)!=size:
-            raise osv.except_osv(_('Error'),_('El nro. de obra social debe tener %s dígitos.')%(size) )  
+            raise osv.except_osv(_('Error'),_('El nro. de obra social debe tener %s dígitos.')%(size) )
         try:
             int(code)
         except:
-            raise osv.except_osv(_('Error'),_('El nro. de obra social debe ser de tipo numérico. ') )  
+            raise osv.except_osv(_('Error'),_('El nro. de obra social debe ser de tipo numérico. ') )
         return True
-        
+
     _constraints = [(_check_code,"Error",['code'] )]
 medical_benefit ()
 
 class DepartmentCity(osv.osv):
-    
+
     _name = 'res.department.city'
     _inherit = 'res.department.city'
     _columns = {
@@ -292,7 +292,7 @@ class medical_partner(osv.osv):
     def onchange_insurance_number(self, cr, uid, ids, insurance_number, context=None):
         if insurance_number:
             if len(insurance_number)!=15:
-                raise osv.except_osv(_('Error'),_('El número de obra social debe tener 15 dígitos.') )  
+                raise osv.except_osv(_('Error'),_('El número de obra social debe tener 15 dígitos.') )
             benefit = instalation_number[0:12]
             relationship = instalation_number[13:15]
             print benefit
@@ -310,7 +310,7 @@ class medical_partner(osv.osv):
             # city = self.pool.get('medical.correspondent').browse(cr, uid, correspondent_id, context)
             # val = {'agency_id':city.agency_id.id,
             #        'subsidiary_id':city.subsidiary_id.id,}
-            
+
             # return {'value': val}
         return {}
 
@@ -457,7 +457,7 @@ class medical_partner(osv.osv):
     ]
 
     _defaults = {
-        
+
         'street_number':lambda *a: '0',
         't_formulario':lambda *a: '0',
         'phone':lambda *a: '0',
@@ -477,7 +477,7 @@ class medical_partner(osv.osv):
         if len(partner_ids)>0:
             return False
         return True
-        
+
     _constraints = [(_check_dni,"Ya existe un afiliado cargado con el mismo DNI. ",['dni'] )]
 
     def name_get(self, cr, user, ids, context={}):
@@ -526,7 +526,7 @@ class medical_partner(osv.osv):
             city = self.pool.get('medical.correspondent').browse(cr, uid, correspondent_id, context)
             val = {'agency_id':city.agency_id.id,
                    'subsidiary_id':city.subsidiary_id.id,}
-            
+
             return {'value': val}
         return {}
 
@@ -536,7 +536,7 @@ class medical_partner(osv.osv):
             val = {'has_relationship':benefit.insurance_id.has_relationship,
             'has_code':benefit.insurance_id.has_code,
             }
-            
+
             return {'value': val}
         return {}
 
@@ -599,7 +599,7 @@ class medical_appointment_practice(osv.osv):
             fech = cr.fetchall()
             if fech:
                 res[practice.id] = fech[0][0][0:10]
-            else: 
+            else:
                 res[practice.id] = '2000-01-01' # si no tiene fecha de creación , asigno una fecha x para registros previos migracion.
         return res
 
@@ -607,11 +607,11 @@ class medical_appointment_practice(osv.osv):
         if not args:
             return []
         res = []
-        
+
         if args[0][1]in ('>=','<='):
             cr.execute("""select id from medical_appointment_practice where create_date %s '%s'"""%(args[0][1],args[0][2]))
             res = cr.fetchall()
-            
+
         if not res:
             return [('id', '=', '0')]
         return [('id', 'in', map(lambda x:x[0], res))]
@@ -624,7 +624,7 @@ class medical_appointment_practice(osv.osv):
         'q_cantidad': fields.integer('Practice Quantity', required=True),
         'doctor_id' : fields.many2one ('res.partner', 'Especialista',domain=[('is_doctor', '=', "1")], help="Physician's Name", required=False),
         'c_profesional_solicita' : fields.char ('c_profesional_solicita'),
-        'f_create_date': fields.function(_get_fecha,fnct_search=_search_fecha, method=True, type= 'date', string='Fecha Creacion'),  
+        'f_create_date': fields.function(_get_fecha,fnct_search=_search_fecha, method=True, type= 'date', string='Fecha Creacion'),
         'calendar_event_id': fields.many2one ('calendar.event', 'Calendar event', required=False),
     }
     _sql_constraints = [
@@ -642,7 +642,7 @@ class medical_appointment_practice(osv.osv):
     #     except:
     #         return False
     #     return True
-        
+
     # _constraints = [(_check_code,"La fecha de práctica no puede ser de un mes posterior al actual",['f_fecha_practica'] )]
 medical_appointment_practice ()
 
@@ -667,7 +667,7 @@ class medical_appointment (osv.osv):
             else:
                 values['consultorio_externo'] =  False
         return {'value': values}
-    
+
     _columns = {
         'doctor' : fields.many2one ('res.partner', 'Physician',domain=[('is_doctor', '=', "1")], help="Physician's Name", ondelete='restrict'),
         'name' : fields.char ('Appointment ID', size=64, readonly=True, required=False),
@@ -770,7 +770,7 @@ class medical_appointment (osv.osv):
             values['speciality'] =  doctor_id.speciality
 
         return {'value': values}
-    
+
     # def search(self, cr, uid, args, offset=0, limit=None, order=None, context=None, count=False):
     #     if not context:
     #         context = {}
@@ -793,7 +793,7 @@ class medical_init(osv.osv_memory):
                 'SANTA RITA','2 DE MAYO','ARISTOBULO DEL VALLE','VILLA SALTO ENCANTADO','25 DE MAYO','SAN JAVIER','SAN VICENTE','EL SOBERBIO',
                 'SAN PEDRO','BERNARDO DE IRIGOYEN','OBERA')''')
         cr.execute(sql)
-        
+
         return super(medical_init, self)._auto_init(cr, context=context)
 
 medical_init()
