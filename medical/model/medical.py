@@ -1,4 +1,4 @@
-# coding=utf-8
+f# coding=utf-8
 
 #    Copyright (C) 2008-2010  Luis Falcon
 
@@ -463,7 +463,7 @@ class medical_partner(osv.osv):
         'phone':lambda *a: '0',
         'id_sucursal':lambda *a: 18,
         'nacionality': '1',
-        'nacionality_id': lambda self,cr,uid,context: self.pool.get('res.country').search(cr, uid, [('name','=','Argentina')])[0],
+        'nacionality_id': lambda self,cr,uid,context: self.pool.get('res.country').search(cr, uid, [('name','=','Argentina.')])[0],
         'start_date': lambda *a: time.strftime('%Y-%m-%d'),
         'has_insurance':lambda *a: True,
 
