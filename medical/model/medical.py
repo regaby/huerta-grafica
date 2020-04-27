@@ -1,4 +1,4 @@
-f# coding=utf-8
+# coding=utf-8
 
 #    Copyright (C) 2008-2010  Luis Falcon
 
