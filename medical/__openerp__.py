@@ -35,6 +35,7 @@ This module provide :
         "base",
         "base_department_city",
         'report_aeroo',
+        'l10n_ar_invoice',
         ],
 
     "init_xml": [],

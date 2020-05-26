@@ -470,7 +470,7 @@ class medical_partner(osv.osv):
     }
     def _check_dni(self,cr,uid,ids,context=None):
         demo_record = self.browse(cr,uid,ids,context=context)[0]
-        if demo_record.has_insurance == False:
+        if demo_record.has_insurance == False or demo_record.is_patient == False:
             return True
         partner_ids = self.search(cr, uid, [('dni','=',demo_record.dni),('document_type','=',demo_record.document_type),('active','=',True),('is_patient','=',demo_record.is_patient)])
         partner_ids.remove(ids[0])
@@ -534,8 +534,9 @@ class medical_partner(osv.osv):
         if benefit_id:
             benefit = self.pool.get('medical.benefit').browse(cr, uid, benefit_id, context)
             val = {'has_relationship':benefit.insurance_id.has_relationship,
-            'has_code':benefit.insurance_id.has_code,
-            }
+                   'has_code': benefit.insurance_id.has_code,
+                   'customer': benefit.insurance_id.is_particular,
+                  }
 
             return {'value': val}
         return {}

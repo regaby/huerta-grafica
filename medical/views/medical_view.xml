@@ -16,7 +16,7 @@
                 <field name="category_id" position="replace"/>
                 <field name="user_id" position="replace"/>
                 <field name="parent_id" position="replace"/>
-                
+
             </field>
         </record>
 
@@ -32,7 +32,7 @@
                     <li t-if="record.relationship_id.raw_value"><field name="relationship_id"/></li>
                     <li t-if="record.insurance_id.raw_value"><field name="insurance_id"/></li>
                 </xpath>
-				
+
 			</field>
 		</record>
 
@@ -65,19 +65,34 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base_department_city.view_partner_form"/>
             <field name="arch" type="xml">
-    
+
                 <field name="city_id" position="attributes">
                     <attribute name="domain">[('municipality','in',[14001,14002,14003,14004,14005,14006,14007,14008,14009,14010,14011,14012,14013,14014,14015,14016,14017])]</attribute>
                 </field>
                 <field name="country_id" position="after">
-                    <field name="attention_city_id" required="True" placeholder="Ciudad de Atención" on_change="onchange_attention_city(attention_city_id)" attrs="{'readonly': [('use_parent_address','=',True)]}" options="{'no_create': True}" domain="[('attention','=',True)]"/>
-                    <field name="attention_department_id" />
+                    <field name="attention_city_id" placeholder="Ciudad de Atención" on_change="onchange_attention_city(attention_city_id)" attrs="{'readonly': [('use_parent_address','=',True)], 'invisible': [('is_patient','=',False)], 'required': [('is_patient','=',True)]}" options="{'no_create': True}" domain="[('attention','=',True)]" />
+                    <field name="attention_department_id" attrs="{'invisible': [('is_patient','=',False)]}"/>
                 </field>
 
             </field>
         </record>
 
-        
+        <record id="view_res_partner_form_inherit_localizacion" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="l10n_ar_invoice.view_res_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="document_type_id" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|',('is_institution','=', True),'|',('is_doctor','=', True),('is_patient','=', True)]}</attribute>
+                </field>
+                <field name="document_number" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|',('is_institution','=', True),'|',('is_doctor','=', True),('is_patient','=', True)]}</attribute>
+                </field>
+                <!-- <field name="responsability_id" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('is_institution','=', True),'|',('is_doctor','=', True),('is_patient','=', True)]}</attribute>
+                </field> -->
+            </field>
+        </record>
 
 		<record model="ir.ui.view" id="view_partner_form_medical">
 			<field name="name">res.partner.form</field>
@@ -143,12 +158,12 @@
                 </xpath>
                 <xpath expr="//field[@name='active']" position="replace"/>
                 <xpath expr="//field[@name='email']" position="after">
-                	<field name="document_type" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
-                    <field name="dni" attrs="{'invisible': [('is_institution','!=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
-                    <field name="cuil" placeholder="CUIL" attrs="{'invisible': [('is_institution','!=', False)]}"/>
-                    <field name="cuit" placeholder="CUIT" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)],'required': [('is_institution','=', True)]}"/>
+                	<field name="document_type" attrs="{'invisible': ['|',('is_institution','!=', False),'&amp;',('is_doctor','=', False),('is_patient','=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
+                    <field name="dni" attrs="{'invisible': ['|',('is_institution','!=', False),'&amp;',('is_doctor','=', False),('is_patient','=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
+                    <field name="cuil" placeholder="CUIL" attrs="{'invisible': ['|',('is_institution','!=', False),'&amp;',('is_doctor','=', False),('is_patient','=', False)]}"/>
+                    <field name="cuit" placeholder="CUIT" attrs="{'invisible': [('is_institution','=', False)],'required': [('is_institution','=', True)]}"/>
                     <field name="active"/>
-                    <field name="has_insurance" />
+                    <field name="has_insurance" attrs="{'invisible': [('is_patient','=',False)]}" />
                     <field name="has_relationship" invisible="True"/>
                     <field name="has_code" invisible="True"/>
                 </xpath>
@@ -164,9 +179,9 @@
                             <field name="is_doctor" class="oe_inline"/> <label for="is_doctor" string="Is a Doctor?"/>)
                 </xpath> -->
                 <xpath expr="//label[@for='name']" position="after">
-                            <field name="is_patient" class="oe_inline" invisible="True"/> 
-                            <field name="is_doctor" class="oe_inline" invisible="True"/> 
-                            <field name="is_institution" class="oe_inline" invisible="True"/> 
+                            <field name="is_patient" class="oe_inline" invisible="False"/>
+                            <field name="is_doctor" class="oe_inline" invisible="False"/>
+                            <field name="is_institution" class="oe_inline" invisible="False"/>
                 </xpath>
                 <page name='sales_purchases' position="attributes">
                     <attribute name="groups">base.group_no_one</attribute>
@@ -201,7 +216,7 @@
                             <field name="correspondent_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)]}" on_change="onchange_correspondent_id(correspondent_id)"  widget="selection"/>
                             <field name="agency_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
                             <field name="subsidiary_id" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_institution','!=', False)], 'readonly': True}"/>
-                            <field name="id_sucursal" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)], 'readonly': False}"/> 
+                            <field name="id_sucursal" attrs="{'invisible': ['|',('is_doctor','!=', False),('is_patient','!=', False)], 'readonly': False}"/>
                         </group>
                 		<newline />
 						<separator string="Patient Critical Information" colspan="6" />
@@ -227,12 +242,12 @@
 	                		<field name="user_name" attrs="{'required': [('is_institution','=', True)]}"/>
 	                		<field name="instalation_number" attrs="{'required': [('is_institution','=', True)]}"/>
 	                		<field name="head_doctor"/>
-	                		
+
 	                		<field name="attention_point" attrs="{'required': [('is_institution','=', True)]}"/>
-	                		
+
 	                		<field name="nro_sap"/>
                             <field name='update_date' placeholder="Update Date" attrs="{'invisible': [('is_institution','!=', True)]}"/>
-	                		
+
 	                	</group>
 	                	<group string="Modules">
 	                		<field name="module_ids" nolabel="1">
@@ -251,8 +266,8 @@
                 	</page>
 
                 </page>
-                
-				
+
+
 			</field>
 		</record>
 
@@ -317,7 +332,7 @@
 				</calendar>
 			</field>
 		</record>
-<!-- 
+<!--
 		<record id="view_medical_appointmen_graph" model="ir.ui.view">
             <field name="name">medical.appointment.graph</field>
             <field name="model">medical.appointment</field>
@@ -325,7 +340,7 @@
                 <graph string="Appointment Analysis" type="pivot">
                     <field name="doctor" type="row"/>
                     <field name="patient" type="row"/>
-                    
+
                 </graph>
             </field>
         </record> -->
@@ -345,7 +360,7 @@
 						<field name="appointment_date" required="1" colspan="3"/>
                         <field name="insurance_id" colspan="3"/>
 						<newline/>
-						
+
 						<field name="care_type" colspan="3" required="True" on_change="onchange_care_type(care_type)"/>
 						<field name="id_modalidad_presta" colspan="3" required="True"/>
 						<newline/>
@@ -358,10 +373,10 @@
                         <field name="consultorio_externo" invisible="1"/>
 
 					</group>
-					
+
 
 					<notebook>
-						
+
 						<page string="Diagnostic / Practices">
 							<separator string="Diagnostic"/>
 							<field colspan="4" nolabel="1" name="diagnostic_ids">
@@ -401,7 +416,7 @@
 						</page>
 					</notebook>
 
-					
+
 					<field name="state" widget="statusbar" options='{"clickable":"1"}'/>
 				</form>
 			</field>
@@ -446,7 +461,7 @@
 					<field name="doctor" select="1" />
 					<field name="patient" select="1" />
                     <field name="insurance_id" select="1" />
-					
+
 					<field name="appointment_date" select="1" />
 					<newline />
 					<group expand="0" string="Group By..." colspan="11" col="11">
@@ -840,7 +855,7 @@
                             </group>
                         </page>
                     </notebook>
-					
+
 				</form>
 			</field>
 		</record>
