@@ -179,9 +179,9 @@
                             <field name="is_doctor" class="oe_inline"/> <label for="is_doctor" string="Is a Doctor?"/>)
                 </xpath> -->
                 <xpath expr="//label[@for='name']" position="after">
-                            <field name="is_patient" class="oe_inline" invisible="False"/>
-                            <field name="is_doctor" class="oe_inline" invisible="False"/>
-                            <field name="is_institution" class="oe_inline" invisible="False"/>
+                            <field name="is_patient" class="oe_inline" invisible="True"/>
+                            <field name="is_doctor" class="oe_inline" invisible="True"/>
+                            <field name="is_institution" class="oe_inline" invisible="True"/>
                 </xpath>
                 <page name='sales_purchases' position="attributes">
                     <attribute name="groups">base.group_no_one</attribute>
