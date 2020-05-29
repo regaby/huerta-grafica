@@ -73,7 +73,7 @@ class Parser(report_sxw.rml_parse):
         form = self.localcontext['data']['form']
         f_desde, f_hasta, w_care_type, w_insurance, w_psiq, w_psicol, w_psicop = self.init_variables(form)
         sql = """with  medical_prestaciones_by_doctor_view as (
-                    select id, patient, speciality_id, care_type, insurance_id
+                    select id, patient, speciality_id, care_type, insurance_id, doctor
                     from medical_prestaciones_by_doctor_view
                     where f_fecha_practica between '%s 00:00:00' and '%s 23:59:59'
                 )
@@ -87,7 +87,10 @@ class Parser(report_sxw.rml_parse):
                     (case care_type when '7' then 'ATENCION JURISDICCIONES ALEJADAS' end) end) end) end) end) end) end) as modalidad,
                 (select count(*) from medical_prestaciones_by_doctor_view v where v.speciality_id=5 and v.patient=x.patient and care_type=x.care_type) as psiq,
                 (select count(*) from medical_prestaciones_by_doctor_view v where v.speciality_id=1000 and v.patient=x.patient and care_type=x.care_type) as psicol,
-                (select count(*) from medical_prestaciones_by_doctor_view v where v.speciality_id=32 and v.patient=x.patient and care_type=x.care_type) as psicop
+                (select count(*) from medical_prestaciones_by_doctor_view v where v.speciality_id=32 and v.patient=x.patient and care_type=x.care_type) as psicop,
+                (select name from res_partner where id in (select v.doctor from medical_prestaciones_by_doctor_view v where v.speciality_id=5 and v.patient=x.patient and care_type=x.care_type)) as psiq_doc,
+                (select name from res_partner where id in (select v.doctor from medical_prestaciones_by_doctor_view v where v.speciality_id=1000 and v.patient=x.patient and care_type=x.care_type)) as psicol_doc,
+                (select name from res_partner where id in (select min(v.doctor) from medical_prestaciones_by_doctor_view v where v.speciality_id=32 and v.patient=x.patient and care_type=x.care_type)) as psicop_doc
                 from medical_prestaciones_by_doctor_view as x
                 join res_partner as p on (x.patient=p.id)
                 join medical_insurance mi on (x.insurance_id=mi.id)
