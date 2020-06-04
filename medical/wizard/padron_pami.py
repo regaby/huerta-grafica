@@ -99,7 +99,7 @@ class padron_pami(osv.osv_memory):
         result = cr.dictfetchall()
         for r in result:
             try:
-                url = 'https://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s'%(r['beneficio'],r['relacion'])
+                url = 'https://prestadores.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s'%(r['beneficio'],r['relacion'])
                 _logger.info('%s', url)
                 response = urllib.urlopen(url)
             except Exception, e:

@@ -79,7 +79,7 @@ class calendar_event (osv.osv):
 
     def get_pami_link(self, cr, uid, ids, context=None):
         this = self.browse(cr, uid, ids, context=context)
-        url = 'http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.patient.benefit_id.code,this.patient.relationship_id.code)
+        url = 'http://prestadores.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.patient.benefit_id.code,this.patient.relationship_id.code)
         return {
             'type': 'ir.actions.act_url',
             'url': url,
@@ -136,17 +136,17 @@ class calendar_event (osv.osv):
         if args[0][1]in ('ilike'):
             year = args[0][2][0:4]
             month = args[0][2][5:7]
-            
+
             try:
                 to_date = datetime(int(year), int(month), 1)
             except:
-                raise osv.except_osv(_('Error'),_('El periodo debe tener el formado AAAA-MM') )  
+                raise osv.except_osv(_('Error'),_('El periodo debe tener el formado AAAA-MM') )
 
             last_day = calendar.monthrange(int(year),int(month))[1]
             cr.execute("""select id from calendar_event where start between '%s-01 00:00:00' and '%s-%s 23:59:59'"""%(args[0][2],args[0][2],last_day))
             print cr.query
             res = cr.fetchall()
-            
+
         if not res:
             return [('id', '=', '0')]
         return [('id', 'in', map(lambda x:x[0], res))]
@@ -163,7 +163,7 @@ class calendar_event (osv.osv):
         'description': fields.text('Description', readonly=False),
         'type': fields.selection([('event', 'Medical Event'), ('holiday', 'Holiday')], string='Type'),
         'create_user_id': fields.many2one ('res.users', 'Creado por', readonly=True),
-        'period': fields.function(_get_period,fnct_search=_search_period, method=True, type= 'char', string='Periodo'),  
+        'period': fields.function(_get_period,fnct_search=_search_period, method=True, type= 'char', string='Periodo'),
         'phone': fields.char('Telefono',size=20, readonly=True, states={'draft':[('readonly',False)]}),
         'holiday_type': fields.selection([('(Licencia)', 'Licencia'), ('(Feriado)', 'Feriado')], string='Tipo'),
         'holiday_name': fields.char('Feriado'),
@@ -183,7 +183,7 @@ class calendar_event (osv.osv):
         (_check_days_holiday, 'Ya existe otra licencia en el mismo rango de dias para el profesional actual!',['start']),
         (_check_holidays, 'No se puede crear este turno porque el especialista tiene una licencia cargada este dia!',['doctor_id']),
         (_check_feriados, 'No se puede crear este turno porque el dia seleccionado es feriado!',['name']),
-    ] 
+    ]
 
     def action_present(self, cr, uid, ids, context=None):
         new_id = self.write(cr, uid, ids, {'state': 'done'})
@@ -198,7 +198,7 @@ class calendar_event (osv.osv):
         	'q_cantidad': 1,
             'calendar_event_id': new_id,
         }
-        
+
         self.pool.get('medical.appointment.practice').create(cr, uid, practice)
         return {
                     'type': 'ir.actions.act_window',
@@ -244,5 +244,5 @@ class calendar_event (osv.osv):
 
 
 
-    
+
 calendar_event()

@@ -316,7 +316,7 @@ class medical_partner(osv.osv):
 
     def get_pami_link(self, cr, uid, ids, context=None):
         this = self.browse(cr, uid, ids, context=context)
-        url = 'http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.benefit_id.code,this.relationship_id.code)
+        url = 'http://prestadores.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.benefit_id.code,this.relationship_id.code)
         return {
             'type': 'ir.actions.act_url',
             'url': url,
@@ -652,7 +652,7 @@ class medical_appointment (osv.osv):
 
     def get_pami_link(self, cr, uid, ids, context=None):
         this = self.browse(cr, uid, ids, context=context)
-        url = 'http://institucional.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.patient.benefit_id.code,this.patient.relationship_id.code)
+        url = 'http://prestadores.pami.org.ar/result.php?c=6-2-1-1&beneficio=%s&parent=%s&vm=2'%(this.patient.benefit_id.code,this.patient.relationship_id.code)
         return {
             'type': 'ir.actions.act_url',
             'url': url,
