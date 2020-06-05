@@ -88,8 +88,8 @@ class Parser(report_sxw.rml_parse):
                 (select count(*) from medical_prestaciones_by_doctor_view v where v.speciality_id=5 and v.patient=x.patient and care_type=x.care_type) as psiq,
                 (select count(*) from medical_prestaciones_by_doctor_view v where v.speciality_id=1000 and v.patient=x.patient and care_type=x.care_type) as psicol,
                 (select count(*) from medical_prestaciones_by_doctor_view v where v.speciality_id=32 and v.patient=x.patient and care_type=x.care_type) as psicop,
-                (select name from res_partner where id in (select v.doctor from medical_prestaciones_by_doctor_view v where v.speciality_id=5 and v.patient=x.patient and care_type=x.care_type)) as psiq_doc,
-                (select name from res_partner where id in (select v.doctor from medical_prestaciones_by_doctor_view v where v.speciality_id=1000 and v.patient=x.patient and care_type=x.care_type)) as psicol_doc,
+                (select name from res_partner where id in (select min(v.doctor) from medical_prestaciones_by_doctor_view v where v.speciality_id=5 and v.patient=x.patient and care_type=x.care_type)) as psiq_doc,
+                (select name from res_partner where id in (select min(v.doctor) from medical_prestaciones_by_doctor_view v where v.speciality_id=1000 and v.patient=x.patient and care_type=x.care_type)) as psicol_doc,
                 (select name from res_partner where id in (select min(v.doctor) from medical_prestaciones_by_doctor_view v where v.speciality_id=32 and v.patient=x.patient and care_type=x.care_type)) as psicop_doc
                 from medical_prestaciones_by_doctor_view as x
                 join res_partner as p on (x.patient=p.id)
