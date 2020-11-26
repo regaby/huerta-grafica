@@ -166,6 +166,7 @@
                     <field name="has_insurance" attrs="{'invisible': [('is_patient','=',False)]}" />
                     <field name="has_relationship" invisible="True"/>
                     <field name="has_code" invisible="True"/>
+                    <field name="sex" required="True"/>
                 </xpath>
                 <xpath expr="//field[@name='street']" position="after">
                 	<field name="street_number" placeholder="Street Number"/>
@@ -200,7 +201,6 @@
 	                		<field name="nacionality"/>
 	                		<field name="nacionality_id" widget="selection"/>
 	                		<field name="dob" attrs="{'required': [('is_patient','=', True)]}"/>
-	                		<field name="sex" attrs="{'required': [('is_patient','=', True)]}"/>
 	                		<field name="age"/>
 							<field name="deceased" />
 							<field name="dod"
