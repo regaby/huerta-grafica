@@ -41,6 +41,14 @@ class calendar_event (osv.osv):
                 values['consultorio_externo'] =  False
         return {'value': values}
 
+    def onchange_patient (self, cr, uid, ids, patient_id, context):
+        values={}
+        if patient_id:
+            patient_obj = self.pool.get('res.partner').browse(cr,uid, patient_id)
+            values['phone'] =  patient_obj.mobile
+            values['sms_notification'] =  patient_obj.sms_notification
+        return {'value': values}
+
     def _check_days(self,cr,uid,ids,context=None):
         for holiday in self.browse(cr, uid, ids):
             if holiday.start and holiday.stop and holiday.type=='event':
@@ -120,6 +128,17 @@ class calendar_event (osv.osv):
         super(calendar_event, self).write(cr, uid, ids, vals, context)
         return ids
 
+    def create(self, cr, uid, vals, context=None):
+        if 'sms_notification' in vals.keys() and 'patient' in vals.keys():
+            patient_id = vals['patient']
+            patient_obj = self.pool.get('res.partner').browse(cr, uid, patient_id)
+            patient_obj.sms_notification = vals['sms_notification']
+        if 'phone' in vals.keys() and 'patient' in vals.keys():
+            patient_id = vals['patient']
+            patient_obj = self.pool.get('res.partner').browse(cr, uid, patient_id)
+            patient_obj.mobile = vals['phone']
+        return super(calendar_event, self).create(cr, uid, vals, context)
+
     def _get_period(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
         for event in self.browse(cr, uid, ids, context=context):
@@ -167,6 +186,7 @@ class calendar_event (osv.osv):
         'phone': fields.char('Telefono',size=20, readonly=True, states={'draft':[('readonly',False)]}),
         'holiday_type': fields.selection([('(Licencia)', 'Licencia'), ('(Feriado)', 'Feriado')], string='Tipo'),
         'holiday_name': fields.char('Feriado'),
+        'sms_notification': fields.boolean('Enviar Turno por SMS'),
     }
     _defaults = {
         'state': 'draft',
