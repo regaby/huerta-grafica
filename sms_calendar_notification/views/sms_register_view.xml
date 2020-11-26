@@ -1,0 +1,44 @@
+<openerp>
+	<data>
+
+		<record model="ir.ui.view" id="sms_register_view">
+			<field name="name">Registro SMS</field>
+			<field name="model">sms.register</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Registro SMS">
+					<header>
+						<button name="procesar" string="Procesar" states="draft" type="object"/>
+					</header>
+					<group>
+						<field name="date" attrs="{'readonly': [('state','!=', 'draft')], 'required': True}"/>
+						<field name="state" readonly="1" />
+						<field name="log" readonly="1" />
+					</group>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="sms_register_tree">
+			<field name="name">Registro SMS</field>
+			<field name="model">sms.register</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Registro SMS">
+					<field name="date" />
+						<field name="state" />
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="sms_register_action">
+			<field name="name">Registro SMS</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">sms.register</field>
+			<field name="view_type">form</field>
+			<field name="view_id" ref="sms_register_tree" />
+		</record>
+
+		<menuitem action="sms_register_action" id="sms_register_menu" parent="medical_calendar.medical_calendar_submenu" sequence="50" />
+	</data>
+</openerp>
