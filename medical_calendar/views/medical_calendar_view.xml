@@ -97,6 +97,15 @@
 	        	<field name="recurrency" position="attributes">
 	        		<attribute name="string">Turno periódico</attribute>
 	        	</field>
+	        	<!-- <notebook position="inside">
+	        		<page name="turnos" string="Turnos">
+	        			<group>
+	        			</group>
+	        			<group>
+                        	<field name="calendar_ids" nolabel="1"/>
+                        </group>
+	        		</page>
+	        	</notebook> -->
 	        	<xpath expr="//div[@class='oe_title']" position="after">
 	        		<header>
 	        				<button name="get_pami_link" string="Ver Padrón PAMI" type="object" attrs="{'invisible': [('type','!=','event')]}" class="oe_highlight"/>
@@ -104,6 +113,8 @@
 	                                        name="action_present" states="draft" icon="terp-check" />
 	                        <button string="Marcar Ausente" type="object"
 	                                        name="action_absent" states="draft" icon="STOCK_CANCEL"/>
+	                        <button string="Cancelar" type="object"
+	                                        name="action_cancel" states="draft" icon="gtk-clear"/>
 	                        <button string="Volver a sin confirmar" type="object"
 	                                        name="set_draft" states="done,declined" icon="gtk-convert" />
 							<field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft,done,declined"/>
@@ -270,6 +281,32 @@
 			<menuitem action="action_calendar_medical_event" id="medical_calendar_menu" parent="medical_calendar_submenu" sequence="1" name="Medical Calendar" groups="medical.group_medical_demo,medical.group_medical_user"/>
 			<menuitem action="action_calendar_medical_event_doctor" id="medical_calendar_menu_doctor" parent="medical_calendar_submenu" sequence="20" name="Mis Turnos" groups="medical_calendar.group_medical_doctor"/>
 			<menuitem action="action_calendar_medical_holiday" id="medical_calendar_holiday_menu" parent="medical_calendar_submenu" sequence="30" name="Holiday Calendar"/>
+
+		<record model="ir.ui.view" id="view_partner_form_medical_event">
+			<field name="name">res.partner.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="medical.view_partner_form_medical" />
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<page name="patient" position="after">
+					<page string="Turnos" attrs="{'invisible': [('is_patient','=', False)]}">
+                        <group>
+                        	<group>
+                        		<field name="nro_draft" />
+                        		<field name="nro_done" />
+                        	</group>
+                        	<group>
+                        		<field name="nro_declined" />
+                        		<field name="nro_cancel" />
+                        	</group>
+                        </group>
+                        <group>
+                        	<field name="calendar_ids" nolabel="1"/>
+                        </group>
+                    </page>
+				</page>
+			</field>
+		</record>
 
 	</data>
 </openerp>

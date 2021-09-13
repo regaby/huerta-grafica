@@ -159,7 +159,7 @@
                 <xpath expr="//field[@name='active']" position="replace"/>
                 <xpath expr="//field[@name='email']" position="after">
                 	<field name="document_type" attrs="{'invisible': ['|',('is_institution','!=', False),'&amp;',('is_doctor','=', False),('is_patient','=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
-                    <field name="dni" attrs="{'invisible': ['|',('is_institution','!=', False),'&amp;',('is_doctor','=', False),('is_patient','=', False)], 'required': ['|',('is_doctor','=',True),'&amp;',('is_patient','=',True),('has_insurance','=',True)]}"/>
+                    <field name="dni" attrs="{'invisible': ['|',('is_institution','!=', False),'&amp;',('is_doctor','=', False),('is_patient','=', False)], 'required': ['|',('is_doctor','=',True)]}"/>
                     <field name="cuil" placeholder="CUIL" attrs="{'invisible': ['|',('is_institution','!=', False),'&amp;',('is_doctor','=', False),('is_patient','=', False)]}"/>
                     <field name="cuit" placeholder="CUIT" attrs="{'invisible': [('is_institution','=', False)],'required': [('is_institution','=', True)]}"/>
                     <field name="active"/>

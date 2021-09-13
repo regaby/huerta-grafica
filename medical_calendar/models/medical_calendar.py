@@ -30,6 +30,7 @@ import re
 
 class calendar_event (osv.osv):
     _inherit = "calendar.event"
+    _order = "id desc"
 
     def onchange_appointment_id (self, cr, uid, ids, appointment_id, context):
         values={}
@@ -178,7 +179,14 @@ class calendar_event (osv.osv):
         'insurance_id':fields.related('patient', 'insurance_id', type='many2one', relation='medical.insurance', string='Financiadora', readonly=True),
         'consultorio_externo': fields.boolean('Consultorio Externo'),
         'name': fields.char('Meeting Subject'),
-        'state': fields.selection([('draft', 'Unconfirmed'), ('open', 'Confirmed'),('done', 'Presente'),('declined', 'Ausente'),('holiday', 'Licencia')], string='Status', track_visibility='onchange'),
+        'state': fields.selection([
+            ('draft', 'Unconfirmed'),
+            ('open', 'Confirmed'),
+            ('done', 'Presente'),
+            ('declined', 'Ausente'),
+            ('holiday', 'Licencia'),
+            ('cancel', 'Cancelado'),
+        ], string='Status', track_visibility='onchange'),
         'description': fields.text('Description', readonly=False),
         'type': fields.selection([('event', 'Medical Event'), ('holiday', 'Holiday')], string='Type'),
         'create_user_id': fields.many2one ('res.users', 'Creado por', readonly=True),
@@ -187,6 +195,14 @@ class calendar_event (osv.osv):
         'holiday_type': fields.selection([('(Licencia)', 'Licencia'), ('(Feriado)', 'Feriado')], string='Tipo'),
         'holiday_name': fields.char('Feriado'),
         'sms_notification': fields.boolean('Enviar Turno por SMS'),
+        # 'calendar_ids': fields.related(
+        #         'patient',
+        #         'calendar_ids',
+        #         type='one2many',
+        #         relation='calendar.event',
+        #         string='Turnos',
+        #         readonly=True
+        #     ),
     }
     _defaults = {
         'state': 'draft',
@@ -242,6 +258,19 @@ class calendar_event (osv.osv):
                     # 'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}}
                 }
 
+    def action_cancel(self, cr, uid, ids, context=None):
+        new_id = self.write(cr, uid, ids, {'state': 'cancel'})
+        if not isinstance(new_id, (int, long)):
+            new_id = new_id[0]
+        return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'calendar.event',
+                    'view_mode': 'form',
+                    'res_id': new_id,
+                    'target': 'current',
+                    # 'flags': {'form': {'action_buttons': True, 'options': {'mode': 'edit'}}}
+                }
+
     def set_draft(self, cr, uid, ids, context=None):
         turno = self.browse(cr, uid, ids, context=context)
         practice_pool = self.pool.get('medical.appointment.practice')
@@ -262,7 +291,67 @@ class calendar_event (osv.osv):
             self.write(cr, uid, ids, {'state': 'draft'})
             return True
 
-
-
-
 calendar_event()
+
+
+class medical_partner(osv.osv):
+    _name = "res.partner"
+    _inherit = "res.partner"
+
+    def _get_fetch(self, cr, uid, ids, state, context=None):
+        res = {}
+        for partner in self.browse(cr, uid, ids, context=context):
+            cr.execute('''select count(*) from calendar_event where patient = %s \
+                      and state='%s' '''%(partner.id, state))
+            fech = cr.fetchall()
+            print ('\n\n\nfech', fech)
+            if fech:
+                res[partner.id] = fech[0][0]
+        return res
+
+    def _count_draft(self, cr, uid, ids, field_name, arg, context=None):
+        return self._get_fetch(cr, uid, ids, 'draft')
+
+    def _count_done(self, cr, uid, ids, field_name, arg, context=None):
+        return self._get_fetch(cr, uid, ids, 'done')
+
+    def _count_declined(self, cr, uid, ids, field_name, arg, context=None):
+        return self._get_fetch(cr, uid, ids, 'declined')
+
+    def _count_cancel(self, cr, uid, ids, field_name, arg, context=None):
+        return self._get_fetch(cr, uid, ids, 'cancel')
+
+    _columns = {
+        'calendar_ids': fields.one2many(
+            'calendar.event',
+            'patient',
+            'Turnos',
+            ondelete='cascade'
+        ),
+        'nro_draft' : fields.function(
+            _count_draft,
+            method=True,
+            type='integer',
+            string='Sin confirmar'
+        ),
+        'nro_done' : fields.function(
+            _count_done,
+            method=True,
+            type='integer',
+            string='Presentes'
+        ),
+        'nro_declined' : fields.function(
+            _count_declined,
+            method=True,
+            type='integer',
+            string='Ausentes'
+        ),
+        'nro_cancel' : fields.function(
+            _count_cancel,
+            method=True,
+            type='integer',
+            string='Cancelados'
+        ),
+    }
+
+medical_partner()
