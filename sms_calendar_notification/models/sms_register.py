@@ -74,7 +74,7 @@ class sms_register (osv.osv):
             hora = (datetime(*time.strptime(event.start, "%Y-%m-%d %H:%M:%S")[0:5])-timedelta(hours=3)).strftime("%d/%m/%Y %H:%M")
             sex_pat = event.patient.sex == 'F' and 'Sra.' or 'Sr.'
             sex_doc = event.doctor_id.sex == 'F' and 'la Dra.' or 'el Dr.'
-            text = "%s %s recuerde su turno el %s hs. con %s %s"%(sex_pat, event.patient.name, hora, sex_doc, event.doctor_id.name)
+            text = "%s %s recuerde su turno el %s hs. con %s. Red Prevenir"%(sex_pat, event.patient.name, hora, event.doctor_id.name)
             phone = event.phone and event.phone or event.patient.mobile
             if not phone:
                 output += 'No hay telefono celular definido para el paciente %s\n'%event.patient.name
