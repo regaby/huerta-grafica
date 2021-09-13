@@ -17,7 +17,8 @@
             <field name="model">calendar.event</field>
             <field name="arch" type="xml">
                 <graph string="Análisis de Turnos" type="pivot">
-                    <field name="state" type="row"/>
+                    <field name="start_date" type="row"/>
+                    <field name="state" type="col"/>
                 </graph>
             </field>
         </record>
@@ -210,8 +211,18 @@
                 	<filter string="Done" domain="[('state','=','done')]" />
                 	<filter string="Declined" domain="[('state','=','declined')]" /> -->
                 	<filter icon="terp-go-today" string="Mis Turnos" domain="['|',('type','=','holiday'),'&amp;',('type','=','event'),('create_user_id','=',uid)]" name="my_events"/>
-
                 	<filter string="Estado" context="{'group_by':'state'}" />
+                	<filter string="Año Actual" name="year" domain="[
+                		('state', '!=', 'holiday'),
+                		('start','&lt;=', time.strftime('%%Y-12-31')),('start','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                	<filter string="Mes Actual" name="month" domain="[
+                		('state', '!=', 'holiday'),
+                		('start','&lt;=', time.strftime('%Y-%m-%d')),
+                		('start','&gt;=',time.strftime('%Y-%m-01'))]" help="month"/>
+                	<filter string="Mes Anterior" name="last_month" domain="[
+                		('state', '!=', 'holiday'),
+                		('start','&gt;=', (context_today() - relativedelta(months=1)).strftime('%Y-%m-01')),
+                		('start','&lt;',time.strftime('%Y-%m-01'))]" help="month"/>
                 </group>
 
 
